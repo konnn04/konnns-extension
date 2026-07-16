@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bookmark, ChevronLeft, ChevronRight, Folder } from "lucide-react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { registerFeature } from "@/core/feature-registry";
 import { useFeatureValues, useSettingsStore } from "@/core/settings-engine/settingsStore";
@@ -35,27 +36,51 @@ function Favicon({ url, title }: { url: string; title: string }) {
 
 function FolderButton({ item }: { item: BookmarkItem }) {
   const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [menuPos, setMenuPos] = useState<React.CSSProperties>({});
 
   useEffect(() => {
     if (!open) return;
+    const btn = btnRef.current;
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    setMenuPos({
+      position: "fixed",
+      left: r.left + r.width / 2,
+      bottom: window.innerHeight - r.top + 8,
+      transform: "translateX(-50%)",
+    });
+
     const onDown = (e: MouseEvent) => {
-      if (!ref.current?.contains(e.target as Node)) setOpen(false);
+      if (!(e.target as HTMLElement)?.closest(".bookmark-folder__menu") && e.target !== btn) {
+        setOpen(false);
+      }
     };
-    window.addEventListener("mousedown", onDown);
-    return () => window.removeEventListener("mousedown", onDown);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    // Delay adding listeners so the same click that opened doesn't close
+    const id = setTimeout(() => {
+      window.addEventListener("mousedown", onDown);
+      window.addEventListener("keydown", onKey);
+    }, 0);
+    return () => {
+      clearTimeout(id);
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   return (
-    <div className="bookmark-folder" ref={ref}>
-      <button className="bookmark-item" onClick={() => setOpen((o) => !o)} title={item.title}>
+    <div className="bookmark-folder">
+      <button ref={btnRef} className="bookmark-item" onClick={() => setOpen((o) => !o)} title={item.title}>
         <span className="bookmark-item__letter">
           <Folder size={15} />
         </span>
         <span className="bookmark-item__label">{item.title}</span>
       </button>
-      {open && (
-        <div className="bookmark-folder__menu">
+      {open && createPortal(
+        <div className="bookmark-folder__menu" style={menuPos}>
           {(item.children ?? [])
             .filter((c) => c.url)
             .map((c) => (
@@ -64,7 +89,8 @@ function FolderButton({ item }: { item: BookmarkItem }) {
                 <span>{c.title || c.url}</span>
               </a>
             ))}
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
