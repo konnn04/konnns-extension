@@ -1,6 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { browser } from "wxt/browser";
-import { Pause, Play, RotateCcw, SkipForward, Timer } from "lucide-react";
+import {
+  Brain,
+  Coffee,
+  Palmtree,
+  Pause,
+  Play,
+  RotateCcw,
+  SkipForward,
+  Timer,
+  type LucideIcon,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { registerFeature } from "@/core/feature-registry";
 import { useFeatureValues, useSettingsStore } from "@/core/settings-engine/settingsStore";
@@ -19,12 +29,32 @@ import {
   type PomodoroConfig,
   type PomodoroState,
 } from "./state";
+import { getPhaseImageUrl, usePhaseMedia } from "./media";
+import { PomodoroMediaSettings } from "./PomodoroMediaSettings";
 import { pomodoroSettingsSchema } from "./settings.schema";
 import "./pomodoro.css";
 
 export const POMODORO_FEATURE_ID = "tool-pomodoro";
 
-const PHASE_EMOJI: Record<Phase, string> = { work: "🧠", short: "☕", long: "🌴" };
+const PHASE_ICON: Record<Phase, LucideIcon> = { work: Brain, short: Coffee, long: Palmtree };
+
+/** Loads the user's custom image for a phase (re-reads when it changes). */
+function usePhaseImage(phase: Phase | undefined): string | null {
+  const version = usePhaseMedia((s) => s.version);
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!phase) return;
+    let current: string | null = null;
+    void getPhaseImageUrl(phase).then((u) => {
+      current = u;
+      setUrl(u);
+    });
+    return () => {
+      if (current) URL.revokeObjectURL(current);
+    };
+  }, [phase, version]);
+  return url;
+}
 
 function fmt(ms: number): string {
   const total = Math.max(0, Math.ceil(ms / 1000));
@@ -103,6 +133,9 @@ function ToolPomodoro() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.workMin, config.shortMin, config.longMin, config.sessionsBeforeLong]);
 
+  const phaseImg = usePhaseImage(state?.phase);
+  const PhaseIcon = state ? PHASE_ICON[state.phase] : null;
+
   if (!state) return null;
 
   const remaining = state.running && state.endsAt ? state.endsAt - now : state.remainingMs;
@@ -121,7 +154,8 @@ function ToolPomodoro() {
   return (
     <div className="pomo">
       <span className="pomo__phase">
-        {PHASE_EMOJI[state.phase]} {t(`pomodoro.${state.phase}`)}
+        {PhaseIcon && <PhaseIcon size={16} className="pomo__phase-icon" />}
+        {t(`pomodoro.${state.phase}`)}
       </span>
 
       <div className="pomo__ring">
@@ -137,7 +171,11 @@ function ToolPomodoro() {
           />
         </svg>
         <div className="pomo__center">
-          <span className="pomo__emoji">{PHASE_EMOJI[state.phase]}</span>
+          {phaseImg ? (
+            <img className="pomo__phase-img" src={phaseImg} alt="" />
+          ) : (
+            PhaseIcon && <PhaseIcon size={34} className="pomo__phase-glyph" />
+          )}
           <span className="pomo__time">{fmt(remaining)}</span>
         </div>
       </div>
@@ -193,6 +231,7 @@ registerFeature({
   defaultEnabled: true,
   notifiable: true,
   settingsSchema: pomodoroSettingsSchema,
+  settingsExtra: PomodoroMediaSettings,
   component: ToolPomodoro,
   order: 1,
 });

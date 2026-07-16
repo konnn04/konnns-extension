@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Maximize2, Minus, PanelRight, Pin, Square, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getFeaturesByZone, type FeatureDefinition } from "@/core/feature-registry";
@@ -7,9 +7,14 @@ import {
   type ToolWindowState,
   type WindowMode,
 } from "@/core/layout-engine/windowManager";
-import { useSettingsStore } from "@/core/settings-engine/settingsStore";
+import {
+  CORE_FEATURE_ID,
+  useFeatureValues,
+  useSettingsStore,
+} from "@/core/settings-engine/settingsStore";
 import { Skeleton } from "@/shared/ui";
 import { clearMagnify, magnify } from "@/shared/utils/dockMagnify";
+import { RailScroll } from "./RailScroll";
 import "./right-sidebar.css";
 
 /**
@@ -21,7 +26,11 @@ export function RightSidebar() {
   const { t } = useTranslation();
   const features = getFeaturesByZone("right-sidebar");
   const enabledMap = useSettingsStore((s) => s.enabled);
-  const { open, windows, openWindow, close, hydrate, hydrated } = useWindowManager();
+  const settingsHydrated = useSettingsStore((s) => s.hydrated);
+  const core = useFeatureValues(CORE_FEATURE_ID);
+  const restoreWindows = core.restoreWindows !== false;
+  const { open, windows, openWindow, close, hydrate, hydrated, restoreOpen, clampToViewport } =
+    useWindowManager();
   const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
@@ -29,6 +38,22 @@ export function RightSidebar() {
   }, [hydrated, hydrate]);
 
   const enabledFeatures = features.filter((f) => enabledMap[f.id] ?? f.defaultEnabled);
+
+  // restore last session's windows once both stores are ready (opt-out setting)
+  const restoredRef = useRef(false);
+  useEffect(() => {
+    if (restoredRef.current || !hydrated || !settingsHydrated) return;
+    restoredRef.current = true;
+    if (restoreWindows) restoreOpen(enabledFeatures.map((f) => f.id));
+  }, [hydrated, settingsHydrated, restoreWindows, restoreOpen, enabledFeatures]);
+
+  // keep floating windows on-screen when the browser window is resized
+  useEffect(() => {
+    const onResize = () => clampToViewport();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [clampToViewport]);
+
   if (enabledFeatures.length === 0) return null;
 
   const railVisible = hovering || open.length > 0;
@@ -50,28 +75,30 @@ export function RightSidebar() {
         }}
         onMouseMove={(e) => magnify(e.currentTarget, ".right-rail__trigger", e.clientY)}
       >
-        {enabledFeatures.map((f) => {
-          const Icon = f.icon;
-          const active = open.includes(f.id);
-          const minimized = windows[f.id]?.mode === "minimized";
-          return (
-            <button
-              key={f.id}
-              type="button"
-              className={`right-rail__trigger ${active ? "right-rail__trigger--active" : ""}`}
-              aria-pressed={active}
-              aria-label={t(f.nameKey)}
-              title={t(f.nameKey)}
-              onClick={() => {
-                // closed → open; minimized → restore; visible → close
-                if (!active || minimized) openWindow(f.id);
-                else close(f.id);
-              }}
-            >
-              <Icon size={20} />
-            </button>
-          );
-        })}
+        <RailScroll count={enabledFeatures.length}>
+          {enabledFeatures.map((f) => {
+            const Icon = f.icon;
+            const active = open.includes(f.id);
+            const minimized = windows[f.id]?.mode === "minimized";
+            return (
+              <button
+                key={f.id}
+                type="button"
+                className={`right-rail__trigger ${active ? "right-rail__trigger--active" : ""}`}
+                aria-pressed={active}
+                aria-label={t(f.nameKey)}
+                title={t(f.nameKey)}
+                onClick={() => {
+                  // closed → open; minimized → restore; visible → close
+                  if (!active || minimized) openWindow(f.id);
+                  else close(f.id);
+                }}
+              >
+                <Icon size={20} />
+              </button>
+            );
+          })}
+        </RailScroll>
       </div>
 
       {open.map((id) => {

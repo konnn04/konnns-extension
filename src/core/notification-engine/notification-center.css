@@ -1,9 +1,9 @@
 .notif-trigger-zone {
   position: fixed;
   right: 0;
-  bottom: 56px;
+  bottom: 60px;
   width: 96px;
-  height: 56px;
+  height: 52px;
   z-index: 50;
   display: flex;
   align-items: flex-end;

@@ -1,4 +1,5 @@
 import { browser } from "wxt/browser";
+import { hasPermissions, requestPermissions } from "@/core/permissions";
 
 /** Most-visited sites via the browser topSites API (optional runtime permission). */
 
@@ -7,20 +8,12 @@ export interface TopSite {
   url: string;
 }
 
-export async function hasTopSitesPermission(): Promise<boolean> {
-  try {
-    return await browser.permissions.contains({ permissions: ["topSites"] });
-  } catch {
-    return false;
-  }
+export function hasTopSitesPermission(): Promise<boolean> {
+  return hasPermissions({ permissions: ["topSites"] });
 }
 
-export async function requestTopSitesPermission(): Promise<boolean> {
-  try {
-    return await browser.permissions.request({ permissions: ["topSites"] });
-  } catch {
-    return false;
-  }
+export function requestTopSitesPermission(): Promise<boolean> {
+  return requestPermissions({ permissions: ["topSites"] });
 }
 
 export async function getTopSites(limit: number): Promise<TopSite[]> {

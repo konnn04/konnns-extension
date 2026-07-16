@@ -11,6 +11,7 @@ import {
 } from "@/core/settings-engine/settingsStore";
 import { IconButton, Skeleton } from "@/shared/ui";
 import { clearMagnify, magnify } from "@/shared/utils/dockMagnify";
+import { RailScroll } from "./RailScroll";
 import "./left-sidebar.css";
 
 export function LeftSidebar() {
@@ -42,23 +43,25 @@ export function LeftSidebar() {
           onMouseMove={(e) => magnify(e.currentTarget, ".left-rail__trigger", e.clientY)}
           onMouseLeave={(e) => clearMagnify(e.currentTarget, ".left-rail__trigger")}
         >
-          {enabledFeatures.map((f) => {
-            const Icon = f.icon;
-            const active = open.includes(f.id);
-            return (
-              <button
-                key={f.id}
-                type="button"
-                className={`left-rail__trigger ${active ? "left-rail__trigger--active" : ""}`}
-                aria-pressed={active}
-                aria-label={t(f.nameKey)}
-                title={t(f.nameKey)}
-                onClick={() => toggle(f.id, singleOpen)}
-              >
-                <Icon size={20} />
-              </button>
-            );
-          })}
+          <RailScroll count={enabledFeatures.length}>
+            {enabledFeatures.map((f) => {
+              const Icon = f.icon;
+              const active = open.includes(f.id);
+              return (
+                <button
+                  key={f.id}
+                  type="button"
+                  className={`left-rail__trigger ${active ? "left-rail__trigger--active" : ""}`}
+                  aria-pressed={active}
+                  aria-label={t(f.nameKey)}
+                  title={t(f.nameKey)}
+                  onClick={() => toggle(f.id, singleOpen)}
+                >
+                  <Icon size={20} />
+                </button>
+              );
+            })}
+          </RailScroll>
         </div>
 
         <div className="left-panels">

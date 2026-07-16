@@ -28,6 +28,7 @@
   transition:
     transform var(--dur-panel) var(--ease-out),
     opacity var(--dur-panel) var(--ease-out);
+  will-change: transform, opacity;
 }
 .right-rail--visible {
   transform: translate(0, -50%);

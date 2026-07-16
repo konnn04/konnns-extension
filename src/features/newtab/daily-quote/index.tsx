@@ -33,7 +33,7 @@ function DailyQuote() {
 
   useEffect(() => {
     if (!autoHide) return;
-    const id = window.setTimeout(() => setVisible(false), 15000);
+    const id = window.setTimeout(() => setVisible(false), 10000);
     return () => window.clearTimeout(id);
   }, [autoHide]);
 

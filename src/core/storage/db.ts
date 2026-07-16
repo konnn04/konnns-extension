@@ -86,6 +86,15 @@ export interface AudioAssetRow {
   updatedAt: number;
 }
 
+/** Generic image/gif assets keyed by a caller-defined id (e.g. "pomo:work"). */
+export interface MediaAssetRow {
+  id: string;
+  type: "image" | "gif";
+  blob: Blob;
+  name: string;
+  updatedAt: number;
+}
+
 export type NotificationType = "info" | "success" | "reminder" | "alarm";
 
 export interface NotificationRow {
@@ -98,7 +107,7 @@ export interface NotificationRow {
   readAt: number | null;
 }
 
-export const DB_SCHEMA_VERSION = 4;
+export const DB_SCHEMA_VERSION = 5;
 
 export const db = new Dexie("newtab-extension") as Dexie & {
   settings: EntityTable<SettingsRow, "featureId">;
@@ -111,6 +120,7 @@ export const db = new Dexie("newtab-extension") as Dexie & {
   onboardingState: EntityTable<OnboardingStateRow, "id">;
   notificationsLog: EntityTable<NotificationRow, "id">;
   audioAssets: EntityTable<AudioAssetRow, "id">;
+  mediaAssets: EntityTable<MediaAssetRow, "id">;
 };
 
 // v1 — initial schema
@@ -137,6 +147,11 @@ db.version(3).stores({
 // v4 — add audio assets (user background music, optim item 18)
 db.version(4).stores({
   audioAssets: "id",
+});
+
+// v5 — add generic media assets (e.g. pomodoro phase images/gifs)
+db.version(5).stores({
+  mediaAssets: "id",
 });
 
 export async function estimateStorage(): Promise<{ usage: number; quota: number } | null> {

@@ -103,6 +103,27 @@
 .wp-item:hover .wp-item__delete {
   opacity: 1;
 }
+.wp-item__slide {
+  position: absolute;
+  top: var(--space-1);
+  left: var(--space-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--overlay);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--dur-hover) ease-out;
+}
+.wp-item__slide--on {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
 .wp-manager__meta {
   margin-top: var(--space-4);
   font-size: 13px;

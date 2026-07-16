@@ -22,6 +22,7 @@ import { RightSidebar } from "./sidebar/RightSidebar";
 import { LowPowerSuggest } from "./overlays/LowPowerSuggest";
 import { FocusToggle } from "./overlays/FocusToggle";
 import { Onboarding } from "./overlays/Onboarding";
+import { EnglishDailyAutoOpen } from "@/features/newtab/tool-english";
 import { CORE_FEATURE_ID } from "@/core/settings-engine/settingsStore";
 import "./app.css";
 
@@ -113,6 +114,7 @@ function AppReady() {
       <CursorEffects />
       <BgMusicPlayer />
       <Onboarding />
+      <EnglishDailyAutoOpen />
     </div>
   );
 }

@@ -22,3 +22,5 @@ import "./tool-tasks";
 import "./tool-notes";
 import "./tool-qr";
 import "./tool-emoji";
+import "./tool-translate";
+import "./tool-english";

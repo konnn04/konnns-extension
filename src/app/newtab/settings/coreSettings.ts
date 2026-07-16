@@ -42,6 +42,12 @@ export const coreGeneralSchema = defineSchema({
     step: 10,
     default: 360,
   },
+  restoreWindows: {
+    type: "toggle",
+    label: "settings.restoreWindows",
+    description: "settings.restoreWindowsDesc",
+    default: true,
+  },
   soundEnabled: { type: "toggle", label: "sound.enabled", default: false },
   soundVolume: {
     type: "slider",

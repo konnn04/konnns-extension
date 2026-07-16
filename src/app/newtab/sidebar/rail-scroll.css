@@ -1,0 +1,44 @@
+/* Paged viewport for docks with many triggers (shared by left + right rails) */
+.rail-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  max-height: min(58vh, 480px);
+  overflow-y: hidden; /* paged via arrow buttons, not the wheel */
+  /* room for the dock-magnify scale so enlarged icons aren't clipped */
+  padding-inline: 4px;
+  scrollbar-width: none;
+}
+.rail-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.rail-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-hover) ease-out,
+    background-color var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out;
+}
+.rail-arrow--on {
+  opacity: 0.75;
+  pointer-events: auto;
+}
+.rail-arrow--on:hover {
+  opacity: 1;
+  background: var(--surface-elevated);
+  color: var(--text);
+}

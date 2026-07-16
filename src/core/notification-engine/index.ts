@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { browser } from "wxt/browser";
 import { db, type NotificationRow, type NotificationType } from "@/core/storage/db";
+import { requestPermissions } from "@/core/permissions";
 import { useSettingsStore } from "@/core/settings-engine/settingsStore";
 
 /**
@@ -150,12 +151,8 @@ export async function notify(input: NotifyInput): Promise<void> {
   }
 }
 
-export async function requestNotificationPermission(): Promise<boolean> {
-  try {
-    return await browser.permissions.request({ permissions: ["notifications"] });
-  } catch {
-    return false;
-  }
+export function requestNotificationPermission(): Promise<boolean> {
+  return requestPermissions({ permissions: ["notifications"] });
 }
 
 export async function hasNotificationPermission(): Promise<boolean> {

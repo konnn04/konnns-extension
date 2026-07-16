@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Trash2, Upload, Film, Link, Eraser, Shuffle } from "lucide-react";
+import { Trash2, Upload, Film, Link, Eraser, Shuffle, Check, Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button, IconButton, TextInput } from "@/shared/ui";
 import { useFeatureValues, useSettingsStore } from "@/core/settings-engine/settingsStore";
@@ -41,6 +41,14 @@ export function WallpaperManager() {
   const values = useFeatureValues(FEATURE_ID);
   const setValue = useSettingsStore((s) => s.setValue);
   const activeId = (values.activeId as string) ?? "";
+  const inSlideshow = values.mode === "slideshow";
+  const slideItems = Array.isArray(values.slideItems) ? (values.slideItems as string[]) : [];
+  const toggleSlide = (id: string) => {
+    const next = slideItems.includes(id)
+      ? slideItems.filter((x) => x !== id)
+      : [...slideItems, id];
+    setValue(FEATURE_ID, "slideItems", next);
+  };
 
   const imgInput = useRef<HTMLInputElement>(null);
   const videoInput = useRef<HTMLInputElement>(null);
@@ -164,6 +172,12 @@ export function WallpaperManager() {
 
       {error && <div className="ui-field__error" style={{ marginBottom: "var(--space-3)" }}>{error}</div>}
 
+      {inSlideshow && (
+        <p className="ui-field__desc" style={{ marginBottom: "var(--space-2)" }}>
+          {t("wallpaper.slidePick", { count: slideItems.length })}
+        </p>
+      )}
+
       <div className="wp-manager__grid">
         {/* theme gradient is always the first, deletable-never option */}
         <div
@@ -189,6 +203,18 @@ export function WallpaperManager() {
           >
             <Thumb item={item} />
             {activeId === item.id && <span className="wp-item__badge">{t("wallpaper.active")}</span>}
+            {inSlideshow && (
+              <button
+                className={`wp-item__slide ${slideItems.includes(item.id) ? "wp-item__slide--on" : ""}`}
+                title={t("wallpaper.slideToggle")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleSlide(item.id);
+                }}
+              >
+                {slideItems.includes(item.id) ? <Check size={14} /> : <Plus size={14} />}
+              </button>
+            )}
             <IconButton
               label={t("common.delete")}
               className="wp-item__delete"

@@ -59,12 +59,19 @@
   color: var(--accent-contrast);
 }
 /* hover-hide: pure CSS so it can't get stuck visible. The bar keeps pointer
-   events while transparent so hovering its area reveals it. */
+   events while transparent so hovering its area reveals it. Slide + fade so
+   the reveal reads as a smooth transition rather than an instant pop. */
 .bookmark-bar--hover-mode {
   opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity var(--dur-panel) var(--ease-out),
+    transform var(--dur-panel) var(--ease-out);
+  will-change: opacity, transform;
 }
 .bookmark-bar--hover-mode:hover {
   opacity: 1;
+  transform: translateY(0);
 }
 
 /* Radial (fan) layout — items positioned around a bottom-centered arc */

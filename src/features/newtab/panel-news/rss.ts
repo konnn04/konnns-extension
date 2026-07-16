@@ -1,4 +1,5 @@
 import { browser } from "wxt/browser";
+import { requestPermissions } from "@/core/permissions";
 
 /**
  * News via public RSS (keyless, docs/phase-2 §2 + bonus-public-api). Feeds are
@@ -72,12 +73,8 @@ export async function hasHostPermission(): Promise<boolean> {
   }
 }
 
-export async function requestHostPermission(): Promise<boolean> {
-  try {
-    return await browser.permissions.request({ origins: [HOST_PATTERN] });
-  } catch {
-    return false;
-  }
+export function requestHostPermission(): Promise<boolean> {
+  return requestPermissions({ origins: [HOST_PATTERN] });
 }
 
 function stripHtml(html: string): string {

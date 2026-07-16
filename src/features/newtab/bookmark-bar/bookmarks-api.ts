@@ -1,4 +1,5 @@
 import { browser } from "wxt/browser";
+import { hasPermissions, requestPermissions } from "@/core/permissions";
 
 /**
  * Bookmark source = native browser bookmarks API (Option A per
@@ -13,20 +14,12 @@ export interface BookmarkItem {
   children?: BookmarkItem[];
 }
 
-export async function hasBookmarkPermission(): Promise<boolean> {
-  try {
-    return await browser.permissions.contains({ permissions: ["bookmarks"] });
-  } catch {
-    return false;
-  }
+export function hasBookmarkPermission(): Promise<boolean> {
+  return hasPermissions({ permissions: ["bookmarks"] });
 }
 
-export async function requestBookmarkPermission(): Promise<boolean> {
-  try {
-    return await browser.permissions.request({ permissions: ["bookmarks"] });
-  } catch {
-    return false;
-  }
+export function requestBookmarkPermission(): Promise<boolean> {
+  return requestPermissions({ permissions: ["bookmarks"] });
 }
 
 /** Children of the "bookmarks bar" folder (Chrome id "1", Firefox "toolbar_____"). */

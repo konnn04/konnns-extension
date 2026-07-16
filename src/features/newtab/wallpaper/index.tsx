@@ -28,8 +28,35 @@ function WallpaperLayer() {
   const urlsRef = useRef<Set<string>>(new Set());
   const touch = useWallpaperStore((s) => s.touch);
 
+  // Slideshow: cycle through the chosen wallpapers on a timer
+  const slideshow = values.mode === "slideshow";
+  const slideItems = Array.isArray(values.slideItems) ? (values.slideItems as string[]) : [];
+  const slideKey = slideItems.join(",");
+  const slideInterval =
+    typeof values.slideInterval === "number" ? values.slideInterval : 30;
+  const slideOrder = (values.slideOrder as string) ?? "sequential";
+  const [slideIdx, setSlideIdx] = useState(0);
+
+  useEffect(() => {
+    if (!slideshow) return;
+    setSlideIdx(0);
+    const ids = slideKey ? slideKey.split(",") : [];
+    if (ids.length <= 1) return; // nothing to cycle through
+    const id = window.setInterval(() => {
+      setSlideIdx((i) => {
+        if (slideOrder === "random") {
+          let n = i;
+          while (n === i) n = Math.floor(Math.random() * ids.length);
+          return n;
+        }
+        return (i + 1) % ids.length;
+      });
+    }, Math.max(5, slideInterval) * 1000);
+    return () => window.clearInterval(id);
+  }, [slideshow, slideKey, slideInterval, slideOrder]);
+
   // Random-on-open: pick a random wallpaper from the library each new tab
-  const randomMode = values.randomMode === true;
+  const randomMode = values.randomMode === true && !slideshow;
   const items = useWallpaperStore((s) => s.items);
   const itemsLoaded = useWallpaperStore((s) => s.loaded);
   const loadItems = useWallpaperStore((s) => s.load);
@@ -45,7 +72,13 @@ function WallpaperLayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [randomMode, itemsLoaded]);
 
-  const activeId = randomMode && randomId ? randomId : ((values.activeId as string) ?? "");
+  const slideActiveId =
+    slideshow && slideItems.length > 0
+      ? slideItems[Math.min(slideIdx, slideItems.length - 1)]
+      : null;
+  const activeId =
+    slideActiveId ??
+    (randomMode && randomId ? randomId : ((values.activeId as string) ?? ""));
   const lowPower =
     coreValues.lowPower === true ||
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;

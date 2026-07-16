@@ -23,6 +23,36 @@ export interface ToolWindowState {
 // windows sit above center (z 10) / quick-access (z 20); start the stack here
 const Z_BASE = 30;
 
+// which windows were open when the tab closed (restored on reopen if the user
+// enabled "restore windows"). Kept in localStorage for a synchronous read.
+const OPEN_KEY = "wm:open";
+function saveOpen(open: string[]) {
+  try {
+    localStorage.setItem(OPEN_KEY, JSON.stringify(open));
+  } catch {
+    /* storage disabled */
+  }
+}
+function loadOpen(): string[] {
+  try {
+    const raw = localStorage.getItem(OPEN_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Keep a floating window at least partially on-screen after a viewport resize. */
+function clampPosition(win: ToolWindowState): { x: number; y: number } {
+  const maxX = Math.max(0, window.innerWidth - 80);
+  const maxY = Math.max(0, window.innerHeight - 40);
+  return {
+    x: Math.min(Math.max(0, win.position.x), maxX),
+    y: Math.min(Math.max(0, win.position.y), maxY),
+  };
+}
+
 function defaultState(id: string, index: number): ToolWindowState {
   return {
     id,
@@ -37,9 +67,15 @@ function defaultState(id: string, index: number): ToolWindowState {
 interface WMState {
   windows: Record<string, ToolWindowState>;
   open: string[];
+  /** windows that were open last session (loaded on hydrate, not auto-shown) */
+  pendingOpen: string[];
   topZ: number;
   hydrated: boolean;
   hydrate: () => Promise<void>;
+  /** reopen the windows from last session (used when "restore windows" is on) */
+  restoreOpen: (validIds?: string[]) => void;
+  /** keep every floating window on-screen (call on viewport resize) */
+  clampToViewport: () => void;
   toggle: (id: string) => void;
   openWindow: (id: string) => void;
   close: (id: string) => void;
@@ -72,6 +108,7 @@ function persistDebounced(w: ToolWindowState) {
 export const useWindowManager = create<WMState>((set, get) => ({
   windows: {},
   open: [],
+  pendingOpen: [],
   topZ: Z_BASE,
   hydrated: false,
 
@@ -91,7 +128,31 @@ export const useWindowManager = create<WMState>((set, get) => ({
       };
       topZ = Math.max(topZ, r.zIndex);
     }
-    set({ windows, topZ, hydrated: true });
+    set({ windows, topZ, hydrated: true, pendingOpen: loadOpen() });
+  },
+
+  restoreOpen: (validIds) => {
+    const { pendingOpen, open } = get();
+    if (open.length > 0) return; // don't clobber a session already in progress
+    const ids = validIds ? pendingOpen.filter((id) => validIds.includes(id)) : pendingOpen;
+    ids.forEach((id) => get().openWindow(id));
+  },
+
+  clampToViewport: () => {
+    const s = get();
+    let changed = false;
+    const windows = { ...s.windows };
+    for (const id of s.open) {
+      const win = windows[id];
+      if (!win || win.mode !== "floating") continue;
+      const pos = clampPosition(win);
+      if (pos.x !== win.position.x || pos.y !== win.position.y) {
+        windows[id] = { ...win, position: pos };
+        persistDebounced(windows[id]);
+        changed = true;
+      }
+    }
+    if (changed) set({ windows });
   },
 
   toggle: (id) => (get().open.includes(id) ? get().close(id) : get().openWindow(id)),
@@ -101,15 +162,18 @@ export const useWindowManager = create<WMState>((set, get) => ({
     const win = state.windows[id] ?? defaultState(id, state.open.length);
     const zIndex = state.topZ + 1;
     const next = { ...win, zIndex, mode: win.mode === "minimized" ? win.prevMode : win.mode };
-    set({
-      windows: { ...state.windows, [id]: next },
-      open: state.open.includes(id) ? state.open : [...state.open, id],
-      topZ: zIndex,
-    });
+    const open = state.open.includes(id) ? state.open : [...state.open, id];
+    set({ windows: { ...state.windows, [id]: next }, open, topZ: zIndex });
+    saveOpen(open);
     persist(next);
   },
 
-  close: (id) => set((s) => ({ open: s.open.filter((x) => x !== id) })),
+  close: (id) =>
+    set((s) => {
+      const open = s.open.filter((x) => x !== id);
+      saveOpen(open);
+      return { open };
+    }),
 
   focus: (id) => {
     const s = get();
