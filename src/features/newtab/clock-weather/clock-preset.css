@@ -1,0 +1,64 @@
+.clock-preset {
+  margin-top: var(--space-3);
+}
+.clock-preset__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+.clock-preset__tab {
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    color var(--dur-hover) ease-out,
+    border-color var(--dur-hover) ease-out;
+}
+.clock-preset__tab--active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--surface);
+}
+.clock-preset__row {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.clock-preset__preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(45deg, var(--surface) 25%, transparent 25%) -10px 0/20px 20px,
+    linear-gradient(-45deg, var(--surface) 25%, transparent 25%) -10px 0/20px 20px,
+    var(--theme-gradient, var(--bg));
+  overflow: hidden;
+  margin-bottom: var(--space-3);
+}
+.clock-preset__editor {
+  width: 100%;
+  min-height: 200px;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+}
+.clock-preset__editor:focus {
+  border-color: var(--accent);
+}

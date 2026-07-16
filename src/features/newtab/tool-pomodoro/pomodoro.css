@@ -1,0 +1,116 @@
+.pomo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+}
+.pomo__phase {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+.pomo__ring {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.pomo__ring svg {
+  transform: rotate(-90deg);
+}
+.pomo__ring-bg {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 8;
+}
+.pomo__ring-fg {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+.pomo__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.pomo__emoji {
+  font-size: 34px;
+  line-height: 1;
+}
+.pomo__time {
+  font-family: var(--font-mono);
+  font-size: 34px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.pomo__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.pomo__main-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: 120px;
+}
+.pomo__sessions {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.pomo__durations {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.pomo-stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.pomo-stepper__label {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+.pomo-stepper__ctrl {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.pomo-stepper__ctrl button {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+.pomo-stepper__ctrl button:hover {
+  border-color: var(--accent);
+}
+.pomo-stepper__ctrl span {
+  min-width: 22px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

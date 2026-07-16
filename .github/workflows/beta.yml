@@ -1,0 +1,61 @@
+# Beta build: runs when something is merged/pushed to `dev`.
+# Produces ONE rolling pre-release tagged `beta` that is always overwritten
+# (no version bump — beta always points at the latest dev commit).
+name: Beta
+
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: beta
+  cancel-in-progress: true
+
+jobs:
+  beta:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build zips
+        run: |
+          pnpm build && pnpm zip
+          pnpm build:firefox && pnpm exec wxt zip -b firefox
+
+      - name: Changelog (recent dev changes)
+        id: notes
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          BETA: "1"
+        run: node .github/scripts/ai-changelog.mjs > RELEASE_NOTES.md
+
+      # Overwrite the single rolling beta release + move its tag to this commit.
+      - name: Recreate rolling beta release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete beta --cleanup-tag --yes 2>/dev/null || true
+          VER=$(node -p "require('./package.json').version")
+          gh release create beta \
+            --prerelease \
+            --target "$GITHUB_SHA" \
+            --title "Beta (dev) · v$VER-beta" \
+            --notes-file RELEASE_NOTES.md \
+            .output/*.zip

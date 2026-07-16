@@ -1,0 +1,49 @@
+.app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.zone-center {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  pointer-events: none;
+}
+.zone-center > * {
+  pointer-events: auto;
+}
+.zone-center--top {
+  justify-content: flex-start;
+  padding-top: 14vh;
+}
+
+/* Full-width flex centering — NOT transform-based, because Framer Motion's
+   reveal animation controls `transform` and would override translateX/Y. */
+.zone-quick-access {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--space-5);
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.zone-quick-access > * {
+  pointer-events: auto;
+}
+.zone-quick-access--vertical {
+  right: auto;
+  top: 0;
+  bottom: 0;
+  left: var(--space-5);
+  flex-direction: column;
+  justify-content: center;
+}

@@ -1,0 +1,78 @@
+.tasks__add {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.tasks__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--dur-hover) ease-out;
+}
+.task-row:hover {
+  background: var(--surface);
+}
+.task-row--dragover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.task-row__grip {
+  color: var(--text-muted);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--dur-hover) ease-out;
+}
+.task-row:hover .task-row__grip {
+  opacity: 0.7;
+}
+.task-check {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-contrast);
+  transition:
+    background-color var(--dur-hover) ease-out,
+    border-color var(--dur-hover) ease-out;
+}
+.task-check--done {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.task-row__text {
+  flex: 1;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  outline: none;
+}
+.task-row__text--done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+.task-row__del {
+  opacity: 0;
+  transition: opacity var(--dur-hover) ease-out;
+}
+.task-row:hover .task-row__del {
+  opacity: 1;
+}
+.tasks__empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: var(--space-4);
+}

@@ -1,0 +1,113 @@
+.settings-trigger-zone {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 96px;
+  height: 96px;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: var(--space-4);
+}
+.settings-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur-hover) ease-out,
+    transform var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out;
+}
+.settings-trigger-zone:hover .settings-trigger,
+.settings-trigger:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.settings-trigger:hover {
+  color: var(--text);
+}
+
+.settings-layout {
+  display: flex;
+  min-height: 420px;
+  max-height: 72vh;
+}
+.settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-right: 1px solid var(--border);
+  min-width: 200px;
+  /* scroll the nav independently so many items don't stretch the modal */
+  min-height: 0;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.settings-nav__group {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: var(--space-3) var(--space-3) var(--space-1);
+}
+.settings-nav__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background-color var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out;
+}
+.settings-nav__item:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.settings-nav__item--active {
+  background: var(--surface);
+  color: var(--accent);
+}
+.settings-content {
+  flex: 1;
+  padding: var(--space-5);
+  overflow-y: auto;
+}
+.settings-section {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.settings-section__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.settings-section__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

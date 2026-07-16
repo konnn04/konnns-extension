@@ -1,0 +1,61 @@
+.focus-trigger-zone {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 96px;
+  height: 96px;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: var(--space-4);
+}
+.focus-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur-hover) ease-out,
+    transform var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out;
+}
+.focus-trigger-zone:hover .focus-trigger,
+.focus-trigger--active,
+.focus-trigger:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.focus-trigger:hover {
+  color: var(--text);
+}
+.focus-trigger--active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+
+/* Focus Mode: hide everything except wallpaper + clock + search */
+html[data-focus="true"] .left-sidebar,
+html[data-focus="true"] .left-sidebar__hover-zone,
+html[data-focus="true"] .right-rail,
+html[data-focus="true"] .right-sidebar__hover-zone,
+html[data-focus="true"] .tool-window,
+html[data-focus="true"] .zone-quick-access,
+html[data-focus="true"] .notif-trigger-zone,
+html[data-focus="true"] .settings-trigger-zone,
+html[data-focus="true"] .avatar,
+html[data-focus="true"] .most-visited,
+html[data-focus="true"] .daily-quote,
+html[data-focus="true"] .weather-summary {
+  display: none !important;
+}

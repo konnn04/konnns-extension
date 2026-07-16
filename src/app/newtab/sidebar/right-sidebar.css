@@ -1,0 +1,194 @@
+/* Right sidebar: trigger rail + tool windows (Phase 4) */
+.right-sidebar__hover-zone {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  z-index: 39;
+}
+.right-rail {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translate(100%, -50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--border);
+  border-right: none;
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  transition:
+    transform var(--dur-panel) var(--ease-out),
+    opacity var(--dur-panel) var(--ease-out);
+}
+.right-rail--visible {
+  transform: translate(0, -50%);
+  opacity: 1;
+}
+.right-rail__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out,
+    transform var(--dur-hover) ease-out;
+}
+.right-rail__trigger {
+  transform: scale(var(--dock-scale, 1));
+  transform-origin: right center;
+}
+.right-rail__trigger:hover {
+  background: var(--surface-elevated);
+  color: var(--text);
+}
+.right-rail__trigger--active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Tool window */
+.tool-window {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+  backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+}
+.tool-window--docked {
+  top: 0;
+  bottom: 0;
+  border-radius: 0;
+  border-top: none;
+  border-bottom: none;
+  height: 100%;
+}
+.tool-window--maximized {
+  inset: 24px 24px 24px 24px;
+  width: auto !important;
+  height: auto !important;
+}
+.tool-window__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 7px var(--space-3);
+  border-bottom: 1px solid var(--border);
+  cursor: grab;
+  user-select: none;
+}
+.tool-window__header:active {
+  cursor: grabbing;
+}
+.tool-window--docked .tool-window__header,
+.tool-window--maximized .tool-window__header {
+  cursor: default;
+}
+.tool-window__title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* macOS traffic lights */
+.tw-lights {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.tw-light {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: transparent;
+  transition: filter var(--dur-hover) ease-out;
+}
+.tw-light--close {
+  background: #ff5f57;
+}
+.tw-light--min {
+  background: #febc2e;
+}
+.tw-light--max {
+  background: #28c840;
+}
+.tw-lights:hover .tw-light {
+  color: rgba(0, 0, 0, 0.55);
+}
+.tw-light:hover {
+  filter: brightness(1.12);
+}
+.tool-window__dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out;
+}
+.tool-window__dock:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.tool-window__body {
+  flex: 1;
+  overflow: auto;
+  padding: var(--space-3);
+}
+.tool-window__resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+}
+.tool-window__resize::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--text-muted);
+  border-bottom: 2px solid var(--text-muted);
+  opacity: 0.5;
+}

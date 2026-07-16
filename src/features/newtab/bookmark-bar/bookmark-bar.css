@@ -1,0 +1,150 @@
+.bookmark-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-soft);
+  /* keep the bar within the viewport and wrap instead of overflowing */
+  max-width: min(760px, 92vw);
+  transition: opacity var(--dur-panel) var(--ease-out);
+}
+.bookmark-bar--vertical {
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: none;
+  max-height: 82vh;
+  padding: var(--space-4) var(--space-2);
+}
+/* hover-hide: pure CSS so it can't get stuck visible. The bar keeps pointer
+   events while transparent so hovering its area reveals it. */
+.bookmark-bar--hover-mode {
+  opacity: 0;
+}
+.bookmark-bar--hover-mode:hover {
+  opacity: 1;
+}
+
+/* Radial (fan) layout — items positioned around a bottom-centered arc */
+.bookmark-radial {
+  position: relative;
+  transition: opacity var(--dur-panel) var(--ease-out);
+}
+.bookmark-radial__slot {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transition: transform var(--dur-panel) var(--ease-out);
+}
+
+/* macOS-dock style magnification: scale set inline via --bm-scale (JS proximity) */
+.bookmark-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transform: scale(var(--bm-scale, 1)) translateY(calc((1 - var(--bm-scale, 1)) * 8px));
+  transform-origin: bottom center;
+  transition: transform var(--dur-hover) ease-out;
+  text-decoration: none;
+}
+.bookmark-bar--vertical .bookmark-item {
+  transform-origin: center left;
+}
+.bookmark-item__icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+  background: var(--surface-elevated);
+  padding: 3px;
+}
+.bookmark-item__letter {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+.bookmark-item__label {
+  max-width: 52px;
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Folder popover */
+.bookmark-folder {
+  position: relative;
+}
+.bookmark-folder__menu {
+  position: absolute;
+  bottom: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  max-height: 320px;
+  overflow: auto;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+  z-index: 20;
+}
+.bookmark-folder__entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: background-color var(--dur-hover) ease-out;
+}
+.bookmark-folder__entry:hover {
+  background: var(--surface);
+}
+.bookmark-folder__entry img {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+}
+.bookmark-folder__entry span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* permission / first-time notes */
+.bookmark-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  color: var(--text-muted);
+}

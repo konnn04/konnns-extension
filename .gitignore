@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# WXT build output & generated types
+.output/
+.wxt/
+*.zip
+
+# Logs & caches
+*.log
+npm-debug.log*
+.eslintcache
+
+# Env & secrets (never commit API keys)
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Misc
+coverage/
+.claude/skills/ui-ux-pro-max

@@ -1,0 +1,114 @@
+.wallpaper-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--theme-gradient, var(--bg));
+}
+.wallpaper-layer__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: blur(var(--wallpaper-blur));
+  /* slight over-scale so blur/parallax never reveal the edges */
+  transform: scale(calc(1 + var(--wallpaper-blur) / 200));
+  transition: opacity var(--dur-wallpaper) var(--ease-standard);
+}
+.wallpaper-layer__media--visible {
+  opacity: 1;
+}
+/* user-adjustable darkening so center content stays readable */
+.wallpaper-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #000 calc(var(--wallpaper-dim) * 100%), transparent);
+  pointer-events: none;
+}
+/* parallax: the media layer shifts with the pointer (set via JS transform) */
+.wallpaper-layer--parallax .wallpaper-layer__media {
+  transform: scale(1.08) translate(var(--parallax-x, 0), var(--parallax-y, 0));
+  transition:
+    opacity var(--dur-wallpaper) var(--ease-standard),
+    transform 200ms ease-out;
+}
+
+/* ---- Library manager (settings) ---- */
+.wp-manager__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.wp-manager__url {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.wp-manager__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+.wp-item {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--border);
+  aspect-ratio: 16 / 9;
+  cursor: pointer;
+  background: var(--surface);
+  transition:
+    border-color var(--dur-hover) ease-out,
+    transform var(--dur-hover) ease-out;
+}
+.wp-item:hover {
+  transform: scale(1.02);
+}
+.wp-item--active {
+  border-color: var(--accent);
+}
+.wp-item__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.wp-item__gradient {
+  width: 100%;
+  height: 100%;
+}
+.wp-item__badge {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+.wp-item__delete {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  opacity: 0;
+  transition: opacity var(--dur-hover) ease-out;
+  background: var(--overlay);
+}
+.wp-item:hover .wp-item__delete {
+  opacity: 1;
+}
+.wp-manager__meta {
+  margin-top: var(--space-4);
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}

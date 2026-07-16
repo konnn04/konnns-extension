@@ -1,0 +1,128 @@
+.gh__reload {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-2);
+}
+.gh__profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.gh__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--border);
+}
+.gh__name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.gh__login {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.gh__bio {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.gh__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: var(--space-4);
+}
+.gh__line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.gh__line svg {
+  color: var(--accent);
+}
+.gh__line b {
+  color: var(--text);
+}
+.gh__section-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-2);
+}
+.gh__contrib {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.gh__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.gh__repo,
+.gh__notif {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition:
+    border-color var(--dur-hover) ease-out,
+    transform var(--dur-hover) ease-out;
+}
+.gh__repo:hover,
+.gh__notif:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.gh__repo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+.gh__repo-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.gh__repo-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.gh__repo-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gh__repo-lang {
+  display: inline-block;
+  margin-top: var(--space-1);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.gh__notif-title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.gh__notif-repo {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}

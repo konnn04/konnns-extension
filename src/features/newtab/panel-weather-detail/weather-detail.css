@@ -1,0 +1,220 @@
+.wdetail__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.wdetail__loc {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.wdetail__now {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.wdetail__now-icon {
+  color: var(--accent);
+}
+.wdetail__now-temp {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+.wdetail__now-cond {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+/* compact stat grid (item 5 — limit big cards) */
+.wdetail__grid {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+.wdetail__cell {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.wdetail__cell svg {
+  color: var(--accent);
+}
+.wdetail__cell b {
+  color: var(--text);
+}
+/* sun arc visual */
+.sunarc {
+  margin-bottom: var(--space-3);
+}
+.sunarc__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.sunarc__horizon {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.sunarc__track {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 2;
+}
+.sunarc__prog {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.sunarc__sun circle {
+  fill: #ffd54a;
+}
+.sunarc__ray {
+  stroke: #ffd54a;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.sunarc__sun--night circle {
+  fill: var(--text-muted);
+  opacity: 0.5;
+}
+.sunarc__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+.sunarc__labels span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.sunarc__labels svg {
+  color: var(--accent);
+}
+.wdetail__hours {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+  margin-top: var(--space-2);
+}
+.wdetail__hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 44px;
+  padding: var(--space-2) var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.wdetail__hour-time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.wdetail__hour-icon {
+  color: var(--accent);
+}
+.wdetail__hour-temp {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.wdetail__stat {
+  flex: 1;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.wdetail__stat-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.wdetail__stat-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.wdetail__section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin: var(--space-4) 0 var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.temp-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.temp-chart__area {
+  fill: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.temp-chart__line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.temp-chart__label {
+  fill: var(--text-muted);
+  font-size: 8px;
+}
+.temp-chart__value {
+  fill: var(--text);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.wdetail__days {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.wdetail__day {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--dur-hover) ease-out;
+}
+.wdetail__day:hover {
+  background: var(--surface);
+}
+.wdetail__day-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  text-transform: capitalize;
+}
+.wdetail__day-name svg {
+  color: var(--accent);
+}
+.wdetail__day-temp {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.wdetail__day-temp b {
+  color: var(--text);
+}
+.wdetail__day-temp span {
+  color: var(--text-muted);
+}

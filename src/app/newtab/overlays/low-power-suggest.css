@@ -1,0 +1,28 @@
+.lp-suggest {
+  position: fixed;
+  /* margin-auto centering (not translateX) — Framer Motion controls transform */
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: fit-content;
+  top: var(--space-4);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: min(92vw, 520px);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+  backdrop-filter: blur(var(--glass-blur));
+}
+.lp-suggest__icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.lp-suggest__text {
+  font-size: 13px;
+  color: var(--text);
+}

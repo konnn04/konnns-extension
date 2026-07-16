@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+# auto-fix + lint staged files, then type-check the whole project
+npx --no-install lint-staged && pnpm compile

@@ -1,0 +1,164 @@
+.notif-trigger-zone {
+  position: fixed;
+  right: 0;
+  bottom: 56px;
+  width: 96px;
+  height: 56px;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 var(--space-4) var(--space-2);
+}
+.notif-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--dur-hover) ease-out,
+    transform var(--dur-hover) ease-out,
+    color var(--dur-hover) ease-out;
+}
+/* auto-hide like the settings gear; reveal only on hover/focus of the corner.
+   When there are unread items the small badge dot stays as a subtle hint. */
+.notif-trigger-zone:hover .notif-trigger,
+.notif-trigger:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.notif-trigger--has-unread {
+  opacity: 0.5;
+  transform: translateY(0);
+}
+.notif-trigger--has-unread:hover {
+  opacity: 1;
+}
+.notif-trigger:hover {
+  color: var(--text);
+}
+.notif-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.notif-panel {
+  position: fixed;
+  right: var(--space-4);
+  bottom: 108px;
+  z-index: 60;
+  width: min(360px, 90vw);
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+  backdrop-filter: blur(var(--glass-blur));
+  overflow: hidden;
+}
+.notif-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+.notif-panel__title {
+  font-weight: 700;
+  font-size: 15px;
+}
+.notif-panel__actions {
+  display: flex;
+  gap: var(--space-1);
+}
+.notif-panel__list {
+  overflow-y: auto;
+  padding: var(--space-2);
+}
+.notif-panel__empty {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.notif-row {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  cursor: default;
+  transition: background-color var(--dur-hover) ease-out;
+}
+.notif-row:hover {
+  background: var(--surface);
+}
+.notif-row--unread {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.notif-row__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+.notif-row__dot--read {
+  background: transparent;
+}
+.notif-row__body {
+  flex: 1;
+  min-width: 0;
+}
+.notif-row__title {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.notif-row__text {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.notif-row__meta {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.notif-row__source {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* settings section */
+.notif-settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}

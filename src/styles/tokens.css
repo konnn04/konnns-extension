@@ -1,0 +1,88 @@
+/*
+ * Design tokens — single source of truth for the whole project.
+ * Color tokens are overridden at runtime by the Theme Engine (see core/theme-engine).
+ * Components MUST consume these variables; hardcoding colors is forbidden (docs/core-he-thong/01).
+ */
+:root {
+  /* Color tokens (defaults = "ocean" dark, replaced on theme load) */
+  --bg: #0b1622;
+  --surface: rgba(15, 30, 45, 0.72);
+  --surface-elevated: rgba(22, 42, 60, 0.92);
+  --text: #e8f1f8;
+  --text-muted: rgba(232, 241, 248, 0.62);
+  --accent: #38bdf8;
+  --accent-contrast: #06222e;
+  --border: rgba(232, 241, 248, 0.14);
+  --overlay: rgba(4, 10, 16, 0.55);
+  --shadow-color: rgba(0, 0, 0, 0.35);
+
+  /* Typography */
+  --font-heading: "Segoe UI", system-ui, sans-serif;
+  --font-body: "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+
+  /* Shape & elevation */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 999px;
+  --shadow-soft: 0 2px 12px var(--shadow-color);
+  --shadow-elevated: 0 12px 40px var(--shadow-color);
+
+  /* Appearance controls (overridden at runtime from General settings) */
+  --wallpaper-dim: 0.35; /* 0..1 darkness overlay on the wallpaper */
+  --wallpaper-blur: 0px; /* blur applied to the wallpaper media */
+  --panel-alpha: 1; /* glass transparency of panels/surfaces (0.4..1) */
+  --glass-blur: 16px; /* backdrop blur strength for glass panels */
+  /* derived translucent panel backgrounds (react to --panel-alpha) */
+  --glass-bg: color-mix(in srgb, var(--surface) calc(var(--panel-alpha) * 100%), transparent);
+  --glass-bg-strong: color-mix(
+    in srgb,
+    var(--surface-elevated) calc(var(--panel-alpha) * 100%),
+    transparent
+  );
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Motion (docs/phase-1-mvp/03 §4) */
+  --dur-hover: 150ms;
+  --dur-panel: 280ms;
+  --dur-window: 200ms;
+  --dur-theme: 300ms;
+  --dur-wallpaper: 500ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: ease-in-out;
+}
+
+/* Theme crossfade: enabled after first paint so initial load doesn't animate */
+html[data-theme-transitions="true"] body,
+html[data-theme-transitions="true"] body * {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: var(--dur-theme);
+  transition-timing-function: var(--ease-standard);
+}
+
+/* Low-power mode / prefers-reduced-motion: collapse all motion (docs/phase-1-mvp/03 §4) */
+html[data-low-power="true"] {
+  --dur-hover: 0ms;
+  --dur-panel: 50ms;
+  --dur-window: 50ms;
+  --dur-theme: 0ms;
+  --dur-wallpaper: 0ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-hover: 0ms;
+    --dur-panel: 50ms;
+    --dur-window: 50ms;
+    --dur-theme: 0ms;
+    --dur-wallpaper: 0ms;
+  }
+}
