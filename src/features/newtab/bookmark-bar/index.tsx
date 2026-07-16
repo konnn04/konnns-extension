@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bookmark, Folder } from "lucide-react";
+import { Bookmark, ChevronLeft, ChevronRight, Folder } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { registerFeature } from "@/core/feature-registry";
 import { useFeatureValues, useSettingsStore } from "@/core/settings-engine/settingsStore";
@@ -76,7 +76,10 @@ function BookmarkBar() {
   const setValue = useSettingsStore((s) => s.setValue);
   const [state, setState] = useState<"checking" | "no-permission" | "loading" | "ready">("checking");
   const [items, setItems] = useState<BookmarkItem[]>([]);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const barRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const orientation = (values.orientation as string) ?? "horizontal";
   const showMode = (values.showMode as string) ?? "always";
@@ -117,6 +120,29 @@ function BookmarkBar() {
     barRef.current
       ?.querySelectorAll<HTMLElement>(".bookmark-item")
       .forEach((n) => n.style.removeProperty("--bm-scale"));
+  };
+
+  // Update scroll button visibility
+  const updateScrollState = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 1);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
+  }, []);
+
+  // Re-check after items load or window resize
+  useEffect(() => {
+    updateScrollState();
+    const onResize = () => updateScrollState();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [items, updateScrollState]);
+
+  const scrollTrack = (direction: "left" | "right") => {
+    const el = trackRef.current;
+    if (!el) return;
+    const step = 200; // px per click
+    el.scrollBy({ left: direction === "right" ? step : -step, behavior: "smooth" });
   };
 
   // hover-hide is pure CSS (:hover) so it never gets stuck showing (no JS state)
@@ -208,13 +234,41 @@ function BookmarkBar() {
     );
   }
 
+  const hasItems = seenNote && items.length > 0;
+
   return (
     <div ref={barRef} className={barClass} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
       {noteBlock}
       {seenNote && items.length === 0 && (
         <span className="bookmark-note">{t("bookmarks.empty")}</span>
       )}
-      {seenNote && items.map((item) => renderItem(item, item.id))}
+      {hasItems && (
+        <>
+          <button
+            className={`bookmark-bar__scroll-btn ${canScrollLeft ? "bookmark-bar__scroll-btn--visible" : ""}`}
+            onClick={() => scrollTrack("left")}
+            aria-label="Scroll bookmarks left"
+            tabIndex={canScrollLeft ? 0 : -1}
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <div
+            className="bookmark-bar__track"
+            ref={trackRef}
+            onScroll={updateScrollState}
+          >
+            {items.map((item) => renderItem(item, item.id))}
+          </div>
+          <button
+            className={`bookmark-bar__scroll-btn ${canScrollRight ? "bookmark-bar__scroll-btn--visible" : ""}`}
+            onClick={() => scrollTrack("right")}
+            aria-label="Scroll bookmarks right"
+            tabIndex={canScrollRight ? 0 : -1}
+          >
+            <ChevronRight size={18} />
+          </button>
+        </>
+      )}
     </div>
   );
 }

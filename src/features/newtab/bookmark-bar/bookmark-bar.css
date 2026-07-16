@@ -1,25 +1,61 @@
 .bookmark-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-1);
   border-radius: var(--radius-lg);
   background: var(--glass-bg);
   border: 1px solid var(--border);
   backdrop-filter: blur(var(--glass-blur));
   box-shadow: var(--shadow-soft);
-  /* keep the bar within the viewport and wrap instead of overflowing */
   max-width: min(760px, 92vw);
   transition: opacity var(--dur-panel) var(--ease-out);
 }
 .bookmark-bar--vertical {
   flex-direction: column;
-  flex-wrap: wrap;
   max-width: none;
   max-height: 82vh;
-  padding: var(--space-4) var(--space-2);
+  padding: var(--space-2) var(--space-4);
+}
+.bookmark-bar__track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow: hidden;
+  scroll-behavior: smooth;
+  flex: 1;
+  /* room for macOS-dock scale animation (1.35×) so icons aren't clipped */
+  padding-block: var(--space-2);
+}
+.bookmark-bar--vertical .bookmark-bar__track {
+  flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: unset;
+}
+.bookmark-bar__scroll-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface-elevated);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--dur-hover) ease-out, background var(--dur-hover) ease-out;
+  pointer-events: none;
+}
+.bookmark-bar:hover .bookmark-bar__scroll-btn--visible {
+  opacity: 0.8;
+  pointer-events: auto;
+}
+.bookmark-bar__scroll-btn--visible:hover {
+  opacity: 1;
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
 /* hover-hide: pure CSS so it can't get stuck visible. The bar keeps pointer
    events while transparent so hovering its area reveals it. */
