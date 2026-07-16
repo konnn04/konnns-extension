@@ -30,11 +30,11 @@ if (commits.length === 0) commits.push("Minor updates and maintenance.");
 
 /** Group commits by conventional-commit type for the fallback. */
 function groupFallback(list) {
-  const groups = { "✨ Tính năng": [], "🐛 Sửa lỗi": [], "🔧 Khác": [] };
+  const groups = { "✨ Features": [], "🐛 Bug Fixes": [], "🔧 Other": [] };
   for (const c of list) {
-    if (/^feat/i.test(c)) groups["✨ Tính năng"].push(c.replace(/^feat(\(.*?\))?:\s*/i, ""));
-    else if (/^fix/i.test(c)) groups["🐛 Sửa lỗi"].push(c.replace(/^fix(\(.*?\))?:\s*/i, ""));
-    else groups["🔧 Khác"].push(c.replace(/^\w+(\(.*?\))?:\s*/i, ""));
+    if (/^feat/i.test(c)) groups["✨ Features"].push(c.replace(/^feat(\(.*?\))?:\s*/i, ""));
+    else if (/^fix/i.test(c)) groups["🐛 Bug Fixes"].push(c.replace(/^fix(\(.*?\))?:\s*/i, ""));
+    else groups["🔧 Other"].push(c.replace(/^\w+(\(.*?\))?:\s*/i, ""));
   }
   let out = "";
   for (const [title, items] of Object.entries(groups)) {
@@ -48,10 +48,10 @@ async function aiChangelog(list) {
   const key = process.env.DEEPSEEK_API_KEY;
   if (!key) return null;
   const prompt =
-    `Bạn là trợ lý viết changelog cho một extension trình duyệt.\n` +
-    `Từ danh sách commit dưới đây, viết changelog Markdown NGẮN GỌN, thân thiện với người dùng cuối, bằng TIẾNG VIỆT.\n` +
-    `Nhóm theo mục: "### ✨ Tính năng", "### 🐛 Sửa lỗi", "### 🔧 Cải thiện". Bỏ nhóm nào rỗng.\n` +
-    `Gộp/viết lại cho dễ hiểu, bỏ chi tiết kỹ thuật vụn vặt, KHÔNG bịa nội dung không có trong commit.\n\n` +
+    `You are a changelog writer for a browser extension.\n` +
+    `From the commit list below, write a CONCISE, end-user-friendly Markdown changelog in ENGLISH.\n` +
+    `Group under: "### ✨ Features", "### 🐛 Bug Fixes", "### 🔧 Improvements". Skip empty groups.\n` +
+    `Merge and rephrase for clarity, omit trivial technical details, and DO NOT fabricate content not in the commits.\n\n` +
     `Commits:\n${list.map((c) => `- ${c}`).join("\n")}`;
   try {
     const res = await fetch("https://api.deepseek.com/chat/completions", {
@@ -77,7 +77,7 @@ async function aiChangelog(list) {
 const body = (await aiChangelog(commits)) ?? groupFallback(commits);
 
 const header = isBeta
-  ? `> ⚠️ **Bản Beta (dev)** — chưa chính thức, có thể bị ghi đè bất cứ lúc nào.\n`
+  ? `> ⚠️ **Beta (dev)** — preview build, may be overwritten at any time.\n`
   : "";
 const compare =
   prevTag && !isBeta

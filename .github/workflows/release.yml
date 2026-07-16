@@ -1,17 +1,12 @@
-# Official release: runs when something is merged/pushed to `main`.
-# Bumps the version (also synced into the extension manifest by WXT), builds
-# Chrome + Firefox zips, generates an AI changelog, and publishes a GitHub Release.
 name: Release
 
 on:
   push:
     branches: [main]
 
-# allow the workflow to push the version bump + create releases
 permissions:
   contents: write
 
-# never run two releases at once
 concurrency:
   group: release
   cancel-in-progress: false
@@ -19,13 +14,12 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # skip the run triggered by our own version-bump commit
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # full history so we can diff commits for the changelog
+          fetch-depth: 0 
 
       - uses: pnpm/action-setup@v4
 
@@ -36,8 +30,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # 1) Decide how much to bump from the merge commit message.
-      #    "BREAKING" or "#major" -> major, "feat"/"#minor" -> minor, else patch.
       - name: Decide version bump
         id: bump
         run: |
@@ -55,7 +47,6 @@ jobs:
         id: ver
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
-      # 2) Generate the changelog BEFORE tagging (diffs against the last tag).
       - name: Generate changelog
         id: notes
         env:
@@ -63,13 +54,11 @@ jobs:
           NEW_VERSION: ${{ steps.ver.outputs.version }}
         run: node .github/scripts/ai-changelog.mjs > RELEASE_NOTES.md
 
-      # 3) Build both browsers as installable zips.
       - name: Build zips
         run: |
           pnpm build && pnpm zip
           pnpm build:firefox && pnpm exec wxt zip -b firefox
 
-      # 4) Commit the version bump back to main + tag.
       - name: Commit & tag
         run: |
           git config user.name "github-actions[bot]"
@@ -78,7 +67,6 @@ jobs:
           git tag "v${{ steps.ver.outputs.version }}"
           git push origin HEAD:main --follow-tags
 
-      # 5) Publish the GitHub Release with notes + zips.
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
