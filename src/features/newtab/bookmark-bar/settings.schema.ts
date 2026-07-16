@@ -6,6 +6,7 @@ export const bookmarkSettingsSchema = defineSchema({
     label: "bookmarks.orientation",
     options: [
       { value: "horizontal", label: "bookmarks.orientationH" },
+      { value: "horizontal-top", label: "bookmarks.orientationHTop" },
       { value: "vertical", label: "bookmarks.orientationV" },
       { value: "radial", label: "bookmarks.orientationRadial" },
     ],

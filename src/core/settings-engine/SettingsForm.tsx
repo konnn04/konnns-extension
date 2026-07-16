@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Field, Select, Slider, TextInput, Toggle } from "@/shared/ui";
+import { Field, NumberStepper, Select, Slider, TextInput, Toggle } from "@/shared/ui";
 import type { FieldDef, SettingsSchema } from "./schema";
 import { useFeatureValues, useSettingsStore } from "./settingsStore";
 
@@ -83,13 +83,12 @@ function SettingsField({
       );
     case "number":
       return (
-        <Field label={label} description={description}>
-          <TextInput
-            type="number"
+        <Field label={label} description={description} inline={true}>
+          <NumberStepper
+            value={value === undefined || value === null ? field.default ?? 0 : (value as number)}
+            onChange={onChange as (v: number) => void}
             min={field.min}
             max={field.max}
-            value={value === undefined || value === null ? "" : String(value)}
-            onChange={(e) => onChange(e.target.value === "" ? undefined : Number(e.target.value))}
           />
         </Field>
       );

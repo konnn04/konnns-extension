@@ -34,7 +34,7 @@ function Favicon({ url, title }: { url: string; title: string }) {
   );
 }
 
-function FolderButton({ item }: { item: BookmarkItem }) {
+function FolderButton({ item, dir = "up" }: { item: BookmarkItem; dir?: "up" | "down" }) {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const [menuPos, setMenuPos] = useState<React.CSSProperties>({});
@@ -44,12 +44,21 @@ function FolderButton({ item }: { item: BookmarkItem }) {
     const btn = btnRef.current;
     if (!btn) return;
     const r = btn.getBoundingClientRect();
-    setMenuPos({
-      position: "fixed",
-      left: r.left + r.width / 2,
-      bottom: window.innerHeight - r.top + 8,
-      transform: "translateX(-50%)",
-    });
+    if (dir === "down") {
+      setMenuPos({
+        position: "fixed",
+        left: r.left + r.width / 2,
+        top: r.bottom + 8,
+        transform: "translateX(-50%)",
+      });
+    } else {
+      setMenuPos({
+        position: "fixed",
+        left: r.left + r.width / 2,
+        bottom: window.innerHeight - r.top + 8,
+        transform: "translateX(-50%)",
+      });
+    }
 
     const onDown = (e: MouseEvent) => {
       if (!(e.target as HTMLElement)?.closest(".bookmark-folder__menu") && e.target !== btn) {
@@ -69,7 +78,7 @@ function FolderButton({ item }: { item: BookmarkItem }) {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, dir]);
 
   return (
     <div className="bookmark-folder">
@@ -128,11 +137,29 @@ function BookmarkBar() {
     })();
   }, [load]);
 
-  // macOS-dock proximity magnification (CSS transform only — light on GPU)
+  // macOS-dock magnification
   const onMouseMove = (e: React.MouseEvent) => {
     const bar = barRef.current;
     if (!bar) return;
     const nodes = bar.querySelectorAll<HTMLElement>(".bookmark-item");
+
+    // Radial: find the single closest item and magnify only that one
+    if (orientation === "radial") {
+      let best: { el: HTMLElement; dist: number } | null = null;
+      nodes.forEach((node) => {
+        const r = node.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+        if (!best || dist < best.dist) best = { el: node, dist };
+      });
+      nodes.forEach((node) => {
+        node.style.setProperty("--bm-scale", node === best?.el ? "1.4" : "1");
+      });
+      return;
+    }
+
+    // Horizontal / vertical: proximity-based scaling along the bar axis
     nodes.forEach((node) => {
       const rect = node.getBoundingClientRect();
       const center = orientation === "vertical" ? rect.top + rect.height / 2 : rect.left + rect.width / 2;
@@ -148,7 +175,6 @@ function BookmarkBar() {
       .forEach((n) => n.style.removeProperty("--bm-scale"));
   };
 
-  // Update scroll button visibility
   const updateScrollState = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
@@ -156,7 +182,6 @@ function BookmarkBar() {
     setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 1);
   }, []);
 
-  // Re-check after items load or window resize
   useEffect(() => {
     updateScrollState();
     const onResize = () => updateScrollState();
@@ -171,10 +196,11 @@ function BookmarkBar() {
     el.scrollBy({ left: direction === "right" ? step : -step, behavior: "smooth" });
   };
 
-  // hover-hide is pure CSS (:hover) so it never gets stuck showing (no JS state)
+  const isTop = orientation === "horizontal-top";
   const barClass = [
     "bookmark-bar",
     orientation === "vertical" && "bookmark-bar--vertical",
+    isTop && "bookmark-bar--top",
     showMode === "hover" && "bookmark-bar--hover-mode",
   ]
     .filter(Boolean)
@@ -187,7 +213,7 @@ function BookmarkBar() {
         <span className="bookmark-item__label">{item.title || item.url}</span>
       </a>
     ) : (
-      <FolderButton key={key} item={item} />
+      <FolderButton key={key} item={item} dir={isTop ? "down" : "up"} />
     );
 
   if (state === "no-permission") {
@@ -229,32 +255,58 @@ function BookmarkBar() {
     </div>
   ) : null;
 
-  // Radial layout: items fan across the upper semicircle (docs/phase-5 §2),
-  // which fits the bottom quick-access zone without running off-screen.
   if (orientation === "radial" && seenNote && items.length > 0) {
     const n = items.length;
-    const radius = Math.min(150, 70 + n * 8);
+    const ringCfg = [
+      { capacity: 12, scale: 1.0 },
+      { capacity: 8, scale: 0.5 },
+      { capacity: 16, scale: 0.15 },
+    ];
+    const baseR = Math.min(130, 70 + n * 5);
+
+    let rem = n;
+    const activeRings: { count: number; rx: number; ry: number }[] = [];
+    for (const r of ringCfg) {
+      if (rem <= 0) break;
+      const count = Math.min(rem, r.capacity);
+      const radius = baseR * r.scale;
+      activeRings.push({ count, rx: radius * 2, ry: radius * 0.6 });
+      rem -= count;
+    }
+    if (rem > 0 && activeRings.length > 0) activeRings[activeRings.length - 1].count += rem;
+
+    const outer = activeRings[0];
+    const cW = (outer?.rx ?? 100) + 56;
+    const cH = (outer?.ry ?? 50) + 56;
+    const yBase = 16; 
+
     return (
       <div
         ref={barRef}
         className={`bookmark-radial ${showMode === "hover" ? "bookmark-bar--hover-mode" : ""}`}
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
-        style={{ width: radius * 2, height: radius }}
+        style={{ width: cW * 2, height: cH * 2 + 40 }}
       >
-        {items.map((item, i) => {
-          const angle = n === 1 ? 0 : -90 + (i / (n - 1)) * 180;
-          return (
-            <div
-              className="bookmark-radial__slot"
-              key={item.id}
-              style={{
-                transform: `translate(-50%, 50%) rotate(${angle}deg) translateY(-${radius}px) rotate(${-angle}deg)`,
-              }}
-            >
-              {renderItem(item)}
-            </div>
-          );
+        {activeRings.map((ring, ri) => {
+          const startIdx = activeRings.slice(0, ri).reduce((s, r) => s + r.count, 0);
+          return items.slice(startIdx, startIdx + ring.count).map((item, i) => {
+            const angle = ring.count === 1 ? 0 : -80 + (i / (ring.count - 1)) * 160;
+            const rad = (angle * Math.PI) / 180;
+            const x = Math.sin(rad) * ring.rx;
+            const y = -Math.cos(rad) * ring.ry + yBase;
+            return (
+              <div
+                className="bookmark-radial__slot"
+                key={item.id}
+                style={{
+                  transform: `translate(calc(-50% + ${x.toFixed(1)}px), calc(180% + ${y.toFixed(1)}px))`,
+                }}
+              >
+                {renderItem(item)}
+              </div>
+            );
+          });
         })}
       </div>
     );

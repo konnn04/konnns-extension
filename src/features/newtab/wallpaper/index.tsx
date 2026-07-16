@@ -218,6 +218,19 @@ function WallpaperLayer() {
           return prev.filter((l) => l.visible || l.key === key);
         });
       }, 700);
+
+      // Immediately pause old video layers so they don't keep playing audio
+      // while crossfading out (race condition fix for slideshow / quick switch).
+      requestAnimationFrame(() => {
+        if (cancelled) return;
+        const container = layerRef.current;
+        if (!container) return;
+        container
+          .querySelectorAll<HTMLVideoElement>("video[data-visible='false']")
+          .forEach((v) => {
+            v.pause();
+          });
+      });
     })();
 
     return () => {
@@ -248,6 +261,7 @@ function WallpaperLayer() {
             autoPlay
             loop
             playsInline
+            data-visible={l.visible}
           />
         ) : (
           <img
