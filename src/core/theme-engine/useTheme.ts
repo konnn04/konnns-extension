@@ -63,13 +63,17 @@ export function useThemeEngine(): void {
   const bgBlur = typeof core.bgBlur === "number" ? core.bgBlur : 0;
   const panelAlpha = typeof core.panelAlpha === "number" ? core.panelAlpha : 85;
   const panelBlur = typeof core.panelBlur === "number" ? core.panelBlur : 16;
+  const panelHeight = typeof core.panelHeight === "number" ? core.panelHeight : 100;
+  const panelRadius = typeof core.panelRadius === "number" ? core.panelRadius : 0;
   useEffect(() => {
     const root = document.documentElement.style;
     root.setProperty("--wallpaper-dim", String(bgDim / 100));
     root.setProperty("--wallpaper-blur", `${bgBlur}px`);
     root.setProperty("--panel-alpha", String(panelAlpha / 100));
     root.setProperty("--glass-blur", `${panelBlur}px`);
-  }, [bgDim, bgBlur, panelAlpha, panelBlur]);
+    root.setProperty("--panel-height", `${panelHeight}vh`);
+    root.setProperty("--panel-radius", `${panelRadius}px`);
+  }, [bgDim, bgBlur, panelAlpha, panelBlur, panelHeight, panelRadius]);
 
   // Enable token crossfade only after first paint (avoid animating initial load)
   useEffect(() => {

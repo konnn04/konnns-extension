@@ -34,6 +34,8 @@
   --wallpaper-blur: 0px; /* blur applied to the wallpaper media */
   --panel-alpha: 1; /* glass transparency of panels/surfaces (0.4..1) */
   --glass-blur: 16px; /* backdrop blur strength for glass panels */
+  --panel-height: 100vh; /* left panel height (50vh..100vh) */
+  --panel-radius: 0px; /* left panel outer-edge corner radius */
   /* derived translucent panel backgrounds (react to --panel-alpha) */
   --glass-bg: color-mix(in srgb, var(--surface) calc(var(--panel-alpha) * 100%), transparent);
   --glass-bg-strong: color-mix(

@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
+  height: var(--panel-height);
   z-index: 40;
   display: flex;
   align-items: stretch;
@@ -89,6 +89,7 @@
   overflow-y: auto;
   background: var(--glass-bg-strong);
   border-right: 1px solid var(--border);
+  border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
   box-shadow: var(--shadow-elevated);
   backdrop-filter: blur(var(--glass-blur));
   pointer-events: auto;

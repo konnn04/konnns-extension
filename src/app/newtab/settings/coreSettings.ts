@@ -42,6 +42,23 @@ export const coreGeneralSchema = defineSchema({
     step: 10,
     default: 360,
   },
+  panelHeight: {
+    type: "slider",
+    label: "settings.panelHeight",
+    description: "settings.panelHeightDesc",
+    min: 50,
+    max: 100,
+    step: 1,
+    default: 100,
+  },
+  panelRadius: {
+    type: "slider",
+    label: "settings.panelRadius",
+    min: 0,
+    max: 24,
+    step: 1,
+    default: 0,
+  },
   restoreWindows: {
     type: "toggle",
     label: "settings.restoreWindows",
