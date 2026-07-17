@@ -95,6 +95,19 @@ export interface MediaAssetRow {
   updatedAt: number;
 }
 
+export interface MusicTrackRow {
+  id: string;
+  blob: Blob;
+  title: string;
+  artist: string;
+  album?: string;
+  thumbnail?: Blob;
+  fileName: string;
+  size: number;
+  duration: number;
+  createdAt: number;
+}
+
 export type NotificationType = "info" | "success" | "reminder" | "alarm";
 
 export interface NotificationRow {
@@ -121,6 +134,7 @@ export const db = new Dexie("newtab-extension") as Dexie & {
   notificationsLog: EntityTable<NotificationRow, "id">;
   audioAssets: EntityTable<AudioAssetRow, "id">;
   mediaAssets: EntityTable<MediaAssetRow, "id">;
+  musicTracks: EntityTable<MusicTrackRow, "id">;
 };
 
 // v1 — initial schema
@@ -152,6 +166,11 @@ db.version(4).stores({
 // v5 — add generic media assets (e.g. pomodoro phase images/gifs)
 db.version(5).stores({
   mediaAssets: "id",
+});
+
+// v6 — add MusicBox tracks (personal music player)
+db.version(6).stores({
+  musicTracks: "id, createdAt",
 });
 
 export async function estimateStorage(): Promise<{ usage: number; quota: number } | null> {

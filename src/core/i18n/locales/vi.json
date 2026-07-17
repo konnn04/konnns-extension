@@ -182,7 +182,8 @@
     "panel-calendar": "Lịch Google",
     "tool-pomodoro": "Pomodoro",
     "tool-tasks": "Công việc",
-    "tool-notes": "Ghi chú"
+    "tool-notes": "Ghi chú",
+    "tool-musicbox": "MusicBox"
   },
   "tasks": {
     "placeholder": "Thêm công việc...",
@@ -211,6 +212,28 @@
     "uploadImage": "Tải ảnh",
     "imageTooLarge": "Ảnh quá lớn (tối đa 8MB)",
     "imagesHint": "Ảnh tuỳ chỉnh (tĩnh hoặc GIF) hiển thị ở giữa vòng đếm cho từng trạng thái"
+  },
+  "musicbox": {
+    "autoPlayOnOpen": "Tự động phát khi mở tab mới",
+    "autoPlayOnOpenDesc": "Tự động bắt đầu phát nhạc khi mở tab mới",
+    "randomOnOpen": "Chọn ngẫu nhiên khi mở tab",
+    "randomOnOpenDesc": "Chọn ngẫu nhiên 1 bài trong thư viện mỗi khi mở tab mới",
+    "onlyPlayInNewTab": "Chỉ phát khi ở tab này",
+    "onlyPlayInNewTabDesc": "Tự động tạm dừng khi bạn chuyển sang tab hoặc cửa sổ khác",
+    "showCornerStatus": "Hiện trạng thái ở góc trên phải",
+    "showCornerStatusDesc": "Thanh nhỏ hiện tên bài/nghệ sĩ/nút play-pause ở góc trên phải",
+    "showVisualizer": "Hiện hiệu ứng sóng nhạc",
+    "showVisualizerDesc": "Các thanh tần số động cạnh trạng thái ở góc",
+    "noTrack": "Chưa chọn bài nào",
+    "empty": "Chưa có bài nào — tải lên để bắt đầu",
+    "emptyOpenSettings": "Chưa có bài nào — vào Cài đặt → MusicBox để tải lên",
+    "library": "Thư viện nhạc",
+    "upload": "Tải nhạc lên",
+    "title": "Tên bài",
+    "artist": "Nghệ sĩ",
+    "album": "Album (không bắt buộc)",
+    "thumbnail": "Ảnh bìa (không bắt buộc)",
+    "trackTooLarge": "File quá lớn (tối đa 50MB mỗi bài)"
   },
   "translate": {
     "search": "Tìm ngôn ngữ…",
@@ -271,7 +294,7 @@
     "showTrending": "Hiện Top repo (trending)",
     "showTrendingDesc": "Thêm mục repo nổi bật theo ngày/tuần/tháng ở cuối panel",
     "showRecentRepos": "Hiện repo gần đây",
-    "showLanguageStats": "Hiện thống kê ngôn ngữ",
+    "showLanguageStats": "Thống kê ngôn ngữ",
     "showLanguageStatsDesc": "Thống kê ngôn ngữ tính từ các repo push gần đây nhất của bạn",
     "excludedLanguages": "Loại trừ ngôn ngữ",
     "excludedLanguagesDesc": "Danh sách cách nhau bởi dấu phẩy, ví dụ: HTML, CSS",

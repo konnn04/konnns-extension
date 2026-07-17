@@ -182,7 +182,8 @@
     "panel-calendar": "Google Calendar",
     "tool-pomodoro": "Pomodoro",
     "tool-tasks": "Tasks",
-    "tool-notes": "Notes"
+    "tool-notes": "Notes",
+    "tool-musicbox": "MusicBox"
   },
   "tasks": {
     "placeholder": "Add a task...",
@@ -211,6 +212,28 @@
     "uploadImage": "Upload image",
     "imageTooLarge": "Image too large (max 8MB)",
     "imagesHint": "Custom image (static or GIF) shown in the ring center for each phase"
+  },
+  "musicbox": {
+    "autoPlayOnOpen": "Auto-play on new tab",
+    "autoPlayOnOpenDesc": "Start playback automatically when a new tab opens",
+    "randomOnOpen": "Random track on open",
+    "randomOnOpenDesc": "Pick a random track from your library each time a new tab opens",
+    "onlyPlayInNewTab": "Only play while on this tab",
+    "onlyPlayInNewTabDesc": "Pause automatically when you switch away from this tab or window",
+    "showCornerStatus": "Show status in top-right corner",
+    "showCornerStatusDesc": "A small title/artist/play-pause bar in the top-right corner",
+    "showVisualizer": "Show waveform visualizer",
+    "showVisualizerDesc": "Animated frequency bars next to the corner status",
+    "noTrack": "No track selected",
+    "empty": "No tracks yet — upload one to get started",
+    "emptyOpenSettings": "No tracks yet — upload one in Settings → MusicBox",
+    "library": "Music library",
+    "upload": "Upload track",
+    "title": "Title",
+    "artist": "Artist",
+    "album": "Album (optional)",
+    "thumbnail": "Thumbnail (optional)",
+    "trackTooLarge": "File too large (max 50MB per track)"
   },
   "translate": {
     "search": "Find a language…",

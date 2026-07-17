@@ -23,6 +23,8 @@ import { LowPowerSuggest } from "./overlays/LowPowerSuggest";
 import { FocusToggle } from "./overlays/FocusToggle";
 import { Onboarding } from "./overlays/Onboarding";
 import { EnglishDailyAutoOpen } from "@/features/newtab/tool-english";
+import { MusicEngine } from "@/features/newtab/tool-musicbox/engine";
+import { MusicCornerStatus } from "@/features/newtab/tool-musicbox/CornerStatus";
 import { CORE_FEATURE_ID } from "@/core/settings-engine/settingsStore";
 import "./app.css";
 
@@ -116,6 +118,8 @@ function AppReady() {
       <BgMusicPlayer />
       <Onboarding />
       <EnglishDailyAutoOpen />
+      <MusicEngine />
+      <MusicCornerStatus />
     </div>
   );
 }

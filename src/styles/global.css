@@ -2,6 +2,17 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* dashboard chrome shouldn't behave like a text document (drag-select on
+     Linux/X11 in particular is very trigger-happy); text-entry surfaces
+     opt back in below */
+  user-select: none;
+}
+
+input,
+textarea,
+[contenteditable="true"],
+[contenteditable="true"] * {
+  user-select: text;
 }
 
 html,

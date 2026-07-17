@@ -64,9 +64,14 @@
   --ease-standard: ease-in-out;
 }
 
-/* Theme crossfade: enabled after first paint so initial load doesn't animate */
-html[data-theme-transitions="true"] body,
-html[data-theme-transitions="true"] body * {
+/* Theme crossfade: enabled after first paint so initial load doesn't animate.
+   Wrapped in :where() so this rule always has zero specificity — any
+   component's own `transition` (e.g. dock fade/slide on transform+opacity)
+   wins instead of being silently clobbered by this wildcard. Without this,
+   `transition-property` here fully replaces (not merges with) a component's
+   own list, so unlisted properties like transform/opacity stop transitioning
+   entirely and snap instantly. */
+:where(html[data-theme-transitions="true"] body, html[data-theme-transitions="true"] body *) {
   transition-property: background-color, color, border-color, box-shadow;
   transition-duration: var(--dur-theme);
   transition-timing-function: var(--ease-standard);

@@ -24,3 +24,4 @@ import "./tool-qr";
 import "./tool-emoji";
 import "./tool-translate";
 import "./tool-english";
+import "./tool-musicbox";

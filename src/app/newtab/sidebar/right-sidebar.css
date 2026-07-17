@@ -12,7 +12,10 @@
   top: 50%;
   right: 0;
   transform: translate(100%, -50%);
-  z-index: 40;
+  /* above docked/floating tool windows (z-index starts at 30, grows per
+     focus) so the rail never ends up rendering under a window it should
+     always be reachable above; still below modals (settings=50, etc.) */
+  z-index: 45;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,6 +36,12 @@
 .right-rail--visible {
   transform: translate(0, -50%);
   opacity: 1;
+}
+/* Overlay mode: the rail floats above docked tool windows instead of being
+   pushed outward by them — needs to win the stacking context regardless of
+   how high a focused window's dynamic z-index has climbed. */
+.right-rail--overlay {
+  z-index: 1000;
 }
 .right-rail__trigger {
   display: flex;
@@ -82,12 +91,14 @@
     width var(--dur-panel) var(--ease-out);
 }
 .tool-window--docked {
-  top: 0;
-  bottom: 0;
-  border-radius: 0;
-  border-top: none;
-  border-bottom: none;
-  height: 100%;
+  /* mirrors the left panel's height/radius settings — a docked tool window
+     is functionally a panel pinned to this side */
+  top: 50%;
+  height: var(--panel-height);
+  transform: translateY(-50%);
+  /* flush against the right screen edge, so only the left (interior) corners
+     round — same top-anchor-vs-center convention as the left panel */
+  border-radius: var(--panel-radius) 0 0 var(--panel-radius);
 }
 .tool-window--maximized {
   inset: 24px 24px 24px 24px;
@@ -217,5 +228,7 @@
   transform: translate(0, -50%);
 }
 .tool-window--swapped.tool-window--docked {
-  border-radius: 0;
+  /* flush against the left screen edge when swapped, so the right (interior)
+     corners round instead */
+  border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
 }

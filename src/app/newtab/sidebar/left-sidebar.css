@@ -1,9 +1,10 @@
 /* Left sidebar: trigger rail + sliding panels (Phase 2) */
 .left-sidebar {
   position: fixed;
-  top: 0;
+  top: 50%;
   left: 0;
   height: var(--panel-height);
+  transform: translateY(-50%);
   z-index: 40;
   display: flex;
   align-items: stretch;
@@ -15,11 +16,17 @@
   left: 0;
   bottom: 0;
   width: 14px;
-  z-index: 39;
+  /* above .left-sidebar (z-index 40) so it still receives the hover even
+     where a flush-edge panel would otherwise sit on top of it and block it */
+  z-index: 41;
 }
 
-/* Trigger rail */
+/* Trigger rail. In "shift" mode the panel sits flush at the screen edge and
+   the rail is what gets pushed inward to avoid it (order:2) — the same
+   edge-flush/rail-pushed convention the tools side uses. In "overlay" mode
+   the rail is taken out of flow (position:absolute) so order is moot. */
 .left-rail {
+  order: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,8 +81,9 @@
   color: var(--accent-contrast);
 }
 
-/* Panels container */
+/* Panels container — order:1 so it renders flush against the screen edge */
 .left-panels {
+  order: 1;
   display: flex;
   align-items: stretch;
   height: 100%;
@@ -89,6 +97,8 @@
   overflow-y: auto;
   background: var(--glass-bg-strong);
   border-right: 1px solid var(--border);
+  /* panel is vertically centered (both top/bottom edges exposed when shorter
+     than 100vh), so both right corners round */
   border-radius: 0 var(--panel-radius) var(--panel-radius) 0;
   box-shadow: var(--shadow-elevated);
   backdrop-filter: blur(var(--glass-blur));
@@ -128,6 +138,10 @@
   right: 0;
 }
 .left-sidebar--swapped .left-rail {
+  /* container is right-anchored now, so the flex row's rightmost item is
+     what touches the actual screen edge — flip the order so the panel is
+     still the one flush against it, and the rail still the one pushed away */
+  order: 1;
   border-radius: var(--radius-lg) 0 0 var(--radius-lg);
   border-left: 1px solid var(--border);
   border-right: none;
@@ -135,6 +149,9 @@
 }
 .left-sidebar--swapped .left-rail--visible {
   transform: translateX(0);
+}
+.left-sidebar--swapped .left-panels {
+  order: 2;
 }
 .left-sidebar--swapped .left-panel {
   border-right: none;
@@ -144,4 +161,27 @@
 .left-sidebar__hover-zone--swapped {
   left: auto;
   right: 0;
+}
+
+/* Overlay mode: rail floats above the panel instead of sitting beside it —
+   take it out of flex flow so the panel spans the full width from x:0, and
+   raise its stacking above the panel regardless of the panel's own z-index. */
+.left-sidebar--overlay .left-rail--overlay {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  margin: 0;
+  transform: translate(-100%, -50%);
+  z-index: 1000;
+}
+.left-sidebar--overlay .left-rail--overlay.left-rail--visible {
+  transform: translate(0, -50%);
+}
+.left-sidebar--overlay.left-sidebar--swapped .left-rail--overlay {
+  left: auto;
+  right: 0;
+  transform: translate(100%, -50%);
+}
+.left-sidebar--overlay.left-sidebar--swapped .left-rail--overlay.left-rail--visible {
+  transform: translate(0, -50%);
 }

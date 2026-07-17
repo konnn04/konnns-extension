@@ -941,7 +941,7 @@ In `src/features/newtab/panel-github/settings.schema.ts`, add after `showTrendin
 `vi.json` → `github`:
 ```json
 "showRecentRepos": "Hiện repo gần đây",
-"showLanguageStats": "Hiện thống kê ngôn ngữ",
+"showLanguageStats": "Thống kê ngôn ngữ",
 "showLanguageStatsDesc": "Thống kê ngôn ngữ tính từ các repo push gần đây nhất của bạn",
 "excludedLanguages": "Loại trừ ngôn ngữ",
 "excludedLanguagesDesc": "Danh sách cách nhau bởi dấu phẩy, ví dụ: HTML, CSS",
