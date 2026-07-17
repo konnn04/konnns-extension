@@ -121,3 +121,27 @@
 .left-panel__resize:hover {
   background: color-mix(in srgb, var(--accent) 30%, transparent);
 }
+
+/* Swapped: anchor to the right edge instead of left */
+.left-sidebar--swapped {
+  left: auto;
+  right: 0;
+}
+.left-sidebar--swapped .left-rail {
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  border-left: 1px solid var(--border);
+  border-right: none;
+  transform: translateX(100%);
+}
+.left-sidebar--swapped .left-rail--visible {
+  transform: translateX(0);
+}
+.left-sidebar--swapped .left-panel {
+  border-right: none;
+  border-left: 1px solid var(--border);
+  border-radius: var(--panel-radius) 0 0 var(--panel-radius);
+}
+.left-sidebar__hover-zone--swapped {
+  left: auto;
+  right: 0;
+}

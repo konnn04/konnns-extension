@@ -30,12 +30,16 @@ export function LeftSidebar() {
   // rail is visible when a panel is open, hovering, or "always show" is on
   const alwaysShow = core.alwaysShowDocks === true;
   const railVisible = alwaysShow || hovering || open.length > 0;
+  const swapped = core.swapSidebars === true;
 
   return (
     <>
-      <div className="left-sidebar__hover-zone" onMouseEnter={() => setHovering(true)} />
       <div
-        className="left-sidebar"
+        className={`left-sidebar__hover-zone ${swapped ? "left-sidebar__hover-zone--swapped" : ""}`}
+        onMouseEnter={() => setHovering(true)}
+      />
+      <div
+        className={`left-sidebar ${swapped ? "left-sidebar--swapped" : ""}`}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       >

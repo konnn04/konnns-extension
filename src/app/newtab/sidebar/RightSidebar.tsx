@@ -58,17 +58,23 @@ export function RightSidebar() {
 
   const alwaysShow = core.alwaysShowDocks === true;
   const railVisible = alwaysShow || hovering || open.length > 0;
+  const swapped = core.swapSidebars === true;
+  const overlapMode = (core.dockOverlapMode as string) ?? "shift";
   const dockedOrder = open.filter((id) => windows[id]?.mode === "docked");
-  // shift the rail left of any docked windows so they never overlap it
+  // "shift": rail moves outward so it never overlaps docked windows (default).
+  // "overlay": rail stays flush at the edge, layered above docked windows.
   const DOCK_WIDTH = 360;
-  const railRight = dockedOrder.length * DOCK_WIDTH;
+  const railRight = overlapMode === "shift" ? dockedOrder.length * DOCK_WIDTH : 0;
 
   return (
     <>
-      <div className="right-sidebar__hover-zone" onMouseEnter={() => setHovering(true)} />
       <div
-        className={`right-rail ${railVisible ? "right-rail--visible" : ""}`}
-        style={{ right: railRight }}
+        className={`right-sidebar__hover-zone ${swapped ? "right-sidebar__hover-zone--swapped" : ""}`}
+        onMouseEnter={() => setHovering(true)}
+      />
+      <div
+        className={`right-rail ${railVisible ? "right-rail--visible" : ""} ${swapped ? "right-rail--swapped" : ""}`}
+        style={swapped ? { left: railRight } : { right: railRight }}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={(e) => {
           setHovering(false);
@@ -113,6 +119,8 @@ export function RightSidebar() {
             win={win}
             dockIndex={dockedOrder.indexOf(id)}
             dockCount={dockedOrder.length}
+            swapped={swapped}
+            overlapMode={overlapMode}
           />
         );
       })}
@@ -125,11 +133,15 @@ function WindowFrame({
   win,
   dockIndex,
   dockCount,
+  swapped,
+  overlapMode,
 }: {
   feature: FeatureDefinition;
   win: ToolWindowState;
   dockIndex: number;
   dockCount: number;
+  swapped: boolean;
+  overlapMode: string;
 }) {
   const { t } = useTranslation();
   const { focus, close, minimize, toggleMaximize, setMode, setPosition, setSize } =
@@ -185,7 +197,10 @@ function WindowFrame({
   const dockWidth = 360;
   let style: React.CSSProperties;
   if (win.mode === "docked") {
-    style = { right: dockIndex * dockWidth, width: dockWidth, zIndex: win.zIndex };
+    const offset = overlapMode === "overlay" ? 0 : dockIndex * dockWidth;
+    style = swapped
+      ? { left: offset, width: dockWidth, zIndex: win.zIndex }
+      : { right: offset, width: dockWidth, zIndex: win.zIndex };
   } else if (win.mode === "maximized") {
     style = { zIndex: win.zIndex };
   } else {
@@ -203,7 +218,7 @@ function WindowFrame({
 
   return (
     <div
-      className={`tool-window tool-window--${win.mode}`}
+      className={`tool-window tool-window--${win.mode} ${swapped ? "tool-window--swapped" : ""}`}
       style={style}
       onMouseDown={() => focus(feature.id)}
     >

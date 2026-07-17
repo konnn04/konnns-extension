@@ -33,6 +33,22 @@ export const coreGeneralSchema = defineSchema({
     ],
     default: "single",
   },
+  swapSidebars: {
+    type: "toggle",
+    label: "settings.swapSidebars",
+    description: "settings.swapSidebarsDesc",
+    default: false,
+  },
+  dockOverlapMode: {
+    type: "select",
+    label: "settings.dockOverlapMode",
+    description: "settings.dockOverlapModeDesc",
+    options: [
+      { value: "shift", label: "settings.dockOverlapShift" },
+      { value: "overlay", label: "settings.dockOverlapOverlay" },
+    ],
+    default: "shift",
+  },
   sidebarWidth: {
     type: "slider",
     label: "settings.sidebarWidth",

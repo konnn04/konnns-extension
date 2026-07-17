@@ -74,6 +74,12 @@
   box-shadow: var(--shadow-elevated);
   backdrop-filter: blur(var(--glass-blur));
   overflow: hidden;
+  /* only left/right/width — top/height/inset change during active
+     drag/resize and must stay instant or dragging will feel laggy */
+  transition:
+    left var(--dur-panel) var(--ease-out),
+    right var(--dur-panel) var(--ease-out),
+    width var(--dur-panel) var(--ease-out);
 }
 .tool-window--docked {
   top: 0;
@@ -192,4 +198,24 @@
   border-right: 2px solid var(--text-muted);
   border-bottom: 2px solid var(--text-muted);
   opacity: 0.5;
+}
+
+/* Swapped: anchor the rail/hover-zone to the left edge instead of right */
+.right-sidebar__hover-zone--swapped {
+  right: auto;
+  left: 0;
+}
+.right-rail--swapped {
+  right: auto;
+  left: 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  border-left: none;
+  border-right: 1px solid var(--border);
+  transform: translate(-100%, -50%);
+}
+.right-rail--swapped.right-rail--visible {
+  transform: translate(0, -50%);
+}
+.tool-window--swapped.tool-window--docked {
+  border-radius: 0;
 }
