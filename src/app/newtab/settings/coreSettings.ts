@@ -164,6 +164,30 @@ export const coreAppearanceSchema = defineSchema({
     default: "none",
   },
   bgEffectColor: { type: "color", label: "bgfx.tint" },
+  uiScale: {
+    type: "slider",
+    label: "settings.uiScale",
+    description: "settings.uiScaleDesc",
+    min: 80,
+    max: 130,
+    step: 5,
+    default: 100,
+  },
+  fontScale: {
+    type: "slider",
+    label: "settings.fontScale",
+    description: "settings.fontScaleDesc",
+    min: 80,
+    max: 130,
+    step: 5,
+    default: 100,
+  },
+  compactMode: {
+    type: "toggle",
+    label: "settings.compactMode",
+    description: "settings.compactModeDesc",
+    default: false,
+  },
 });
 
 export const coreSettingsSchema: SettingsSchema = {

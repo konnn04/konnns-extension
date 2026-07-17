@@ -44,14 +44,15 @@
     transparent
   );
 
-  /* Spacing scale */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
+  /* Spacing scale (multiplied by --ui-scale, set at runtime) */
+  --ui-scale: 1;
+  --space-1: calc(4px * var(--ui-scale));
+  --space-2: calc(8px * var(--ui-scale));
+  --space-3: calc(12px * var(--ui-scale));
+  --space-4: calc(16px * var(--ui-scale));
+  --space-5: calc(24px * var(--ui-scale));
+  --space-6: calc(32px * var(--ui-scale));
+  --space-7: calc(48px * var(--ui-scale));
 
   /* Motion (docs/phase-1-mvp/03 §4) */
   --dur-hover: 150ms;
@@ -87,4 +88,15 @@ html[data-low-power="true"] {
     --dur-theme: 0ms;
     --dur-wallpaper: 0ms;
   }
+}
+
+/* Compact mode: tighter spacing, independent of --ui-scale */
+html[data-compact="true"] {
+  --space-1: calc(2px * var(--ui-scale));
+  --space-2: calc(4px * var(--ui-scale));
+  --space-3: calc(6px * var(--ui-scale));
+  --space-4: calc(10px * var(--ui-scale));
+  --space-5: calc(14px * var(--ui-scale));
+  --space-6: calc(20px * var(--ui-scale));
+  --space-7: calc(30px * var(--ui-scale));
 }

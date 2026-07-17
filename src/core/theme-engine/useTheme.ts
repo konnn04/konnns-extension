@@ -75,6 +75,17 @@ export function useThemeEngine(): void {
     root.setProperty("--panel-radius", `${panelRadius}px`);
   }, [bgDim, bgBlur, panelAlpha, panelBlur, panelHeight, panelRadius]);
 
+  // Overall UI scale / font scale / compact mode
+  const uiScale = typeof core.uiScale === "number" ? core.uiScale : 100;
+  const fontScale = typeof core.fontScale === "number" ? core.fontScale : 100;
+  const compactMode = core.compactMode === true;
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--ui-scale", String(uiScale / 100));
+    root.style.fontSize = `${(16 * fontScale) / 100}px`;
+    root.dataset.compact = compactMode ? "true" : "false";
+  }, [uiScale, fontScale, compactMode]);
+
   // Enable token crossfade only after first paint (avoid animating initial load)
   useEffect(() => {
     if (!hydrated) return;
