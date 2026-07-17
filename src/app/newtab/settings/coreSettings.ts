@@ -48,6 +48,12 @@ export const coreGeneralSchema = defineSchema({
     description: "settings.restoreWindowsDesc",
     default: true,
   },
+  alwaysShowDocks: {
+    type: "toggle",
+    label: "settings.alwaysShowDocks",
+    description: "settings.alwaysShowDocksDesc",
+    default: false,
+  },
   soundEnabled: { type: "toggle", label: "sound.enabled", default: false },
   soundVolume: {
     type: "slider",

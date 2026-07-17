@@ -27,8 +27,9 @@ export function LeftSidebar() {
   const enabledFeatures = features.filter((f) => enabledMap[f.id] ?? f.defaultEnabled);
   if (enabledFeatures.length === 0) return null;
 
-  // rail is visible when a panel is open or when hovering the left edge
-  const railVisible = hovering || open.length > 0;
+  // rail is visible when a panel is open, hovering, or "always show" is on
+  const alwaysShow = core.alwaysShowDocks === true;
+  const railVisible = alwaysShow || hovering || open.length > 0;
 
   return (
     <>

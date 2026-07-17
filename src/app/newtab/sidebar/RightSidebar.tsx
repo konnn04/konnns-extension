@@ -56,7 +56,8 @@ export function RightSidebar() {
 
   if (enabledFeatures.length === 0) return null;
 
-  const railVisible = hovering || open.length > 0;
+  const alwaysShow = core.alwaysShowDocks === true;
+  const railVisible = alwaysShow || hovering || open.length > 0;
   const dockedOrder = open.filter((id) => windows[id]?.mode === "docked");
   // shift the rail left of any docked windows so they never overlap it
   const DOCK_WIDTH = 360;
