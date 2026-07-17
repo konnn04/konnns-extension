@@ -17,6 +17,7 @@ import { useFeatureValues, useSettingsStore } from "@/core/settings-engine/setti
 import { requestNotificationPermission, hasNotificationPermission } from "@/core/notification-engine";
 import { playSound } from "@/core/sound";
 import { Button } from "@/shared/ui";
+import { useElementSize } from "@/shared/utils/useElementSize";
 import {
   applyConfig,
   getState,
@@ -136,6 +137,9 @@ function ToolPomodoro() {
   const phaseImg = usePhaseImage(state?.phase);
   const PhaseIcon = state ? PHASE_ICON[state.phase] : null;
 
+  const [sizeRef, size] = useElementSize<HTMLDivElement>();
+  const narrow = size.width > 0 && size.width < 240;
+
   if (!state) return null;
 
   const remaining = state.running && state.endsAt ? state.endsAt - now : state.remainingMs;
@@ -152,7 +156,7 @@ function ToolPomodoro() {
   };
 
   return (
-    <div className="pomo">
+    <div className={`pomo ${narrow ? "pomo--narrow" : ""}`} ref={sizeRef}>
       <span className="pomo__phase">
         {PhaseIcon && <PhaseIcon size={16} className="pomo__phase-icon" />}
         {t(`pomodoro.${state.phase}`)}
@@ -190,7 +194,7 @@ function ToolPomodoro() {
           onClick={() => (state.running ? void pause().then(sync) : void onStart())}
         >
           {state.running ? <Pause size={18} /> : <Play size={18} />}
-          {state.running ? t("pomodoro.pause") : t("pomodoro.start")}
+          {!narrow && (state.running ? t("pomodoro.pause") : t("pomodoro.start"))}
         </Button>
         <Button variant="ghost" onClick={() => void skip().then(sync)} aria-label={t("pomodoro.skip")}>
           <SkipForward size={18} />
@@ -202,23 +206,25 @@ function ToolPomodoro() {
       </span>
 
       {/* inline duration editing — no need to open Settings (docs item 20) */}
-      <div className="pomo__durations">
-        <DurationStepper
-          label={t("pomodoro.work")}
-          value={config.workMin}
-          onChange={(v) => setValue(POMODORO_FEATURE_ID, "workMin", v)}
-        />
-        <DurationStepper
-          label={t("pomodoro.short")}
-          value={config.shortMin}
-          onChange={(v) => setValue(POMODORO_FEATURE_ID, "shortMin", v)}
-        />
-        <DurationStepper
-          label={t("pomodoro.long")}
-          value={config.longMin}
-          onChange={(v) => setValue(POMODORO_FEATURE_ID, "longMin", v)}
-        />
-      </div>
+      {!narrow && (
+        <div className="pomo__durations">
+          <DurationStepper
+            label={t("pomodoro.work")}
+            value={config.workMin}
+            onChange={(v) => setValue(POMODORO_FEATURE_ID, "workMin", v)}
+          />
+          <DurationStepper
+            label={t("pomodoro.short")}
+            value={config.shortMin}
+            onChange={(v) => setValue(POMODORO_FEATURE_ID, "shortMin", v)}
+          />
+          <DurationStepper
+            label={t("pomodoro.long")}
+            value={config.longMin}
+            onChange={(v) => setValue(POMODORO_FEATURE_ID, "longMin", v)}
+          />
+        </div>
+      )}
     </div>
   );
 }
