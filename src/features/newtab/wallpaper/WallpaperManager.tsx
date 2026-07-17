@@ -10,6 +10,12 @@ import { MAX_VIDEO_BYTES } from "./image";
 
 const FEATURE_ID = "wallpaper";
 
+function mediaBadge(item: WallpaperMeta): "video" | "gif" | null {
+  if (item.type === "video") return "video";
+  if (/\.gif($|\?)/i.test(item.name)) return "gif";
+  return null;
+}
+
 function Thumb({ item }: { item: WallpaperMeta }) {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
@@ -26,10 +32,21 @@ function Thumb({ item }: { item: WallpaperMeta }) {
   }, [item.id]);
 
   if (!url) return <div className="wp-item__gradient" style={{ background: "var(--surface)" }} />;
-  return item.type === "video" ? (
-    <video className="wp-item__thumb" src={url} muted />
-  ) : (
-    <img className="wp-item__thumb" src={url} alt={item.name} />
+  const badge = mediaBadge(item);
+  return (
+    <>
+      {item.type === "video" ? (
+        <video className="wp-item__thumb" src={url} muted />
+      ) : (
+        <img className="wp-item__thumb" src={url} alt={item.name} />
+      )}
+      {badge === "video" && (
+        <span className="wp-item__media-badge">
+          <Film size={11} />
+        </span>
+      )}
+      {badge === "gif" && <span className="wp-item__media-badge wp-item__media-badge--text">GIF</span>}
+    </>
   );
 }
 

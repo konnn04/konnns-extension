@@ -56,7 +56,14 @@ function WallpaperLayer() {
   }, [slideshow, slideKey, slideInterval, slideOrder]);
 
   // Random-on-open: pick a random wallpaper from the library each new tab
-  const randomMode = values.randomMode === true && !slideshow;
+  const rawRandomMode = values.randomMode;
+  const randomModeKind: "off" | "images" | "videos" | "all" =
+    rawRandomMode === true
+      ? "all"
+      : rawRandomMode === false
+        ? "off"
+        : ((rawRandomMode as "off" | "images" | "videos" | "all") ?? "off");
+  const randomMode = randomModeKind !== "off" && !slideshow;
   const items = useWallpaperStore((s) => s.items);
   const itemsLoaded = useWallpaperStore((s) => s.loaded);
   const loadItems = useWallpaperStore((s) => s.load);
@@ -66,11 +73,15 @@ function WallpaperLayer() {
   }, [randomMode, itemsLoaded, loadItems]);
   useEffect(() => {
     if (randomMode && itemsLoaded && items.length > 0) {
-      setRandomId(items[Math.floor(Math.random() * items.length)].id);
+      const pool =
+        randomModeKind === "all"
+          ? items
+          : items.filter((i) => (randomModeKind === "images" ? i.type === "image" : i.type === "video"));
+      if (pool.length > 0) setRandomId(pool[Math.floor(Math.random() * pool.length)].id);
     }
     // pick once when random mode turns on / library first loads
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [randomMode, itemsLoaded]);
+  }, [randomMode, randomModeKind, itemsLoaded]);
 
   const slideActiveId =
     slideshow && slideItems.length > 0

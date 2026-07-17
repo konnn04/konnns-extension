@@ -92,6 +92,23 @@
   background: var(--accent);
   color: var(--accent-contrast);
 }
+.wp-item__media-badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
 .wp-item__delete {
   position: absolute;
   top: var(--space-1);
