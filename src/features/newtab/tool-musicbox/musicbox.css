@@ -1,0 +1,262 @@
+.mb__thumb {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  color: var(--text-muted);
+  overflow: hidden;
+}
+.mb__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mb__player {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.mb__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mb__title {
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mb__artist {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mb__controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.mb__expanded {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.mb__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.mb__toggle--on {
+  color: var(--accent);
+}
+.mb__volume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 120px;
+  color: var(--text-muted);
+}
+.mb__volume .ui-slider__row {
+  flex: 1;
+}
+
+.mb__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-height: 260px;
+  overflow-y: auto;
+}
+/* read-only playlist row (playback selector) — the row itself is the button */
+.mb__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.mb__row:hover,
+.mb__row--active {
+  background: var(--surface);
+}
+.mb__row__meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mb__row__title {
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mb__row--active .mb__row__title {
+  color: var(--accent);
+}
+.mb__row__artist {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mb__row__dur {
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Settings → MusicBox: upload form + library management list */
+.mb-settings__thumb {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-elevated);
+  color: var(--text-muted);
+  overflow: hidden;
+}
+.mb-settings__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mb-settings__add-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.mb-settings__add-form__row {
+  display: flex;
+  gap: var(--space-2);
+}
+.mb-settings__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+}
+.mb-settings__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+.mb-settings__row:hover {
+  background: var(--surface);
+}
+.mb-settings__row-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mb-settings__row-title {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mb-settings__row-artist {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mb-settings__row-dur,
+.mb-settings__row-size {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Corner status widget — top-right "action bar" pill */
+.mb-corner {
+  position: fixed;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px var(--space-3) 6px 6px;
+  border-radius: var(--radius-full);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--shadow-soft);
+  max-width: 260px;
+  color: var(--text);
+}
+.mb-corner__play {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  cursor: pointer;
+}
+.mb-corner__meta {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+}
+.mb-corner__title {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+.mb-corner__artist {
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+}
+.mb-corner__viz {
+  flex-shrink: 0;
+  color: var(--accent);
+}

@@ -74,7 +74,24 @@
   transform: translateY(0);
 }
 
-/* Radial (fan) layout — items positioned around a bottom-centered arc */
+/* horizontal-top: bar at the top of the viewport, hover slides down */
+.bookmark-bar--top {
+  margin-top: 0;
+}
+.bookmark-bar--top.bookmark-bar--hover-mode {
+  transform: translateY(-10px);
+}
+.bookmark-bar--top.bookmark-bar--hover-mode:hover {
+  transform: translateY(0);
+}
+.bookmark-bar--top .bookmark-item {
+  transform-origin: top center;
+  transform: scale(var(--bm-scale, 1)) translateY(calc((var(--bm-scale, 1) - 1) * 8px));
+}
+.bookmark-bar--top .bookmark-bar__track {
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-4);
+}
 .bookmark-radial {
   position: relative;
   transition: opacity var(--dur-panel) var(--ease-out);
@@ -82,11 +99,13 @@
 .bookmark-radial__slot {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  top: 50%;
   transition: transform var(--dur-panel) var(--ease-out);
 }
+.bookmark-radial__slot .bookmark-item {
+  transform-origin: center center;
+}
 
-/* macOS-dock style magnification: scale set inline via --bm-scale (JS proximity) */
 .bookmark-item {
   display: flex;
   flex-direction: column;
@@ -135,7 +154,6 @@
   text-overflow: ellipsis;
 }
 
-/* Folder popover — rendered via portal with fixed positioning */
 .bookmark-folder__menu {
   min-width: 200px;
   max-height: 320px;

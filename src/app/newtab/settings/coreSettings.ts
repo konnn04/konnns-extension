@@ -33,6 +33,22 @@ export const coreGeneralSchema = defineSchema({
     ],
     default: "single",
   },
+  swapSidebars: {
+    type: "toggle",
+    label: "settings.swapSidebars",
+    description: "settings.swapSidebarsDesc",
+    default: false,
+  },
+  dockOverlapMode: {
+    type: "select",
+    label: "settings.dockOverlapMode",
+    description: "settings.dockOverlapModeDesc",
+    options: [
+      { value: "shift", label: "settings.dockOverlapShift" },
+      { value: "overlay", label: "settings.dockOverlapOverlay" },
+    ],
+    default: "shift",
+  },
   sidebarWidth: {
     type: "slider",
     label: "settings.sidebarWidth",
@@ -42,11 +58,34 @@ export const coreGeneralSchema = defineSchema({
     step: 10,
     default: 360,
   },
+  panelHeight: {
+    type: "slider",
+    label: "settings.panelHeight",
+    description: "settings.panelHeightDesc",
+    min: 50,
+    max: 100,
+    step: 1,
+    default: 100,
+  },
+  panelRadius: {
+    type: "slider",
+    label: "settings.panelRadius",
+    min: 0,
+    max: 24,
+    step: 1,
+    default: 0,
+  },
   restoreWindows: {
     type: "toggle",
     label: "settings.restoreWindows",
     description: "settings.restoreWindowsDesc",
     default: true,
+  },
+  alwaysShowDocks: {
+    type: "toggle",
+    label: "settings.alwaysShowDocks",
+    description: "settings.alwaysShowDocksDesc",
+    default: false,
   },
   soundEnabled: { type: "toggle", label: "sound.enabled", default: false },
   soundVolume: {
@@ -141,6 +180,30 @@ export const coreAppearanceSchema = defineSchema({
     default: "none",
   },
   bgEffectColor: { type: "color", label: "bgfx.tint" },
+  uiScale: {
+    type: "slider",
+    label: "settings.uiScale",
+    description: "settings.uiScaleDesc",
+    min: 80,
+    max: 130,
+    step: 5,
+    default: 100,
+  },
+  fontScale: {
+    type: "slider",
+    label: "settings.fontScale",
+    description: "settings.fontScaleDesc",
+    min: 80,
+    max: 130,
+    step: 5,
+    default: 100,
+  },
+  compactMode: {
+    type: "toggle",
+    label: "settings.compactMode",
+    description: "settings.compactModeDesc",
+    default: false,
+  },
 });
 
 export const coreSettingsSchema: SettingsSchema = {

@@ -17,6 +17,12 @@ import { clearMagnify, magnify } from "@/shared/utils/dockMagnify";
 import { RailScroll } from "./RailScroll";
 import "./right-sidebar.css";
 
+/** Fixed stacking depth for docked windows — below the rail (45) and every
+ * modal/overlay layer, so a docked window can never cover the dock, the
+ * settings modal, or notifications regardless of how many times it (or any
+ * other window) has been focused. */
+const DOCKED_Z_INDEX = 20;
+
 /**
  * Right sidebar layout engine (Phase 4). Trigger rail on the right opens tool
  * windows managed by the Window Manager (floating drag/resize, dock, minimize,
@@ -56,18 +62,28 @@ export function RightSidebar() {
 
   if (enabledFeatures.length === 0) return null;
 
-  const railVisible = hovering || open.length > 0;
+  const alwaysShow = core.alwaysShowDocks === true;
+  const swapped = core.swapSidebars === true;
+  const overlapMode = (core.dockOverlapMode as string) ?? "shift";
   const dockedOrder = open.filter((id) => windows[id]?.mode === "docked");
-  // shift the rail left of any docked windows so they never overlap it
+  // "shift": rail moves outward so it never overlaps docked windows, and stays
+  // visible whenever something is open/docked (default). "overlay": rail stays
+  // flush at the edge, layered above docked windows, and only ever shows on
+  // hover (or "always show docks") — open/docked windows don't force it visible.
+  const forcedVisible = open.length > 0 && overlapMode === "shift";
+  const railVisible = forcedVisible || alwaysShow || hovering;
   const DOCK_WIDTH = 360;
-  const railRight = dockedOrder.length * DOCK_WIDTH;
+  const railRight = overlapMode === "shift" ? dockedOrder.length * DOCK_WIDTH : 0;
 
   return (
     <>
-      <div className="right-sidebar__hover-zone" onMouseEnter={() => setHovering(true)} />
       <div
-        className={`right-rail ${railVisible ? "right-rail--visible" : ""}`}
-        style={{ right: railRight }}
+        className={`right-sidebar__hover-zone ${swapped ? "right-sidebar__hover-zone--swapped" : ""}`}
+        onMouseEnter={() => setHovering(true)}
+      />
+      <div
+        className={`right-rail ${railVisible ? "right-rail--visible" : ""} ${swapped ? "right-rail--swapped" : ""} ${overlapMode === "overlay" ? "right-rail--overlay" : ""}`}
+        style={swapped ? { left: railRight } : { right: railRight }}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={(e) => {
           setHovering(false);
@@ -112,6 +128,8 @@ export function RightSidebar() {
             win={win}
             dockIndex={dockedOrder.indexOf(id)}
             dockCount={dockedOrder.length}
+            swapped={swapped}
+            overlapMode={overlapMode}
           />
         );
       })}
@@ -124,11 +142,15 @@ function WindowFrame({
   win,
   dockIndex,
   dockCount,
+  swapped,
+  overlapMode,
 }: {
   feature: FeatureDefinition;
   win: ToolWindowState;
   dockIndex: number;
   dockCount: number;
+  swapped: boolean;
+  overlapMode: string;
 }) {
   const { t } = useTranslation();
   const { focus, close, minimize, toggleMaximize, setMode, setPosition, setSize } =
@@ -184,7 +206,14 @@ function WindowFrame({
   const dockWidth = 360;
   let style: React.CSSProperties;
   if (win.mode === "docked") {
-    style = { right: dockIndex * dockWidth, width: dockWidth, zIndex: win.zIndex };
+    const offset = overlapMode === "overlay" ? 0 : dockIndex * dockWidth;
+    // Docked windows behave like a pinned panel, not a stackable floating
+    // window — they must NOT use the focus-driven win.zIndex (which grows
+    // unbounded every time any window is opened/focused and can end up
+    // above the rail, the settings modal, or notifications). Fixed and low.
+    style = swapped
+      ? { left: offset, width: dockWidth, zIndex: DOCKED_Z_INDEX }
+      : { right: offset, width: dockWidth, zIndex: DOCKED_Z_INDEX };
   } else if (win.mode === "maximized") {
     style = { zIndex: win.zIndex };
   } else {
@@ -202,7 +231,7 @@ function WindowFrame({
 
   return (
     <div
-      className={`tool-window tool-window--${win.mode}`}
+      className={`tool-window tool-window--${win.mode} ${swapped ? "tool-window--swapped" : ""}`}
       style={style}
       onMouseDown={() => focus(feature.id)}
     >

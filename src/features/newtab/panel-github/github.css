@@ -126,3 +126,36 @@
   color: var(--text-muted);
   margin-top: 2px;
 }
+.gh__langs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.gh__lang-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 34px;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+}
+.gh__lang-name {
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.gh__lang-bar {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  overflow: hidden;
+}
+.gh__lang-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+.gh__lang-pct {
+  text-align: right;
+  color: var(--text-muted);
+}

@@ -27,21 +27,40 @@ export function LeftSidebar() {
   const enabledFeatures = features.filter((f) => enabledMap[f.id] ?? f.defaultEnabled);
   if (enabledFeatures.length === 0) return null;
 
-  // rail is visible when a panel is open or when hovering the left edge
-  const railVisible = hovering || open.length > 0;
+  // "shift" (default): rail stays visible whenever a panel is open, and the
+  // panel sits beside it in-flow. "overlay": rail floats above the panel and
+  // only ever shows on hover (or "always show docks") — an open panel alone
+  // doesn't force it visible.
+  const alwaysShow = core.alwaysShowDocks === true;
+  const swapped = core.swapSidebars === true;
+  const overlapMode = (core.dockOverlapMode as string) ?? "shift";
+  const forcedVisible = open.length > 0 && overlapMode === "shift";
+  const railVisible = forcedVisible || alwaysShow || hovering;
+  const overlay = overlapMode === "overlay";
 
   return (
     <>
-      <div className="left-sidebar__hover-zone" onMouseEnter={() => setHovering(true)} />
       <div
-        className="left-sidebar"
+        className={`left-sidebar__hover-zone ${swapped ? "left-sidebar__hover-zone--swapped" : ""}`}
         onMouseEnter={() => setHovering(true)}
-        onMouseLeave={() => setHovering(false)}
+      />
+      <div
+        className={`left-sidebar ${swapped ? "left-sidebar--swapped" : ""} ${overlay ? "left-sidebar--overlay" : ""}`}
+        // In overlay mode the rail floats above the panel, so hovering the
+        // panel's own content must NOT reveal it — only the edge hover-zone
+        // and the rail itself should. In shift mode the rail sits beside
+        // (never over) the panel, so the whole-area hover is safe/expected.
+        onMouseEnter={overlay ? undefined : () => setHovering(true)}
+        onMouseLeave={overlay ? undefined : () => setHovering(false)}
       >
         <div
-          className={`left-rail ${railVisible ? "left-rail--visible" : ""}`}
+          className={`left-rail ${railVisible ? "left-rail--visible" : ""} ${overlay ? "left-rail--overlay" : ""}`}
+          onMouseEnter={() => setHovering(true)}
           onMouseMove={(e) => magnify(e.currentTarget, ".left-rail__trigger", e.clientY)}
-          onMouseLeave={(e) => clearMagnify(e.currentTarget, ".left-rail__trigger")}
+          onMouseLeave={(e) => {
+            setHovering(false);
+            clearMagnify(e.currentTarget, ".left-rail__trigger");
+          }}
         >
           <RailScroll count={enabledFeatures.length}>
             {enabledFeatures.map((f) => {

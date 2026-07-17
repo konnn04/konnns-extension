@@ -34,6 +34,8 @@
   --wallpaper-blur: 0px; /* blur applied to the wallpaper media */
   --panel-alpha: 1; /* glass transparency of panels/surfaces (0.4..1) */
   --glass-blur: 16px; /* backdrop blur strength for glass panels */
+  --panel-height: 100vh; /* left panel height (50vh..100vh) */
+  --panel-radius: 0px; /* left panel outer-edge corner radius */
   /* derived translucent panel backgrounds (react to --panel-alpha) */
   --glass-bg: color-mix(in srgb, var(--surface) calc(var(--panel-alpha) * 100%), transparent);
   --glass-bg-strong: color-mix(
@@ -42,14 +44,15 @@
     transparent
   );
 
-  /* Spacing scale */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
+  /* Spacing scale (multiplied by --ui-scale, set at runtime) */
+  --ui-scale: 1;
+  --space-1: calc(4px * var(--ui-scale));
+  --space-2: calc(8px * var(--ui-scale));
+  --space-3: calc(12px * var(--ui-scale));
+  --space-4: calc(16px * var(--ui-scale));
+  --space-5: calc(24px * var(--ui-scale));
+  --space-6: calc(32px * var(--ui-scale));
+  --space-7: calc(48px * var(--ui-scale));
 
   /* Motion (docs/phase-1-mvp/03 §4) */
   --dur-hover: 150ms;
@@ -61,9 +64,14 @@
   --ease-standard: ease-in-out;
 }
 
-/* Theme crossfade: enabled after first paint so initial load doesn't animate */
-html[data-theme-transitions="true"] body,
-html[data-theme-transitions="true"] body * {
+/* Theme crossfade: enabled after first paint so initial load doesn't animate.
+   Wrapped in :where() so this rule always has zero specificity — any
+   component's own `transition` (e.g. dock fade/slide on transform+opacity)
+   wins instead of being silently clobbered by this wildcard. Without this,
+   `transition-property` here fully replaces (not merges with) a component's
+   own list, so unlisted properties like transform/opacity stop transitioning
+   entirely and snap instantly. */
+:where(html[data-theme-transitions="true"] body, html[data-theme-transitions="true"] body *) {
   transition-property: background-color, color, border-color, box-shadow;
   transition-duration: var(--dur-theme);
   transition-timing-function: var(--ease-standard);
@@ -85,4 +93,15 @@ html[data-low-power="true"] {
     --dur-theme: 0ms;
     --dur-wallpaper: 0ms;
   }
+}
+
+/* Compact mode: tighter spacing, independent of --ui-scale */
+html[data-compact="true"] {
+  --space-1: calc(2px * var(--ui-scale));
+  --space-2: calc(4px * var(--ui-scale));
+  --space-3: calc(6px * var(--ui-scale));
+  --space-4: calc(10px * var(--ui-scale));
+  --space-5: calc(14px * var(--ui-scale));
+  --space-6: calc(20px * var(--ui-scale));
+  --space-7: calc(30px * var(--ui-scale));
 }

@@ -1,9 +1,3 @@
-/**
- * Image processing before storing — docs/phase-1-mvp/01 §3:
- * resize to the actual screen resolution (≤1080p screens cap at 1080p,
- * larger screens keep up to original size), via createImageBitmap + OffscreenCanvas.
- */
-
 export const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 export const MAX_VIDEO_BYTES = 150 * 1024 * 1024;
 
@@ -15,7 +9,6 @@ export async function processImage(
   const screenW = window.screen.width * dpr;
   const screenH = window.screen.height * dpr;
 
-  // ≤1080p screen → cap at 1080p; larger screens → cap at screen size (never upscale)
   const capW = screenH <= 1080 ? 1920 : screenW;
   const capH = screenH <= 1080 ? 1080 : screenH;
   const scale = Math.min(1, capW / bitmap.width, capH / bitmap.height);

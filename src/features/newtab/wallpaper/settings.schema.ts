@@ -32,10 +32,16 @@ export const wallpaperSettingsSchema = defineSchema({
     showIf: (v) => v.mode === "slideshow",
   },
   randomMode: {
-    type: "toggle",
+    type: "select",
     label: "wallpaper.randomMode",
     description: "wallpaper.randomModeDesc",
-    default: false,
+    options: [
+      { value: "off", label: "wallpaper.randomOff" },
+      { value: "images", label: "wallpaper.randomImages" },
+      { value: "videos", label: "wallpaper.randomVideos" },
+      { value: "all", label: "wallpaper.randomAll" },
+    ],
+    default: "off",
     showIf: (v) => v.mode !== "slideshow",
   },
   videoSound: { type: "toggle", label: "wallpaper.videoSound", default: false },

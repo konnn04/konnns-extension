@@ -63,13 +63,28 @@ export function useThemeEngine(): void {
   const bgBlur = typeof core.bgBlur === "number" ? core.bgBlur : 0;
   const panelAlpha = typeof core.panelAlpha === "number" ? core.panelAlpha : 85;
   const panelBlur = typeof core.panelBlur === "number" ? core.panelBlur : 16;
+  const panelHeight = typeof core.panelHeight === "number" ? core.panelHeight : 100;
+  const panelRadius = typeof core.panelRadius === "number" ? core.panelRadius : 0;
   useEffect(() => {
     const root = document.documentElement.style;
     root.setProperty("--wallpaper-dim", String(bgDim / 100));
     root.setProperty("--wallpaper-blur", `${bgBlur}px`);
     root.setProperty("--panel-alpha", String(panelAlpha / 100));
     root.setProperty("--glass-blur", `${panelBlur}px`);
-  }, [bgDim, bgBlur, panelAlpha, panelBlur]);
+    root.setProperty("--panel-height", `${panelHeight}vh`);
+    root.setProperty("--panel-radius", `${panelRadius}px`);
+  }, [bgDim, bgBlur, panelAlpha, panelBlur, panelHeight, panelRadius]);
+
+  // Overall UI scale / font scale / compact mode
+  const uiScale = typeof core.uiScale === "number" ? core.uiScale : 100;
+  const fontScale = typeof core.fontScale === "number" ? core.fontScale : 100;
+  const compactMode = core.compactMode === true;
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--ui-scale", String(uiScale / 100));
+    root.style.fontSize = `${(16 * fontScale) / 100}px`;
+    root.dataset.compact = compactMode ? "true" : "false";
+  }, [uiScale, fontScale, compactMode]);
 
   // Enable token crossfade only after first paint (avoid animating initial load)
   useEffect(() => {

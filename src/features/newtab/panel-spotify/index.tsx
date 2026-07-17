@@ -7,6 +7,7 @@ import { useOnlineStatus } from "@/core/net";
 import { emit } from "@/core/event-bus";
 import { Button, IconButton } from "@/shared/ui";
 import { RedirectUriField } from "@/core/oauth/RedirectUriField";
+import { useElementSize } from "@/shared/utils/useElementSize";
 import {
   connectSpotify,
   control,
@@ -71,6 +72,9 @@ function PanelSpotify() {
     }
   };
 
+  const [sizeRef, size] = useElementSize<HTMLDivElement>();
+  const narrow = size.width > 0 && size.width < 220;
+
   // View is status-only — connect/disconnect lives in Settings (docs item 4)
   if (!clientId || connected === false) {
     return (
@@ -94,32 +98,51 @@ function PanelSpotify() {
   const pct = np.durationMs > 0 ? (progress / np.durationMs) * 100 : 0;
 
   return (
-    <div className="sp">
+    <div className={`sp ${narrow ? "sp--narrow" : ""}`} ref={sizeRef}>
       <div className="sp__player">
         <div
           className="sp__art"
           style={np.albumArt ? { backgroundImage: `url(${np.albumArt})` } : undefined}
-        />
+        >
+          {narrow && (
+            <div className="sp__art-overlay">
+              <IconButton label="Previous" onClick={() => void doControl("previous")}>
+                <SkipBack size={16} />
+              </IconButton>
+              <IconButton
+                label={np.isPlaying ? "Pause" : "Play"}
+                onClick={() => void doControl(np.isPlaying ? "pause" : "play")}
+              >
+                {np.isPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </IconButton>
+              <IconButton label="Next" onClick={() => void doControl("next")}>
+                <SkipForward size={16} />
+              </IconButton>
+            </div>
+          )}
+        </div>
         <div className="sp__meta">
           <div className="sp__title">{np.title}</div>
           <div className="sp__artist">{np.artist}</div>
           <div className="sp__progress">
             <div className="sp__progress-fill" style={{ width: `${pct}%` }} />
           </div>
-          <div className="sp__controls">
-            <IconButton label="Previous" onClick={() => void doControl("previous")}>
-              <SkipBack size={18} />
-            </IconButton>
-            <IconButton
-              label={np.isPlaying ? "Pause" : "Play"}
-              onClick={() => void doControl(np.isPlaying ? "pause" : "play")}
-            >
-              {np.isPlaying ? <Pause size={22} /> : <Play size={22} />}
-            </IconButton>
-            <IconButton label="Next" onClick={() => void doControl("next")}>
-              <SkipForward size={18} />
-            </IconButton>
-          </div>
+          {!narrow && (
+            <div className="sp__controls">
+              <IconButton label="Previous" onClick={() => void doControl("previous")}>
+                <SkipBack size={18} />
+              </IconButton>
+              <IconButton
+                label={np.isPlaying ? "Pause" : "Play"}
+                onClick={() => void doControl(np.isPlaying ? "pause" : "play")}
+              >
+                {np.isPlaying ? <Pause size={22} /> : <Play size={22} />}
+              </IconButton>
+              <IconButton label="Next" onClick={() => void doControl("next")}>
+                <SkipForward size={18} />
+              </IconButton>
+            </div>
+          )}
         </div>
       </div>
     </div>

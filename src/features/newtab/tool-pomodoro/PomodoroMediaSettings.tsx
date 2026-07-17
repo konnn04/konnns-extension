@@ -68,7 +68,6 @@ function PhaseSlot({ phase }: { phase: Phase }) {
   );
 }
 
-/** Settings section: upload a custom image/GIF for each pomodoro phase. */
 export function PomodoroMediaSettings() {
   const { t } = useTranslation();
   const refresh = usePhaseMedia((s) => s.refresh);

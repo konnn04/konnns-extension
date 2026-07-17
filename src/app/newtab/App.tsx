@@ -23,6 +23,8 @@ import { LowPowerSuggest } from "./overlays/LowPowerSuggest";
 import { FocusToggle } from "./overlays/FocusToggle";
 import { Onboarding } from "./overlays/Onboarding";
 import { EnglishDailyAutoOpen } from "@/features/newtab/tool-english";
+import { MusicEngine } from "@/features/newtab/tool-musicbox/engine";
+import { MusicCornerStatus } from "@/features/newtab/tool-musicbox/CornerStatus";
 import { CORE_FEATURE_ID } from "@/core/settings-engine/settingsStore";
 import "./app.css";
 
@@ -74,6 +76,7 @@ function AppReady() {
   const bookmarkValues = useFeatureValues("bookmark-bar");
   const centerTop = searchValues.position === "top";
   const bookmarkVertical = bookmarkValues.orientation === "vertical";
+  const bookmarkTop = bookmarkValues.orientation === "horizontal-top";
 
   return (
     <div className="app">
@@ -95,7 +98,7 @@ function AppReady() {
       </div>
 
       <motion.div
-        className={`zone-quick-access ${bookmarkVertical ? "zone-quick-access--vertical" : ""}`}
+        className={`zone-quick-access ${bookmarkVertical ? "zone-quick-access--vertical" : ""} ${bookmarkTop ? "zone-quick-access--top" : ""}`}
         {...reveal(0.08 + center.length * 0.07)}
       >
         {quickAccess.map((f) => (
@@ -115,6 +118,8 @@ function AppReady() {
       <BgMusicPlayer />
       <Onboarding />
       <EnglishDailyAutoOpen />
+      <MusicEngine />
+      <MusicCornerStatus />
     </div>
   );
 }

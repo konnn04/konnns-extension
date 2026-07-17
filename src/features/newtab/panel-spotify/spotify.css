@@ -16,6 +16,23 @@
   inset: 0;
   background: linear-gradient(to top, var(--overlay), transparent 55%);
 }
+.sp__art-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity var(--dur-hover) ease-out;
+}
+.sp__art:hover .sp__art-overlay {
+  opacity: 1;
+}
+.sp--narrow .sp__art-overlay :is(button, .icon-button) {
+  color: #fff;
+}
 .sp__meta {
   padding: var(--space-3) var(--space-4);
 }

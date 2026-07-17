@@ -102,6 +102,61 @@ export const TextInput = React.forwardRef<
   return <input ref={ref} className={`ui-input ${className}`} {...rest} />;
 });
 
+/* ---------- NumberStepper (input + /- buttons) ---------- */
+export function NumberStepper({
+  value,
+  onChange,
+  min,
+  max,
+}: {
+  value: number;
+  onChange: (value: number) => void;
+  min?: number;
+  max?: number;
+}) {
+  const step = 1;
+  const canDec = min === undefined || value > min;
+  const canInc = max === undefined || value < max;
+
+  return (
+    <div className="ui-number-stepper">
+      <button
+        type="button"
+        className="ui-number-stepper__btn"
+        disabled={!canDec}
+        onClick={() => onChange(value - step)}
+        aria-label="Decrease"
+      >
+        −
+      </button>
+      <input
+        type="number"
+        className="ui-number-stepper__input"
+        value={value}
+        min={min}
+        max={max}
+        onChange={(e) => {
+          const v = Number(e.target.value);
+          if (!isNaN(v)) {
+            if (min !== undefined && v < min) onChange(min);
+            else if (max !== undefined && v > max) onChange(max);
+            else onChange(v);
+          }
+        }}
+      />
+      <button
+        type="button"
+        className="ui-number-stepper__btn"
+        disabled={!canInc}
+        onClick={() => onChange(value + step)}
+        aria-label="Increase"
+      >
+        +
+      </button>
+    </div>
+  );
+}
+
 /* ---------- Select / Combobox (styled, portal-based) ---------- */
 export { Select, Combobox, type Option } from "./Select";
 
@@ -120,15 +175,21 @@ export function Slider({
   step?: number;
 }) {
   return (
-    <input
-      type="range"
-      className="ui-slider"
-      value={value}
-      min={min}
-      max={max}
-      step={step}
-      onChange={(e) => onChange(Number(e.target.value))}
-    />
+    <div className="ui-slider__row">
+      <input
+        type="range"
+        className="ui-slider"
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        onChange={(e) => onChange(Number(e.target.value))}
+        title={`${value}`}
+      />
+      <div className="ui-slider__value">
+        {value}
+      </div>
+    </div>
   );
 }
 
@@ -171,7 +232,6 @@ export function Field({
   label: string;
   description?: string;
   error?: string;
-  /** inline = label left, control right (toggles/selects) */
   inline?: boolean;
   children: React.ReactNode;
 }) {
