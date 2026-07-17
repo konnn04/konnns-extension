@@ -38,7 +38,7 @@ const GQL = `query {
     followers { totalCount }
     following { totalCount }
     repositories { totalCount }
-    recentRepos: repositories(first: 5, orderBy: {field: PUSHED_AT, direction: DESC}) {
+    recentRepos: repositories(first: 20, orderBy: {field: PUSHED_AT, direction: DESC}) {
       nodes { name description url stargazerCount pushedAt primaryLanguage { name } }
     }
     contributionsCollection {
@@ -191,4 +191,30 @@ export async function fetchUnreadCount(token: string): Promise<number> {
   if (!res.ok) return 0;
   const list = await res.json();
   return Array.isArray(list) ? list.length : 0;
+}
+
+export interface LanguageStat {
+  name: string;
+  count: number;
+  pct: number;
+}
+
+/** Approximate language breakdown from primary languages of recently-pushed
+ * repos (no per-repo byte-level breakdown to avoid N extra API calls). */
+export function computeLanguageStats(
+  repos: RecentRepo[],
+  excluded: string[],
+): LanguageStat[] {
+  const excludedLower = new Set(excluded.map((l) => l.trim().toLowerCase()).filter(Boolean));
+  const counts = new Map<string, number>();
+  for (const r of repos) {
+    if (!r.language) continue;
+    if (excludedLower.has(r.language.toLowerCase())) continue;
+    counts.set(r.language, (counts.get(r.language) ?? 0) + 1);
+  }
+  const total = [...counts.values()].reduce((a, b) => a + b, 0);
+  if (total === 0) return [];
+  return [...counts.entries()]
+    .map(([name, count]) => ({ name, count, pct: (count / total) * 100 }))
+    .sort((a, b) => b.count - a.count);
 }

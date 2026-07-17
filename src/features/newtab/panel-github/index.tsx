@@ -8,11 +8,13 @@ import { emit } from "@/core/event-bus";
 import { notify } from "@/core/notification-engine";
 import { Button, ReloadButton, Segmented, Skeleton } from "@/shared/ui";
 import {
+  computeLanguageStats,
   fetchNotifications,
   fetchProfile,
   fetchTrending,
   type GitHubNotification,
   type GitHubProfile,
+  type LanguageStat,
   type TrendingRepo,
   type TrendingWindow,
 } from "./api";
@@ -28,6 +30,12 @@ function PanelGitHub() {
   const online = useOnlineStatus();
   const token = ((values.token as string) ?? "").trim();
   const showTrending = values.showTrending === true;
+  const showRecentRepos = values.showRecentRepos !== false;
+  const showLanguageStats = values.showLanguageStats === true;
+  const excludedLanguages = ((values.excludedLanguages as string) ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [profile, setProfile] = useState<GitHubProfile | null>(null);
@@ -117,6 +125,10 @@ function PanelGitHub() {
     return <p className="ui-field__desc">{t("github.error")}</p>;
   }
 
+  const languageStats: LanguageStat[] = showLanguageStats
+    ? computeLanguageStats(profile.recentRepos, excludedLanguages)
+    : [];
+
   return (
     <div className="gh">
       <div className="gh__reload">
@@ -148,13 +160,32 @@ function PanelGitHub() {
       </div>
       <ContribGraph weeks={profile.weeks} />
 
-      {profile.recentRepos?.length > 0 && (
+      {showLanguageStats && languageStats.length > 0 && (
+        <>
+          <div className="gh__section-title" style={{ marginTop: "var(--space-4)" }}>
+            {t("github.showLanguageStats")}
+          </div>
+          <div className="gh__langs">
+            {languageStats.slice(0, 6).map((l) => (
+              <div className="gh__lang-row" key={l.name}>
+                <span className="gh__lang-name">{l.name}</span>
+                <div className="gh__lang-bar">
+                  <div className="gh__lang-bar-fill" style={{ width: `${l.pct}%` }} />
+                </div>
+                <span className="gh__lang-pct">{l.pct.toFixed(0)}%</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {showRecentRepos && profile.recentRepos?.length > 0 && (
         <>
           <div className="gh__section-title" style={{ marginTop: "var(--space-4)" }}>
             {t("github.recentRepos")}
           </div>
           <div className="gh__list">
-            {profile.recentRepos.map((r) => (
+            {profile.recentRepos.slice(0, 5).map((r) => (
               <a
                 key={r.name}
                 className="gh__repo"
