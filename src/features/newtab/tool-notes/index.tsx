@@ -21,13 +21,6 @@ function ToolNotes() {
     if (!loaded) void load();
   }, [loaded, load]);
 
-  // load content into the (uncontrolled) editor when switching notes
-  useEffect(() => {
-    if (editorRef.current && active) {
-      editorRef.current.innerHTML = active.content;
-    }
-  }, [activeId]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const onInput = () => {
     if (!active || !editorRef.current) return;
     const html = editorRef.current.innerHTML;
@@ -70,8 +63,9 @@ function ToolNotes() {
       ) : (
         <>
           <input
+            key={activeId}
             className="notes__title"
-            value={active.title}
+            defaultValue={active.title}
             placeholder={t("notes.titlePlaceholder")}
             onChange={(e) => void updateTitle(active.id, e.target.value)}
           />
@@ -91,12 +85,14 @@ function ToolNotes() {
             </button>
           </div>
           <div
+            key={activeId}
             ref={editorRef}
             className="notes__editor"
             contentEditable
             data-placeholder={t("notes.placeholder")}
             onInput={onInput}
             suppressContentEditableWarning
+            dangerouslySetInnerHTML={{ __html: active.content }}
           />
           <div className="notes__footer">
             <Button size="sm" variant="ghost" onClick={() => void remove(active.id)}>

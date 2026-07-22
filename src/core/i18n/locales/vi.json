@@ -8,6 +8,7 @@
     "delete": "Xóa",
     "close": "Đóng",
     "back": "Quay lại",
+    "edit": "Sửa",
     "next": "Tiếp tục",
     "skip": "Bỏ qua",
     "skipAll": "Bỏ qua tất cả",
@@ -187,7 +188,15 @@
   },
   "tasks": {
     "placeholder": "Thêm công việc...",
-    "empty": "Chưa có công việc nào"
+    "empty": "Chưa có công việc nào",
+    "deadline": "Hạn chót",
+    "moreOptions": "Hạn chót & lặp lại",
+    "type": {
+      "once": "1 lần",
+      "daily": "Hằng ngày",
+      "weekly": "Hằng tuần",
+      "monthly": "Hằng tháng"
+    }
   },
   "notes": {
     "add": "Thêm ghi chú",
@@ -212,6 +221,10 @@
     "uploadImage": "Tải ảnh",
     "imageTooLarge": "Ảnh quá lớn (tối đa 8MB)",
     "imagesHint": "Ảnh tuỳ chỉnh (tĩnh hoặc GIF) hiển thị ở giữa vòng đếm cho từng trạng thái"
+  },
+  "datepicker": {
+    "today": "Hôm nay",
+    "clear": "Xóa"
   },
   "musicbox": {
     "autoPlayOnOpen": "Tự động phát khi mở tab mới",

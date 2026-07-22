@@ -62,11 +62,15 @@ export interface NoteRow {
   updatedAt: number;
 }
 
+export type TaskType = "once" | "daily" | "weekly" | "monthly";
+
 export interface TaskRow {
   id: string;
   text: string;
   done: boolean;
   order: number;
+  deadline?: number;
+  taskType: TaskType;
   createdAt: number;
   updatedAt: number;
 }
@@ -74,19 +78,17 @@ export interface TaskRow {
 export interface OnboardingStateRow {
   id: "state";
   completed: boolean;
-  /** step index the user stopped at, to resume mid-wizard */
   step: number;
   updatedAt: number;
 }
 
 export interface AudioAssetRow {
-  id: string; // e.g. "bgMusic"
+  id: string; 
   blob: Blob;
   name: string;
   updatedAt: number;
 }
 
-/** Generic image/gif assets keyed by a caller-defined id (e.g. "pomo:work"). */
 export interface MediaAssetRow {
   id: string;
   type: "image" | "gif";
@@ -137,7 +139,6 @@ export const db = new Dexie("newtab-extension") as Dexie & {
   musicTracks: EntityTable<MusicTrackRow, "id">;
 };
 
-// v1 — initial schema
 db.version(1).stores({
   settings: "featureId, updatedAt",
   wallpapers: "id, createdAt, lastUsedAt",
@@ -148,27 +149,22 @@ db.version(1).stores({
   onboardingState: "id",
 });
 
-// v2 — add avatars table (adding a store needs no data migration; old rows kept)
 db.version(2).stores({
   avatars: "id, createdAt",
 });
 
-// v3 — add notifications log (in-app Notification Center, Phase 3)
 db.version(3).stores({
   notificationsLog: "id, source, createdAt, readAt",
 });
 
-// v4 — add audio assets (user background music, optim item 18)
 db.version(4).stores({
   audioAssets: "id",
 });
 
-// v5 — add generic media assets (e.g. pomodoro phase images/gifs)
 db.version(5).stores({
   mediaAssets: "id",
 });
 
-// v6 — add MusicBox tracks (personal music player)
 db.version(6).stores({
   musicTracks: "id, createdAt",
 });

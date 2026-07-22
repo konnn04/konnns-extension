@@ -158,7 +158,8 @@ export function NumberStepper({
 }
 
 /* ---------- Select / Combobox (styled, portal-based) ---------- */
-export { Select, Combobox, type Option } from "./Select";
+export { Select, Combobox, Dropdown, type Option } from "./Select";
+export { DatePicker } from "./DatePicker";
 
 /* ---------- Slider ---------- */
 export function Slider({
