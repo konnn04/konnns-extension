@@ -19,21 +19,25 @@ export interface Option<T extends string = string> {
   value: T;
   label: string;
   icon?: ReactNode;
-  /** render the label in this font-family (used by the font picker preview) */
   font?: string;
 }
 
-/** Fixed-position dropdown anchored under a trigger element. */
-function Dropdown({
+export function Dropdown({
   anchor,
   onClose,
   children,
   width,
+  matchTriggerWidth = true,
+  className = "ui-select-menu",
+  role = "listbox",
 }: {
   anchor: HTMLElement | null;
   onClose: () => void;
   children: ReactNode;
   width?: number;
+  matchTriggerWidth?: boolean;
+  className?: string;
+  role?: string;
 }) {
   const menuRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<React.CSSProperties>({ visibility: "hidden" });
@@ -50,7 +54,7 @@ function Dropdown({
         left: r.left,
         top: openUp ? undefined : r.bottom + 4,
         bottom: openUp ? window.innerHeight - r.top + 4 : undefined,
-        width: width ?? r.width,
+        width: width ?? (matchTriggerWidth ? r.width : undefined),
         visibility: "visible",
       });
     };
@@ -61,7 +65,7 @@ function Dropdown({
       window.removeEventListener("resize", update);
       window.removeEventListener("scroll", update, true);
     };
-  }, [anchor, width]);
+  }, [anchor, width, matchTriggerWidth]);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -74,7 +78,7 @@ function Dropdown({
   }, [anchor, onClose]);
 
   return createPortal(
-    <div ref={menuRef} className="ui-select-menu" style={style} role="listbox">
+    <div ref={menuRef} className={className} style={style} role={role}>
       {children}
     </div>,
     document.body,
@@ -162,10 +166,6 @@ export function Select<T extends string = string>({
   );
 }
 
-/**
- * Combobox / "Select2" — searchable dropdown supporting single or multiple
- * selection (checkboxes + chips). Kept generic for future feature toggles.
- */
 export function Combobox<T extends string = string>({
   value,
   onChange,

@@ -1,13 +1,15 @@
 import { create } from "zustand";
-import { db, type TaskRow } from "@/core/storage/db";
+import { db, type TaskRow, type TaskType } from "@/core/storage/db";
 
 interface TaskState {
   items: TaskRow[];
   loaded: boolean;
   load: () => Promise<void>;
-  add: (text: string) => Promise<void>;
+  add: (text: string, taskType?: TaskType, deadline?: number) => Promise<void>;
   toggle: (id: string) => Promise<void>;
   edit: (id: string, text: string) => Promise<void>;
+  setDeadline: (id: string, deadline: number | undefined) => Promise<void>;
+  setTaskType: (id: string, taskType: TaskType) => Promise<void>;
   remove: (id: string) => Promise<void>;
   reorder: (fromId: string, toId: string) => Promise<void>;
 }
@@ -21,7 +23,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     set({ items, loaded: true });
   },
 
-  add: async (text) => {
+  add: async (text, taskType = "once", deadline) => {
     const t = text.trim();
     if (!t) return;
     const list = get().items;
@@ -31,6 +33,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       text: t,
       done: false,
       order,
+      deadline,
+      taskType,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
@@ -42,13 +46,23 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     const item = get().items.find((i) => i.id === id);
     if (!item) return;
     const done = !item.done;
-    await db.tasks.update(id, { done, updatedAt: Date.now() });
     set({ items: get().items.map((i) => (i.id === id ? { ...i, done } : i)) });
+    await db.tasks.update(id, { done, updatedAt: Date.now() });
   },
 
   edit: async (id, text) => {
-    await db.tasks.update(id, { text, updatedAt: Date.now() });
     set({ items: get().items.map((i) => (i.id === id ? { ...i, text } : i)) });
+    await db.tasks.update(id, { text, updatedAt: Date.now() });
+  },
+
+  setDeadline: async (id, deadline) => {
+    set({ items: get().items.map((i) => (i.id === id ? { ...i, deadline } : i)) });
+    await db.tasks.update(id, { deadline, updatedAt: Date.now() });
+  },
+
+  setTaskType: async (id, taskType) => {
+    set({ items: get().items.map((i) => (i.id === id ? { ...i, taskType } : i)) });
+    await db.tasks.update(id, { taskType, updatedAt: Date.now() });
   },
 
   remove: async (id) => {

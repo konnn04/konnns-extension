@@ -8,6 +8,7 @@
     "delete": "Delete",
     "close": "Close",
     "back": "Back",
+    "edit": "Edit",
     "next": "Next",
     "skip": "Skip",
     "skipAll": "Skip all",
@@ -187,7 +188,15 @@
   },
   "tasks": {
     "placeholder": "Add a task...",
-    "empty": "No tasks yet"
+    "empty": "No tasks yet",
+    "deadline": "Deadline",
+    "moreOptions": "Deadline & repeat",
+    "type": {
+      "once": "Once",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly"
+    }
   },
   "notes": {
     "add": "Add note",
@@ -212,6 +221,10 @@
     "uploadImage": "Upload image",
     "imageTooLarge": "Image too large (max 8MB)",
     "imagesHint": "Custom image (static or GIF) shown in the ring center for each phase"
+  },
+  "datepicker": {
+    "today": "Today",
+    "clear": "Clear"
   },
   "musicbox": {
     "autoPlayOnOpen": "Auto-play on new tab",
