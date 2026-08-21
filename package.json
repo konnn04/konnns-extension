@@ -1,9 +1,19 @@
 {
   "name": "konnn-extension",
   "description": "Personal NewTab replacement and More Tool — WXT + React",
-  "private": true,
   "version": "0.3.0",
+  "private": true,
   "type": "module",
+  "author": "konnn04",
+  "license": "MIT",
+  "homepage": "https://github.com/konnn04/konnns-extension",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/konnn04/konnns-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/konnn04/konnns-extension/issues"
+  },
   "packageManager": "pnpm@10.33.2",
   "pnpm": {
     "onlyBuiltDependencies": [

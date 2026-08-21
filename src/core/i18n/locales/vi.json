@@ -104,6 +104,22 @@
   },
   "settings": {
     "title": "Cài đặt",
+    "contribute": "Đóng góp & Giới thiệu",
+    "contributeDesc": "Dự án NewTab mã nguồn mở tùy biến cho trình duyệt",
+    "version": "Phiên bản",
+    "contributors": "Người đóng góp",
+    "contributorsDesc": "Những người đã chung tay phát triển và cải thiện dự án",
+    "recentChanges": "Lịch sử cập nhật",
+    "recentChangesDesc": "Các thay đổi và tính năng mới nhất",
+    "commits": "Lịch sử commit gần đây",
+    "releases": "Các bản phát hành",
+    "openGithub": "Xem trên GitHub",
+    "reportIssue": "Báo lỗi / Góp ý",
+    "starGithub": "Tặng sao trên GitHub",
+    "contributeGuide": "Hướng dẫn đóng góp",
+    "commitsCount": "commits",
+    "loadingContributors": "Đang tải danh sách người đóng góp...",
+    "loadingChanges": "Đang tải lịch sử thay đổi...",
     "general": "Chung",
     "appearance": "Giao diện",
     "groupSystem": "Hệ thống",
@@ -327,6 +343,8 @@
     "disconnect": "Ngắt kết nối",
     "notConnected": "Chưa kết nối Spotify",
     "nothingPlaying": "Không có gì đang phát",
+    "recentlyPlayed": "Đã phát gần đây",
+    "openInSpotify": "Mở trên Spotify",
     "premiumNote": "Điều khiển phát cần tài khoản Premium",
     "error": "Lỗi kết nối Spotify"
   },
@@ -500,7 +518,9 @@
     "showMode": "Hiển thị icon",
     "showAlways": "Luôn hiện",
     "showHover": "Ẩn đến khi hover",
-    "empty": "Thư mục bookmark trống"
+    "empty": "Thư mục bookmark trống",
+    "emptyFolder": "Không có mục nào trong thư mục",
+    "back": "Quay lại"
   },
   "onboarding": {
     "welcomeTitle": "Chào mừng đến NewTab mới của bạn",

@@ -104,6 +104,22 @@
   },
   "settings": {
     "title": "Settings",
+    "contribute": "Contribute & About",
+    "contributeDesc": "Open-source personal NewTab replacement for your browser",
+    "version": "Version",
+    "contributors": "Contributors",
+    "contributorsDesc": "People who have contributed to building and improving this project",
+    "recentChanges": "Changelog & Updates",
+    "recentChangesDesc": "Recent changes, fixes, and newly introduced features",
+    "commits": "Recent commits",
+    "releases": "Releases",
+    "openGithub": "View on GitHub",
+    "reportIssue": "Report Issue / Feedback",
+    "starGithub": "Star on GitHub",
+    "contributeGuide": "Contributing Guide",
+    "commitsCount": "commits",
+    "loadingContributors": "Loading contributors...",
+    "loadingChanges": "Loading recent changes...",
     "general": "General",
     "appearance": "Appearance",
     "groupSystem": "System",
@@ -326,8 +342,10 @@
     "connect": "Connect Spotify",
     "disconnect": "Disconnect",
     "notConnected": "Spotify not connected",
-    "nothingPlaying": "Nothing playing",
-    "premiumNote": "Playback control requires a Premium account",
+    "nothingPlaying": "Nothing playing right now",
+    "recentlyPlayed": "Recently played",
+    "openInSpotify": "Open in Spotify",
+    "premiumNote": "Playback controls require Spotify Premium",
     "error": "Spotify connection error"
   },
   "calendar": {
@@ -500,7 +518,9 @@
     "showMode": "Icon visibility",
     "showAlways": "Always visible",
     "showHover": "Hidden until hover",
-    "empty": "Bookmark folder is empty"
+    "empty": "Bookmark folder is empty",
+    "emptyFolder": "This folder is empty",
+    "back": "Back"
   },
   "onboarding": {
     "welcomeTitle": "Welcome to your new NewTab",

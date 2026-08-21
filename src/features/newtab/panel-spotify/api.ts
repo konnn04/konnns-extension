@@ -19,15 +19,19 @@ const SCOPES = [
   "user-read-currently-playing",
   "user-read-playback-state",
   "user-modify-playback-state",
+  "user-read-recently-played",
 ].join(" ");
 
 export interface NowPlaying {
   isPlaying: boolean;
+  isRecentlyPlayed?: boolean;
   title: string;
   artist: string;
   albumArt: string | null;
   progressMs: number;
   durationMs: number;
+  spotifyUrl?: string;
+  uri?: string;
 }
 
 const verifierStore = new Map<string, string>();
@@ -103,30 +107,78 @@ export async function disconnectSpotify(): Promise<void> {
   await clearToken("spotify");
 }
 
+export async function getRecentlyPlayed(token: string): Promise<NowPlaying | null> {
+  try {
+    const res = await fetch("https://api.spotify.com/v1/me/player/recently-played?limit=1", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const item = json?.items?.[0]?.track;
+    if (!item) return null;
+    return {
+      isPlaying: false,
+      isRecentlyPlayed: true,
+      title: item.name ?? "",
+      artist: (item.artists ?? []).map((a: { name: string }) => a.name).join(", "),
+      albumArt: item.album?.images?.[0]?.url ?? null,
+      progressMs: 0,
+      durationMs: item.duration_ms ?? 0,
+      spotifyUrl: item.external_urls?.spotify,
+      uri: item.uri,
+    };
+  } catch {
+    return null;
+  }
+}
+
 export async function getNowPlaying(token: string): Promise<NowPlaying | null> {
-  const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (res.status === 204 || res.status === 202) return null; 
-  if (!res.ok) throw new Error(`spotify ${res.status}`);
-  const json = await res.json();
-  if (!json?.item) return null;
-  return {
-    isPlaying: json.is_playing,
-    title: json.item.name,
-    artist: (json.item.artists ?? []).map((a: { name: string }) => a.name).join(", "),
-    albumArt: json.item.album?.images?.[0]?.url ?? null,
-    progressMs: json.progress_ms ?? 0,
-    durationMs: json.item.duration_ms ?? 0,
-  };
+  try {
+    const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.status === 204 || res.status === 202) {
+      return await getRecentlyPlayed(token);
+    }
+    if (!res.ok) {
+      return await getRecentlyPlayed(token);
+    }
+    const json = await res.json();
+    if (!json?.item) {
+      return await getRecentlyPlayed(token);
+    }
+    return {
+      isPlaying: json.is_playing ?? false,
+      isRecentlyPlayed: false,
+      title: json.item.name ?? "",
+      artist: (json.item.artists ?? []).map((a: { name: string }) => a.name).join(", "),
+      albumArt: json.item.album?.images?.[0]?.url ?? null,
+      progressMs: json.progress_ms ?? 0,
+      durationMs: json.item.duration_ms ?? 0,
+      spotifyUrl: json.item.external_urls?.spotify,
+      uri: json.item.uri,
+    };
+  } catch {
+    return await getRecentlyPlayed(token);
+  }
 }
 
 export type PlaybackAction = "play" | "pause" | "next" | "previous";
 
-export async function control(token: string, action: PlaybackAction): Promise<void> {
+export async function control(token: string, action: PlaybackAction, uri?: string): Promise<boolean> {
   const method = action === "next" || action === "previous" ? "POST" : "PUT";
-  await fetch(`https://api.spotify.com/v1/me/player/${action}`, {
-    method,
-    headers: { Authorization: `Bearer ${token}` },
-  }).catch(() => {});
+  const body = action === "play" && uri ? JSON.stringify({ uris: [uri] }) : undefined;
+  try {
+    const res = await fetch(`https://api.spotify.com/v1/me/player/${action}`, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(body ? { "Content-Type": "application/json" } : {}),
+      },
+      body,
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
