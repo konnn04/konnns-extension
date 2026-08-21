@@ -1,7 +1,7 @@
 {
   "name": "konnn-extension",
   "description": "Personal NewTab replacement and More Tool — WXT + React",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "author": "konnn04",
