@@ -48,6 +48,14 @@ const GITHUB_ISSUES_URL =
 const REPO_PATH = GITHUB_REPO_URL.replace(/^https?:\/\/github\.com\//, "").replace(/\.git$/, "");
 const CONTRIBUTORS_API = `https://api.github.com/repos/${REPO_PATH}/contributors`;
 const COMMITS_API = `https://api.github.com/repos/${REPO_PATH}/commits?per_page=8`;
+const RELEASES_API = `https://api.github.com/repos/${REPO_PATH}/releases?per_page=5`;
+
+interface ReleaseItem {
+  version: string;
+  date: string;
+  isLatest?: boolean;
+  items: string[];
+}
 
 const FALLBACK_CONTRIBUTORS: Contributor[] = [
   {
@@ -59,45 +67,51 @@ const FALLBACK_CONTRIBUTORS: Contributor[] = [
   },
 ];
 
-const RELEASE_CHANGES = [
-  {
-    version: "v0.2.1",
-    date: "2026-08-21",
-    isLatest: true,
-    items: [
-      "Spotify: Hỗ trợ bài đã phát gần nhất khi không có nhạc đang phát (fallback recently-played) & nút mở trực tiếp Spotify.",
-      "Spotify: Hỗ trợ layout responsive (chiều ngang / chiều dọc / compact).",
-      "Thanh Bookmark: Hỗ trợ duyệt thư mục lồng đệ quy đa cấp, hiệu ứng lướt ngang mượt mà kèm nút Quay lại.",
-      "Cài đặt: Bổ sung mục Đóng góp & Giới thiệu (Contribute & About) ngay tab đầu tiên.",
-    ],
-  },
-  {
-    version: "v0.2.0",
-    date: "2026-08-18",
-    items: [
-      "Thêm công cụ MusicBox phát nhạc offline / file âm thanh cục bộ kèm widget góc màn hình.",
-      "Cải tiến Quản lý công việc (Tasks) với deadline chi tiết và bộ chọn ngày DatePicker.",
-      "Thêm bộ lọc định dạng hình nền (ảnh tĩnh, video, động) và huy hiệu thumbnail.",
-      "Thêm thống kê ngôn ngữ lập trình và top repo GitHub.",
-      "Hỗ trợ đảo vị trí thanh công cụ / panel và chế độ chồng lấn dock.",
-    ],
-  },
-  {
-    version: "v0.1.0",
-    date: "2026-08-01",
-    items: [
-      "Khởi tạo dự án NewTab với kiến trúc WXT + React + TypeScript.",
-      "Hệ thống Theme đa dạng (12 themes), font chữ tùy biến và hiệu ứng kính mờ (glassmorphism).",
-      "Đồng hồ, thời tiết, thanh tìm kiếm đa công cụ, ghi chú, mã QR, Pomodoro và thanh bookmark.",
-    ],
-  },
-];
+function getLocalReleaseChanges(currentVersion: string): ReleaseItem[] {
+  const latestTag = currentVersion.startsWith("v") ? currentVersion : `v${currentVersion}`;
+  return [
+    {
+      version: latestTag,
+      date: "2026-08-21",
+      isLatest: true,
+      items: [
+        "Spotify: Hỗ trợ bài đã phát gần nhất khi không có nhạc đang phát (fallback recently-played) & nút mở trực tiếp Spotify.",
+        "Spotify: Hỗ trợ layout responsive (chiều ngang / chiều dọc / compact).",
+        "Thanh Bookmark: Hỗ trợ duyệt thư mục lồng đệ quy đa cấp, hiệu ứng lướt ngang mượt mà kèm nút Quay lại.",
+        "Cài đặt: Bổ sung mục Đóng góp & Giới thiệu (Contribute & About) ngay tab đầu tiên.",
+      ],
+    },
+    {
+      version: "v0.2.0",
+      date: "2026-08-18",
+      items: [
+        "Thêm công cụ MusicBox phát nhạc offline / file âm thanh cục bộ kèm widget góc màn hình.",
+        "Cải tiến Quản lý công việc (Tasks) với deadline chi tiết và bộ chọn ngày DatePicker.",
+        "Thêm bộ lọc định dạng hình nền (ảnh tĩnh, video, động) và huy hiệu thumbnail.",
+        "Thêm thống kê ngôn ngữ lập trình và top repo GitHub.",
+        "Hỗ trợ đảo vị trí thanh công cụ / panel và chế độ chồng lấn dock.",
+      ],
+    },
+    {
+      version: "v0.1.0",
+      date: "2026-08-01",
+      items: [
+        "Khởi tạo dự án NewTab với kiến trúc WXT + React + TypeScript.",
+        "Hệ thống Theme đa dạng (12 themes), font chữ tùy biến và hiệu ứng kính mờ (glassmorphism).",
+        "Đồng hồ, thời tiết, thanh tìm kiếm đa công cụ, ghi chú, mã QR, Pomodoro và thanh bookmark.",
+      ],
+    },
+  ];
+}
 
 export function ContributePanel() {
   const { t, i18n } = useTranslation();
-  const [version, setVersion] = useState("0.2.1");
+  const [version, setVersion] = useState(pkg.version ?? "0.3.0");
   const [contributors, setContributors] = useState<Contributor[]>(FALLBACK_CONTRIBUTORS);
   const [commits, setCommits] = useState<CommitItem[]>([]);
+  const [releases, setReleases] = useState<ReleaseItem[]>(() =>
+    getLocalReleaseChanges(pkg.version ?? "0.3.0"),
+  );
   const [loadingContributors, setLoadingContributors] = useState(true);
   const [loadingCommits, setLoadingCommits] = useState(true);
   const [viewMode, setViewMode] = useState<"releases" | "commits">("releases");
@@ -107,6 +121,7 @@ export function ContributePanel() {
       const manifest = browser?.runtime?.getManifest?.();
       if (manifest?.version) {
         setVersion(manifest.version);
+        setReleases(getLocalReleaseChanges(manifest.version));
       }
     } catch {
       /* ignore */
@@ -143,6 +158,30 @@ export function ContributePanel() {
         /* ignore */
       } finally {
         if (!cancelled) setLoadingCommits(false);
+      }
+
+      try {
+        const res = await fetch(RELEASES_API);
+        if (res.ok) {
+          const data = await res.json();
+          if (!cancelled && Array.isArray(data) && data.length > 0) {
+            const mapped: ReleaseItem[] = data.map((r: any, idx: number) => {
+              const bodyLines = (r.body || "")
+                .split("\n")
+                .map((l: string) => l.trim().replace(/^[-*•]\s*/, ""))
+                .filter((l: string) => l.length > 0);
+              return {
+                version: r.tag_name || r.name || "Release",
+                date: r.published_at ? r.published_at.split("T")[0] : "",
+                isLatest: idx === 0,
+                items: bodyLines.length > 0 ? bodyLines : [r.name || "Cập nhật mới"],
+              };
+            });
+            setReleases(mapped);
+          }
+        }
+      } catch {
+        /* keep local releases */
       }
     }
 
@@ -290,7 +329,7 @@ export function ContributePanel() {
 
         {viewMode === "releases" ? (
           <div className="contribute-timeline">
-            {RELEASE_CHANGES.map((rel) => (
+            {releases.map((rel) => (
               <div key={rel.version} className="contribute-timeline__item">
                 <div className="contribute-timeline__dot-wrap">
                   <div
