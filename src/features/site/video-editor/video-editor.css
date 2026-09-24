@@ -1,0 +1,1636 @@
+/* Video Editor — fullBleed site app. */
+
+/* ---------- empty hero screen (Image 1 pattern) ---------- */
+.vied__empty-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: var(--space-6);
+  gap: var(--space-3);
+}
+
+.vied__empty-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--primary, #0ea5e9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+  box-shadow: 0 0 30px rgba(14, 165, 233, 0.15);
+}
+
+.vied__empty-title {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.vied__empty-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.6;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.vied__empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* ---------- card grid screen (Image 2 pattern) ---------- */
+.vied__grid-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-6);
+  overflow-y: auto;
+}
+
+.vied__grid-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.vied__grid-head h1 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.vied__grid-head-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.vied__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.vied__card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 14px);
+  background: var(--surface-elevated, #132f4c);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.vied__card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.vied__card-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: #0f172a;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.vied__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vied__card-empty-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--text-muted);
+}
+
+.vied__card-empty-icon {
+  opacity: 0.5;
+}
+
+.vied__card-empty {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.vied__card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.vied__card-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.vied__card-name:hover {
+  color: var(--primary, #0ea5e9);
+}
+
+.vied__card-rename-input {
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--accent, #0ea5e9);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  width: 100%;
+  outline: none;
+}
+
+.vied__card-submeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.vied__card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface-hover);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.vied__card-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.vied__card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ---------- editor screen ---------- */
+.vied {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.vied__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.vied__title {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.vied__spacer {
+  flex: 1;
+}
+
+.vied__toast {
+  padding: var(--space-2) var(--space-4);
+  background: color-mix(in srgb, var(--danger, #e5484d) 15%, transparent);
+  font-size: 12px;
+  text-align: center;
+}
+
+.vied__error {
+  color: var(--danger, #e5484d);
+  font-size: 12px;
+}
+
+/* ---------- preview ---------- */
+/*
+ * The workspace around the frame is deliberately NOT black.
+ *
+ * It used to be, and that made the output frame impossible to find: the
+ * canvas fills itself with black, so a black surround meant the letterboxing
+ * and the picture were the same colour and there was no way to see where
+ * 1920×1080 actually ended. A neutral ground plus a ring on the canvas makes
+ * the frame read as a page lying on a desk.
+ */
+.vied__preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-4);
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--bg) 78%, #ffffff);
+  overflow: hidden;
+}
+
+/* the decoder/player; never shown — its frames are painted to the canvas
+   below so crop/colour/blur/fade are visible live (see PreviewPlayer.tsx) */
+.vied__preview-source {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vied__preview-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  /* the canvas is the output frame's aspect ratio, letterboxing included */
+  object-fit: contain;
+  /*
+   * `outline`, not `border`: the crop and cover-box overlays position
+   * themselves from this element's getBoundingClientRect, and a border would
+   * shift that by its own width. An outline draws outside the box and is
+   * excluded from the rect, so the ring costs nothing in alignment.
+   */
+  outline: 1px solid color-mix(in srgb, var(--border) 100%, #ffffff 30%);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.55);
+}
+
+/* the frame's own size, shown on the frame rather than only in the toolbar */
+.vied__frame-badge {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: 4;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #000 55%, transparent);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.vied__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.vied__dropzone--over {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ---------- crop frame on the preview ---------- */
+.vied__crop-frame {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid #fff;
+  /* one huge outline is the cheapest way to dim everything outside the frame */
+  outline: 9999px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.7);
+  cursor: move;
+}
+
+.vied__crop-size {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.6;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.vied__crop-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+}
+
+.vied__crop-handle--nw { top: -6px; left: -6px; cursor: nwse-resize; }
+.vied__crop-handle--n  { top: -6px; left: calc(50% - 6px); cursor: ns-resize; }
+.vied__crop-handle--ne { top: -6px; right: -6px; cursor: nesw-resize; }
+.vied__crop-handle--e  { top: calc(50% - 6px); right: -6px; cursor: ew-resize; }
+.vied__crop-handle--se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+.vied__crop-handle--s  { bottom: -6px; left: calc(50% - 6px); cursor: ns-resize; }
+.vied__crop-handle--sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+.vied__crop-handle--w  { top: calc(50% - 6px); left: -6px; cursor: ew-resize; }
+
+/*
+ * A blur region means the opposite of a crop: the box marks what gets HIDDEN,
+ * while everything around it stays visible. So it must drop the crop frame's
+ * dim-everything-outside outline and fill itself instead — inheriting that
+ * outline would darken the whole picture except the part being covered up.
+ */
+.vied__crop-frame--blur {
+  outline: none;
+  border-style: dashed;
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+.vied__aspect-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* ---------- crop panel ---------- */
+/* the audio clip panel shares the right-hand column with PropertiesPanel,
+   so it stacks its rows rather than laying them out as a wide strip */
+.vied__crop-panel {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: var(--space-3);
+  width: 280px;
+  box-sizing: border-box;
+  padding: var(--space-3);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+.vied__crop-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- transport ---------- */
+.vied__transport {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.vied__time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- timeline / track ---------- */
+.vied__timeline {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  min-height: 0;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+}
+
+/* the timeline's own scroller takes whatever height the splitter left it */
+.vied__tl {
+  flex: 1;
+  min-height: 0;
+}
+
+.vied__tl-headers {
+  height: 100%;
+  /* scrolled programmatically to follow the track area — a second scrollbar
+     here would let the headers drift out of line with their own lanes */
+  overflow: hidden;
+}
+
+.vied__tl-scroll {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* ---------- splitter between preview and timeline ---------- */
+.vied__splitter {
+  flex: none;
+  height: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: row-resize;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.vied__splitter:hover,
+.vied__splitter:focus-visible {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  outline: none;
+}
+
+.vied__splitter-grip {
+  width: 44px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.vied__splitter:hover .vied__splitter-grip {
+  background: var(--accent);
+}
+
+/* ---------- "done" button floating over the preview ---------- */
+.vied__preview-confirm {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-elevated);
+}
+
+/* ---------- text / box overlays ---------- */
+.vied__crop-frame--overlay {
+  outline: none;
+  border: 1px dashed var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.vied__overlay-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.vied__overlay-item.is-active {
+  border-color: var(--accent);
+}
+
+.vied__overlay-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.vied__overlay-head .vied__blur-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.vied__overlay-item.is-active .vied__blur-name {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.vied__color-input {
+  width: 24px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.vied__overlay-text {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  resize: vertical;
+}
+
+/* ---------- toolbar (docs/test-001.md §2) ---------- */
+.vied__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.vied__toolbar [aria-pressed="true"] {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--accent);
+}
+
+.vied__toolbar-sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 var(--space-1);
+  background: var(--border);
+}
+
+.vied__mode-btn {
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.vied__mode-btn.is-on {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  color: var(--accent);
+}
+
+/* ---------- track headers + scroller (§1.3/§1.4) ---------- */
+.vied__tl {
+  display: flex;
+  align-items: flex-start;
+}
+
+.vied__tl-headers {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  width: 132px;
+  border-right: 1px solid var(--border);
+}
+
+.vied__tl-corner {
+  border-bottom: 1px solid var(--border);
+}
+
+.vied__track-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px var(--space-2);
+  border-bottom: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.vied__track-header-name {
+  font-size: 11px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vied__track-header-buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.vied__track-btn {
+  display: flex;
+  padding: 2px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.vied__track-btn:hover {
+  color: var(--text);
+}
+
+.vied__track-btn.is-off,
+.vied__track-btn.is-locked {
+  color: var(--danger, #e5484d);
+}
+
+.vied__track-fader {
+  width: 100%;
+  height: 3px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.vied__tl-scroll {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.vied__tl-content {
+  position: relative;
+}
+
+/* a locked track still shows its clips, it just stops answering the mouse */
+.vied__track--locked {
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.vied__marquee {
+  position: absolute;
+  z-index: 4;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  pointer-events: none;
+}
+
+/* ---------- ruler + playhead ---------- */
+.vied__ruler-wrap {
+  position: relative;
+  /* the playhead is absolutely positioned against this, and must be able to
+     hang down over the tracks below without being clipped */
+  z-index: 3;
+}
+
+.vied__ruler {
+  position: relative;
+  height: 22px;
+  min-width: 100%;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.vied__tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.vied__tick-label {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.vied__playhead {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  background: var(--danger, #e5484d);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.vied__playhead-head {
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 13px;
+  height: 13px;
+  background: var(--danger, #e5484d);
+  /* the classic downward-pointing flag, and the only draggable bit */
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  cursor: ew-resize;
+  pointer-events: auto;
+}
+
+.vied__playhead-time {
+  position: absolute;
+  top: -2px;
+  left: 10px;
+  padding: 0 3px;
+  border-radius: var(--radius-sm);
+  background: var(--danger, #e5484d);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.vied__track {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.vied__clip {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* ---------- filmstrip (§1.2) ---------- */
+.vied__filmstrip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.vied__filmstrip img {
+  height: 100%;
+  /* share the clip's width evenly: a fixed width would leave the strip
+     short of the clip's right edge at most zoom levels */
+  flex: 1 1 0;
+  min-width: 0;
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+.vied__filmstrip--pending {
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--text) 6%, transparent) 0 28px,
+    transparent 28px 30px
+  );
+}
+
+/* ---------- fade triangles on the clip corners (§4.3) ---------- */
+.vied__fade-handle {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 2;
+}
+
+.vied__fade-handle--in {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.75), transparent);
+}
+
+.vied__fade-handle--out {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.75), transparent);
+}
+
+.vied__audio-wave {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  pointer-events: none;
+}
+
+.vied__clip--selected {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.vied__clip--dragging {
+  opacity: 0.5;
+}
+
+.vied__clip-handle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  color: var(--text-muted);
+  cursor: grab;
+}
+
+.vied__clip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+}
+
+.vied__clip-mute {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: flex;
+  border: none;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  cursor: pointer;
+  padding: 2px;
+}
+
+/* the full height of the edge, and above the fade strip: reaching for the
+   boundary of a clip means resizing it */
+.vied__clip-trim {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 4;
+}
+
+.vied__clip-trim--left {
+  left: 0;
+}
+
+.vied__clip-trim--right {
+  right: 0;
+}
+
+.vied__clip-trim:hover {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* ---------- audio overlay lane ---------- */
+.vied__audio-clips {
+  position: relative;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--border) 35%, transparent);
+}
+
+.vied__audio-clips--muted {
+  opacity: 0.45;
+}
+
+.vied__audio-clip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  color: var(--text);
+  cursor: grab;
+  overflow: hidden;
+}
+
+.vied__audio-clip--selected {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+.vied__audio-clip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+}
+
+/* ---------- export dialog ---------- */
+.vied__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, black 40%, transparent);
+}
+
+.vied__modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(360px, 90vw);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+}
+
+.vied__modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vied__modal-close {
+  display: flex;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.vied__gif-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.vied__gif-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--warning, #f5a623) 12%, transparent);
+  font-size: 11px;
+}
+
+.vied__export-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.vied__export-progress-track {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  overflow: hidden;
+}
+
+.vied__export-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.15s ease;
+}
+
+.vied__export-done {
+  color: var(--success, #30a46c);
+  font-size: 13px;
+}
+
+/* ---------- stage: preview + properties panel (docs/test-001.md §3/§4.4) ---------- */
+.vied__stage {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.vied__props {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: none;
+  width: 280px;
+  box-sizing: border-box;
+  padding: var(--space-3);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  /* the panel is a fixed width, so anything inside it wraps rather than
+     hanging off the edge of the app */
+  overflow-x: hidden;
+}
+
+.vied__props-group {
+  min-width: 0;
+}
+
+.vied__props-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.vied__props-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+
+.vied__props-group h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* an optional group that is switched OFF keeps its values but stops applying
+   them, so it reads as dimmed rather than absent (§4.4) */
+.vied__props-group--optional {
+  opacity: 0.72;
+}
+
+.vied__props-group--optional.is-on {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+.vied__group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.vied__group-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.vied__group-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-1);
+}
+
+.vied__prop-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.vied__prop-row--inline {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.vied__prop-buttons {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.vied__prop-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.vied__prop-hint {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.vied__mini-reset {
+  display: flex;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.vied__mini-reset:hover {
+  color: var(--text);
+}
+
+.vied__crop-numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.vied__crop-number {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.vied__crop-number input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.vied__blur-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.vied__blur-name {
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* the region whose frame is currently live on the preview */
+.vied__blur-item.is-active .vied__blur-name {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.vied__blur-item > *:nth-child(2) {
+  flex: 1;
+}
+
+/* ---------- extract-audio track picker (§5.3) ---------- */
+.vied__track-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vied__track-option {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  color: var(--text);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vied__track-option:hover {
+  border-color: var(--accent);
+}
+
+.vied__track-option span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---------- export dialog (§7) ---------- */
+.vied__modal--wide {
+  width: min(460px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.vied__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 12px;
+}
+
+.vied__field--row {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.vied__estimate {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---------- media bin (one place imported files live) ---------- */
+.vied__bin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: none;
+  width: 210px;
+  padding: var(--space-3);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+.vied__bin-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.vied__bin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vied__bin-list li {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.vied__bin-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: grab;
+}
+
+.vied__bin-item:hover {
+  border-color: var(--accent);
+  background: var(--glass-bg);
+}
+
+.vied__bin-icon {
+  display: flex;
+  flex: none;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  color: #fff;
+}
+
+/* the colour is the same one the lane uses, so a file and its clips read as
+   the same thing in two places */
+.vied__bin-icon--video { background: #3b82f6; }
+.vied__bin-icon--audio { background: #10b981; }
+.vied__bin-icon--image { background: #a855f7; }
+
+.vied__bin-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.vied__bin-name {
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vied__bin-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ---------- frame size picker ---------- */
+.vied__ratio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.vied__ratio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.vied__ratio.is-on {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+/* the shape itself is the label — a list of numbers makes you do arithmetic
+   to picture what you are choosing */
+.vied__ratio-shape {
+  display: block;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.vied__ratio-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.vied__ratio-size {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ---------- per-kind lanes ---------- */
+.vied__track--video .vied__clip { background: color-mix(in srgb, #3b82f6 22%, var(--glass-bg)); }
+.vied__track--audio .vied__clip { background: color-mix(in srgb, #10b981 22%, var(--glass-bg)); }
+.vied__track--text .vied__clip { background: color-mix(in srgb, #f59e0b 26%, var(--glass-bg)); }
+.vied__track--effect .vied__clip { background: color-mix(in srgb, #ef4444 26%, var(--glass-bg)); }
+.vied__clip--image { background: color-mix(in srgb, #a855f7 24%, var(--glass-bg)) !important; }
+
+.vied__track--hidden { opacity: 0.45; }
+
+.vied__track-header--text,
+.vied__track-header--effect {
+  font-size: 11px;
+}
+
+/* a still has nothing to scrub through, so one tile fills the block rather
+   than a strip of identical frames */
+.vied__still {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.vied__clip-name {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 5px;
+  font-size: 10px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.vied__tl-empty {
+  margin: var(--space-4);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* the decoders are real <video> elements, kept off screen */
+.vied__preview-decoders {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vied__props-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vied__swatch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.vied__swatch input[type="color"] {
+  width: 24px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+/* ---------- right-click menu ---------- */
+.vied__menu {
+  position: fixed;
+  z-index: 60;
+  min-width: 190px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-elevated);
+  backdrop-filter: blur(12px);
+}
+
+.vied__menu-sep {
+  height: 1px;
+  margin: 4px 2px;
+  border: none;
+  background: var(--border);
+}
+
+.vied__menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 5px 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vied__menu-item:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.vied__menu-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.vied__menu-item.is-danger {
+  color: var(--danger, #e5484d);
+}
+
+.vied__menu-icon {
+  display: flex;
+  flex: none;
+  width: 14px;
+  color: var(--text-muted);
+}
+
+.vied__menu-item.is-danger .vied__menu-icon {
+  color: inherit;
+}
+
+.vied__menu-label {
+  flex: 1;
+}
+
+.vied__menu-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- track header: name row plus the stacking arrows ---------- */
+.vied__track-header-top {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.vied__track-header-top .vied__track-header-name {
+  flex: 1;
+  min-width: 0;
+}
+
+/* these arrows ARE the layer order — the lane above draws over the one below */
+.vied__track-order {
+  display: flex;
+  flex-direction: column;
+  flex: none;
+  gap: 0;
+}
+
+.vied__track-order .vied__track-btn {
+  padding: 0;
+  line-height: 0;
+}
+
+.vied__track-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.vied__track-btn--danger:hover {
+  color: var(--danger, #e5484d);
+}
+
+/* the transport now shares the toolbar row, so it needs no block of its own */
+.vied__transport {
+  display: none;
+}
+
+.vied__toolbar .vied__time {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* a colour plus its label plus an on/off, each on its own full-width row —
+   three of these side by side is what pushed a button off the panel */
+.vied__swatch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.vied__swatch-row > span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vied__swatch-row input[type="color"] {
+  width: 26px;
+  height: 20px;
+  flex: none;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.vied__swatch-row input[type="color"]:disabled {
+  opacity: 0.35;
+  cursor: default;
+}

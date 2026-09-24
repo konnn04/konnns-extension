@@ -1,0 +1,362 @@
+/* PDF → Text — fullBleed site app, so this owns the whole viewport height. */
+
+.pdftxt {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0;
+}
+
+.pdftxt--center {
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- dropzone ---------- */
+.pdftxt__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(480px, 90vw);
+  padding: var(--space-6) var(--space-5);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.pdftxt__dropzone--over {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.pdftxt__dropzone-title {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.pdftxt__dropzone-sub {
+  font-size: 12px;
+}
+
+.pdftxt__error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--danger, #e5484d);
+  font-size: 12px;
+}
+
+/* ---------- password gate ---------- */
+.pdftxt__password {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(320px, 90vw);
+}
+
+/* ---------- replace-file confirm modal ---------- */
+.pdftxt__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, black 40%, transparent);
+}
+
+.pdftxt__modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(360px, 90vw);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+}
+
+.pdftxt__modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/* ---------- header ---------- */
+.pdftxt__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.pdftxt__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ---------- body: page list + viewer ---------- */
+.pdftxt__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.pdftxt__pages {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 240px;
+  flex: none;
+  overflow-y: auto;
+  padding: var(--space-3);
+  border-right: 1px solid var(--border);
+  list-style: none;
+}
+
+.pdftxt__page-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  border: none;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.pdftxt__page-row:hover {
+  background: var(--glass-bg-strong);
+}
+
+.pdftxt__page-row--active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+}
+
+.pdftxt__page-num {
+  flex: 1;
+  font-size: 12px;
+}
+
+.pdftxt__page-chars {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.pdftxt__status--pending {
+  color: var(--text-muted);
+}
+.pdftxt__status--ok {
+  color: var(--success, #30a46c);
+}
+.pdftxt__status--empty {
+  color: var(--text-muted);
+}
+.pdftxt__status--error {
+  color: var(--danger, #e5484d);
+}
+.pdftxt__status--spin {
+  color: var(--accent);
+  animation: pdftxt-spin 1s linear infinite;
+}
+
+@keyframes pdftxt-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pdftxt__scan-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---------- viewer ---------- */
+.pdftxt__viewer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-4);
+  overflow-y: auto;
+}
+
+.pdftxt__viewer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.pdftxt__viewer-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.pdftxt__viewer-head h2 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.pdftxt__range-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.pdftxt__range-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pdftxt__range-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pdftxt__range-input {
+  width: 58px;
+  padding: 3px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 12px;
+  text-align: center;
+}
+
+.pdftxt__range-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.pdftxt__range-total {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pdftxt__range-shortcuts {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pdftxt__viewer-note {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pdftxt__text {
+  flex: 1;
+  min-height: 240px;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: none;
+}
+
+.pdftxt__scan-warning {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--warning, #f5a623) 10%, transparent);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.pdftxt__scan-warning p {
+  flex: 1;
+}
+
+.pdftxt__ocr-settings {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pdftxt__ocr-progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.pdftxt__ocr-progress-track {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  overflow: hidden;
+}
+
+.pdftxt__ocr-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.15s ease;
+}
+
+.pdftxt__doc-ocr-hint {
+  align-self: flex-start;
+}
+
+/* ---------- export menu ---------- */
+.pdftxt__export-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.pdftxt__export-menu label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: 11px;
+  color: var(--text-muted);
+}

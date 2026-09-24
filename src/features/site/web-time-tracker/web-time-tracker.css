@@ -1,0 +1,351 @@
+/*
+ * Web Time Tracker — a normal scrollable page (NOT fullBleed), so no layout
+ * rules here fight the shell's own padding/scroll.
+ */
+
+.wtt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 880px;
+}
+
+.wtt__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.wtt__header h1 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+}
+
+.wtt__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wtt__icon--on {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+}
+
+/* ---------- disabled state ---------- */
+.wtt__disabled {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+}
+
+.wtt__disabled-link {
+  border: none;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+/* ---------- body / sections ---------- */
+.wtt__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.wtt__breadcrumb {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  padding: 0;
+}
+
+.wtt__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+}
+
+.wtt__section h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wtt__section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.wtt__total {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+}
+
+.wtt__empty {
+  color: var(--text-muted);
+  font-size: 13px;
+  padding: var(--space-3) 0;
+}
+
+.wtt__favicon {
+  flex: none;
+  border-radius: 3px;
+}
+
+/* ---------- domain ranking bars ---------- */
+.wtt__bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.wtt__bar-row {
+  position: relative;
+}
+
+.wtt__bar-btn {
+  display: grid;
+  grid-template-columns: 16px minmax(80px, 1fr) minmax(60px, 2fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.wtt__bar-btn:hover {
+  background: var(--glass-bg-strong);
+}
+
+.wtt__bar-btn--active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.wtt__bar-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.wtt__bar-track {
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--border);
+  overflow: hidden;
+}
+
+/* single hue for a ranked-magnitude list — see DomainBarChart.tsx */
+.wtt__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+.wtt__bar-value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 4ch;
+  text-align: right;
+}
+
+/* ---------- daily bars ---------- */
+.wtt__daily {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 120px;
+  overflow-x: auto;
+  padding-top: var(--space-4); /* headroom for the hover tooltip */
+}
+
+.wtt__daily-col {
+  position: relative;
+  display: flex;
+  flex: 1 0 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 10px;
+  cursor: default;
+}
+
+.wtt__daily-bar-track {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px 2px 0 0;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.wtt__daily-bar-fill {
+  width: 100%;
+  border-radius: 2px 2px 0 0;
+  background: var(--accent);
+}
+
+.wtt__daily-label {
+  margin-top: var(--space-1);
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* ---------- shared hover tooltip ---------- */
+.wtt__tooltip {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  right: var(--space-2);
+  transform: translateY(-50%);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+  font-size: 11px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.wtt__tooltip--top {
+  top: -4px;
+  right: auto;
+  left: 50%;
+  transform: translate(-50%, -100%);
+}
+
+/* ---------- recent sessions ---------- */
+.wtt__recent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+}
+
+.wtt__recent-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  border: none;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.wtt__recent-row:hover {
+  background: var(--glass-bg-strong);
+}
+
+.wtt__recent-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.wtt__recent-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.wtt__recent-icon {
+  flex: none;
+  color: var(--text-muted);
+}
+
+/* ---------- settings ---------- */
+.wtt__settings {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+}
+
+.wtt__domain-input {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.wtt__domain-input .ui-input {
+  flex: 1;
+}
+
+.wtt__domain-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  list-style: none;
+}
+
+.wtt__domain-tag {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  font-size: 12px;
+}
+
+.wtt__domain-tag button {
+  display: flex;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.wtt__confirm-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}

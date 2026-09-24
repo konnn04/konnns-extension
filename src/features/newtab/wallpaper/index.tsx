@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { registerFeature } from "@/core/feature-registry";
-import { CORE_FEATURE_ID, useFeatureValues } from "@/core/settings-engine/settingsStore";
+import { CORE_FEATURE_ID, useFeatureValues, useSettingsStore } from "@/core/settings-engine/settingsStore";
 import { getWallpaperUrl, useWallpaperStore } from "./store";
 import { WallpaperManager } from "./WallpaperManager";
 import { wallpaperSettingsSchema } from "./settings.schema";
+import {
+  fetchRandomWallhavenWallpaper,
+  type WallhavenCategory,
+  type WallhavenResolution,
+} from "./wallhaven";
 import "./wallpaper.css";
 
 export const WALLPAPER_FEATURE_ID = "wallpaper";
@@ -55,24 +60,43 @@ function WallpaperLayer() {
     return () => window.clearInterval(id);
   }, [slideshow, slideKey, slideInterval, slideOrder]);
 
-  // Random-on-open: pick a random wallpaper from the library each new tab
+  // Random-on-open: pick a random wallpaper from the library or Wallhaven each new tab
   const rawRandomMode = values.randomMode;
-  const randomModeKind: "off" | "images" | "videos" | "all" =
-    rawRandomMode === true
-      ? "all"
-      : rawRandomMode === false
+  const randomModeKind: "wallhaven" | "off" | "images" | "videos" | "all" =
+    rawRandomMode === "wallhaven"
+      ? "wallhaven"
+      : rawRandomMode === "off"
         ? "off"
-        : ((rawRandomMode as "off" | "images" | "videos" | "all") ?? "off");
-  const randomMode = randomModeKind !== "off" && !slideshow;
+        : rawRandomMode === "images" || rawRandomMode === "videos" || rawRandomMode === "all"
+          ? rawRandomMode
+          : rawRandomMode === false
+            ? "off"
+            : rawRandomMode === true
+              ? "all"
+              : "wallhaven";
+
+  const wallhavenTopic = (values.wallhavenTopic as string) ?? "all";
+  const wallhavenCustomQuery = (values.wallhavenCustomQuery as string) ?? "";
+  const wallhavenCategory = (values.wallhavenCategory as WallhavenCategory) ?? "all";
+  const wallhavenResolution = (values.wallhavenResolution as WallhavenResolution) ?? "2560x1440";
+
+  const isLocalRandom =
+    (randomModeKind === "images" || randomModeKind === "videos" || randomModeKind === "all") &&
+    !slideshow;
+
   const items = useWallpaperStore((s) => s.items);
   const itemsLoaded = useWallpaperStore((s) => s.loaded);
   const loadItems = useWallpaperStore((s) => s.load);
   const [randomId, setRandomId] = useState<string | null>(null);
+  const [wallhavenActiveId, setWallhavenActiveId] = useState<string | null>(null);
+  const wallhavenFetchingRef = useRef(false);
+
   useEffect(() => {
-    if (randomMode && !itemsLoaded) void loadItems();
-  }, [randomMode, itemsLoaded, loadItems]);
+    if (isLocalRandom && !itemsLoaded) void loadItems();
+  }, [isLocalRandom, itemsLoaded, loadItems]);
+
   useEffect(() => {
-    if (randomMode && itemsLoaded && items.length > 0) {
+    if (isLocalRandom && itemsLoaded && items.length > 0) {
       const pool =
         randomModeKind === "all"
           ? items
@@ -81,7 +105,53 @@ function WallpaperLayer() {
     }
     // pick once when random mode turns on / library first loads
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [randomMode, randomModeKind, itemsLoaded]);
+  }, [isLocalRandom, randomModeKind, itemsLoaded]);
+
+  // Wallhaven random fetch on new tab open (2K+ landscape: space, forest, city, landscape)
+  useEffect(() => {
+    if (slideshow || randomModeKind !== "wallhaven") return;
+    if (wallhavenFetchingRef.current) return;
+    wallhavenFetchingRef.current = true;
+
+    void (async () => {
+      try {
+        const queryToFetch = wallhavenCustomQuery.trim() || wallhavenTopic;
+        const wp = await fetchRandomWallhavenWallpaper(
+          queryToFetch,
+          wallhavenCategory,
+          wallhavenResolution,
+        );
+        if (wp) {
+          const newId = await useWallpaperStore.getState().addFromUrl(wp.path);
+          setWallhavenActiveId(newId);
+          // Set as activeId in store as well if none is set yet (fresh install)
+          if (!values.activeId) {
+            useSettingsStore.getState().setValue(WALLPAPER_FEATURE_ID, "activeId", newId);
+          }
+          // Keep library tidy by pruning older auto-fetched Wallhaven wallpapers (> 5)
+          const allItems = useWallpaperStore.getState().items;
+          const autoItems = allItems.filter(
+            (it) => it.name.startsWith("wallhaven-") && it.id !== newId,
+          );
+          if (autoItems.length > 5) {
+            for (const old of autoItems.slice(5)) {
+              void useWallpaperStore.getState().remove(old.id);
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to fetch random Wallhaven wallpaper:", err);
+      }
+    })();
+  }, [
+    slideshow,
+    randomModeKind,
+    wallhavenTopic,
+    wallhavenCustomQuery,
+    wallhavenCategory,
+    wallhavenResolution,
+    values.activeId,
+  ]);
 
   const slideActiveId =
     slideshow && slideItems.length > 0
@@ -89,7 +159,11 @@ function WallpaperLayer() {
       : null;
   const activeId =
     slideActiveId ??
-    (randomMode && randomId ? randomId : ((values.activeId as string) ?? ""));
+    (randomModeKind === "wallhaven"
+      ? (wallhavenActiveId ?? (values.activeId as string) ?? "")
+      : isLocalRandom && randomId
+        ? randomId
+        : ((values.activeId as string) ?? ""));
   const lowPower =
     coreValues.lowPower === true ||
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;

@@ -1,0 +1,563 @@
+/* Markdown → PDF — fullBleed site app. */
+
+/* ---------- empty hero screen (Image 1 pattern) ---------- */
+.mdp__empty-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: var(--space-6);
+  gap: var(--space-3);
+  position: relative;
+  transition: background 0.2s ease, outline 0.2s ease;
+}
+
+.mdp__empty-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--primary, #0ea5e9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+  box-shadow: 0 0 30px rgba(14, 165, 233, 0.15);
+}
+
+.mdp__empty-title {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.mdp__empty-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.6;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.mdp__empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.mdp__empty-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+}
+
+/* ---------- card grid screen (Image 2 pattern) ---------- */
+.mdp__grid-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-6);
+  overflow-y: auto;
+  position: relative;
+  transition: outline 0.2s ease;
+}
+
+.mdp__drop--over {
+  outline: 2px dashed var(--accent, #0ea5e9) !important;
+  outline-offset: -8px !important;
+  background: rgba(14, 165, 233, 0.04);
+}
+
+.mdp__grid-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.mdp__grid-head h1 {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.mdp__grid-head-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mdp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.mdp__card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 14px);
+  background: var(--surface-elevated, #132f4c);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.mdp__card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-hover, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.mdp__card-thumb {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  aspect-ratio: 4 / 3;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+  cursor: pointer;
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+
+.mdp__card-preview-text {
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: #334155;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  opacity: 0.9;
+  user-select: none;
+}
+
+.mdp__card-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.mdp__card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.mdp__card-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.mdp__card-name:hover {
+  color: var(--primary, #0ea5e9);
+}
+
+.mdp__card-rename-input {
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--surface);
+  border: 1px solid var(--accent, #0ea5e9);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  width: 100%;
+  outline: none;
+}
+
+.mdp__card-submeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mdp__card-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface-hover);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.mdp__card-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mdp__card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.mdp__drop-hint {
+  margin-top: auto;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---------- editor screen ---------- */
+.mdp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mdp__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.mdp__doc-title {
+  font-weight: 600;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 220px;
+}
+
+.mdp__save-state {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+.mdp__spin {
+  animation: mdp-spin 1s linear infinite;
+}
+
+@keyframes mdp-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mdp__toolbar {
+  display: flex;
+  gap: 2px;
+  padding-inline: var(--space-2);
+  border-inline: 1px solid var(--border);
+}
+
+/* ---------- split view ---------- */
+.mdp__split {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+}
+
+.mdp__source {
+  overflow: auto;
+  min-width: 0;
+}
+
+.mdp__source .cm-editor {
+  height: 100%;
+  background: transparent;
+  color: var(--text);
+}
+
+.mdp__source .cm-editor.cm-focused {
+  outline: none;
+}
+
+.mdp__source .cm-scroller {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.mdp__source .cm-gutters {
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  color: var(--text-muted);
+  border-right: 1px solid var(--border);
+}
+
+.mdp__source .cm-gutterElement {
+  color: var(--text-muted);
+}
+
+.mdp__source .cm-activeLineGutter {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+}
+
+.mdp__source .cm-activeLine {
+  background: color-mix(in srgb, var(--surface-elevated) 40%, transparent);
+}
+
+.mdp__source .cm-cursor {
+  border-left-color: var(--accent);
+}
+
+.mdp__source .cm-selectionBackground,
+.mdp__source ::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent) !important;
+}
+
+.mdp__divider {
+  cursor: col-resize;
+  background: var(--border);
+}
+
+.mdp__divider:hover {
+  background: var(--accent);
+}
+
+.mdp__preview {
+  overflow-y: auto;
+  min-width: 0;
+  padding: var(--space-5);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.mdp__preview :is(h1, h2, h3, h4) {
+  font-family: var(--font-heading);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-2);
+}
+
+.mdp__preview pre {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg-strong);
+  overflow-x: auto;
+}
+
+.mdp__preview code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+.mdp__preview :not(pre) > code {
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg-strong);
+}
+
+.mdp__preview table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.mdp__preview :is(th, td) {
+  border: 1px solid var(--border);
+  padding: var(--space-2);
+}
+
+.mdp__preview blockquote {
+  margin: 0;
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--border);
+  color: var(--text-muted);
+}
+
+.mdp__preview img {
+  max-width: 100%;
+}
+
+/* ---------- print setup dialog ---------- */
+.mdp__modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, black 40%, transparent);
+}
+
+.mdp__modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: min(380px, 92vw);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-elevated);
+}
+
+.mdp__modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mdp__modal-close {
+  display: flex;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mdp__modal-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mdp__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.mdp__field--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------- print layer ---------- */
+/*
+ * Rendered through a portal as a direct child of <body> (see PrintLayer.tsx),
+ * which is what lets the print rules below hide everything else BY STRUCTURE
+ * — the previous version only hid this tool's own panes, so the site shell
+ * (sidebar, header) still printed.
+ */
+.mdp-print-root,
+.mdp-print-measure {
+  display: none;
+}
+
+@media print {
+  /* the shell, the editor, any modal — none of it belongs on paper */
+  body > *:not(.mdp-print-root) {
+    display: none !important;
+  }
+
+  .mdp-print-root {
+    display: block;
+    color: #000;
+    background: #fff;
+    /* backgrounds and shadows are dropped when printing unless asked for —
+       code blocks and table rules would otherwise come out blank */
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* laid out only to be measured; never drawn */
+  .mdp-print-measure {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .mdp-print-page {
+    position: relative;
+    overflow: hidden;
+    break-after: page;
+    page-break-after: always;
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+
+  .mdp-print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .mdp-print-title {
+    margin: 0 0 12pt;
+    font-size: 18pt;
+  }
+
+  .mdp-print-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 9pt;
+    color: #555;
+  }
+
+  .mdp-print-root :is(h1, h2, h3, h4) {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .mdp-print-root pre {
+    padding: 8pt;
+    border-radius: 3pt;
+    background: #f0f0f0;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .mdp-print-root img {
+    max-width: 100%;
+  }
+
+  .mdp-print-root table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .mdp-print-root :is(th, td) {
+    border: 1px solid #ccc;
+    padding: 4pt;
+  }
+
+  .mdp-print-root blockquote {
+    margin: 0;
+    padding-left: 8pt;
+    border-left: 2pt solid #ccc;
+    color: #444;
+  }
+}

@@ -1,0 +1,312 @@
+/* ==========================================================================
+   Wallhaven Wallpaper Explorer Styles
+   ========================================================================== */
+
+.wh-modal {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  max-height: 850px;
+  overflow: hidden;
+  gap: var(--space-3);
+}
+
+/* Header & Search Bar */
+.wh-search-bar {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.wh-search-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.wh-search-input-wrap svg {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.wh-search-input-wrap .ui-text-input {
+  width: 100%;
+  padding-left: 36px;
+  padding-right: 32px;
+}
+
+.wh-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.wh-search-clear:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+/* Quick Tags */
+.wh-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.wh-tags-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+
+.wh-tag-chip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wh-tag-chip:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary, #0ea5e9);
+  color: var(--primary, #0ea5e9);
+  transform: translateY(-1px);
+}
+
+.wh-tag-chip--active {
+  background: var(--primary, #0ea5e9);
+  border-color: var(--primary, #0ea5e9);
+  color: #fff;
+}
+
+/* Filter controls bar */
+.wh-filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.wh-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.wh-filter-label {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.wh-category-pills {
+  display: inline-flex;
+  background: var(--surface-elevated, rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  gap: 2px;
+}
+
+.wh-cat-pill {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.wh-cat-pill:hover {
+  color: var(--text);
+}
+
+.wh-cat-pill--active {
+  background: var(--primary, #0ea5e9);
+  color: #fff;
+}
+
+/* Wallpapers Grid View */
+.wh-grid-scroll {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 280px;
+  padding-right: 4px;
+}
+
+.wh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.wh-card {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  aspect-ratio: 16 / 10;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wh-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary, #0ea5e9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.wh-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wh-card__badges {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+
+.wh-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  text-transform: uppercase;
+}
+
+.wh-badge--4k {
+  background: #f59e0b;
+  color: #000;
+}
+
+.wh-badge--2k {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.wh-card__stats {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+  transition: opacity 0.2s ease;
+}
+
+.wh-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* Hover action overlay */
+.wh-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 60%, transparent 100%);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px;
+  gap: 6px;
+  z-index: 3;
+  transition: opacity 0.2s ease;
+}
+
+.wh-card:hover .wh-card__overlay {
+  opacity: 1;
+}
+
+.wh-card__actions {
+  display: flex;
+  gap: 6px;
+}
+
+.wh-card__actions .ui-btn {
+  flex: 1;
+}
+
+/* Pagination Footer */
+.wh-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.wh-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wh-page-indicator {
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* States */
+.wh-empty-state,
+.wh-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  gap: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.wh-empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}

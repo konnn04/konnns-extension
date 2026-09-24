@@ -1,0 +1,83 @@
+/*
+ * Styles for the embedded UI. These live inside a ShadowRoot (cssInjectionMode
+ * "ui"), so they can never leak into the host page and the host page's CSS can
+ * never reach them. The theme engine is NOT used here — it writes variables to
+ * the host page's <html>, which isn't ours to touch — so the embed surface
+ * carries its own tiny token set that follows the OS color scheme.
+ */
+.kx-root {
+  --kx-bg: #ffffff;
+  --kx-text: #14181d;
+  --kx-muted: rgba(20, 24, 29, 0.6);
+  --kx-border: rgba(20, 24, 29, 0.14);
+  --kx-accent: #2563eb;
+  --kx-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+
+  position: fixed;
+  z-index: 2147483647;
+  inset: auto 16px 16px auto;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--kx-text);
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .kx-root {
+    --kx-bg: #1b2028;
+    --kx-text: #e8edf3;
+    --kx-muted: rgba(232, 237, 243, 0.6);
+    --kx-border: rgba(232, 237, 243, 0.16);
+    --kx-accent: #60a5fa;
+    --kx-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.kx-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 340px;
+  padding: 10px 14px;
+  border: 1px solid var(--kx-border);
+  border-radius: 12px;
+  background: var(--kx-bg);
+  box-shadow: var(--kx-shadow);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kx-toast--in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kx-toast__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kx-accent);
+}
+
+.kx-toast--error .kx-toast__dot {
+  background: #ef4444;
+}
+
+.kx-toast__text {
+  min-width: 0;
+}
+
+.kx-toast__title {
+  font-weight: 600;
+}
+
+.kx-toast__body {
+  color: var(--kx-muted);
+  overflow-wrap: anywhere;
+}

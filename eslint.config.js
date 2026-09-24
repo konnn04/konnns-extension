@@ -12,6 +12,9 @@ export default tseslint.config(
       "node_modules/**",
       "dist/**",
       "**/*.d.ts",
+      // vendored third-party assets self-hosted for CSP/no-CDN reasons
+      // (docs/roadmap/00-tong-quan.md §2.7) — not our source, never lint them
+      "public/**",
     ],
   },
 
@@ -35,6 +38,36 @@ export default tseslint.config(
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrors: "none" },
       ],
       "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+
+  // "1 tool = 1 folder" — docs/site/00 §2. Inside a tool you reach your own
+  // files with relative paths, so an `@/features/...` specifier HERE is by
+  // definition a reach into somebody else's tool: the thing that turns a folder
+  // you can delete into a folder you cannot. Shared code is promoted to
+  // @/core or @/shared instead.
+  //
+  // src/features/newtab predates the convention and still has a few of these,
+  // so it is deliberately left out rather than bulk-rewritten.
+  {
+    files: [
+      "src/features/site/**/*.{ts,tsx}",
+      "src/features/embed/**/*.{ts,tsx}",
+      "src/features/popup/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/features/**"],
+              message:
+                "A tool must not import another tool. Use a relative path within your own folder, or move the shared part to @/core or @/shared.",
+            },
+          ],
+        },
+      ],
     },
   },
 

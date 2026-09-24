@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Trash2, Upload, Film, Link, Eraser, Shuffle, Check, Plus } from "lucide-react";
+import { Trash2, Upload, Film, Link, Eraser, Shuffle, Check, Plus, Compass } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button, IconButton, TextInput } from "@/shared/ui";
 import { useFeatureValues, useSettingsStore } from "@/core/settings-engine/settingsStore";
@@ -7,6 +7,8 @@ import { estimateStorage } from "@/core/storage/db";
 import { useWallpaperStore, type WallpaperMeta } from "./store";
 import { getWallpaperUrl } from "./store";
 import { MAX_VIDEO_BYTES } from "./image";
+import { fetchRandomWallhavenWallpaper, type Wallpaper } from "./wallhaven";
+import { WallhavenModal } from "./WallhavenModal";
 
 const FEATURE_ID = "wallpaper";
 
@@ -72,6 +74,7 @@ export function WallpaperManager() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [usage, setUsage] = useState<string | null>(null);
+  const [showWallhaven, setShowWallhaven] = useState(false);
 
   useEffect(() => {
     if (!loaded) void load();
@@ -102,6 +105,9 @@ export function WallpaperManager() {
       </p>
 
       <div className="wp-manager__actions">
+        <Button size="sm" variant="primary" onClick={() => setShowWallhaven(true)}>
+          <Compass size={15} /> {t("wallpaper.wallhavenBrowse")}
+        </Button>
         <Button size="sm" onClick={() => imgInput.current?.click()}>
           <Upload size={15} /> {t("wallpaper.upload")}
         </Button>
@@ -114,8 +120,12 @@ export function WallpaperManager() {
           onClick={async () => {
             setError(null);
             try {
-              // Lorem Picsum — keyless public source (docs/bonus-public-api.md)
-              setActive(await addFromUrl(`https://picsum.photos/1920/1080?random=${Date.now()}`));
+              const wp = await fetchRandomWallhavenWallpaper();
+              if (wp) {
+                setActive(await addFromUrl(wp.path));
+              } else {
+                setActive(await addFromUrl(`https://picsum.photos/1920/1080?random=${Date.now()}`));
+              }
             } catch (err) {
               onError(err);
             }
@@ -267,6 +277,16 @@ export function WallpaperManager() {
           <Eraser size={15} /> {t("wallpaper.cleanup")}
         </Button>
       </div>
+
+      <WallhavenModal
+        open={showWallhaven}
+        onClose={() => setShowWallhaven(false)}
+        onSelectWallpaper={async (wp: Wallpaper) => {
+          const id = await addFromUrl(wp.path);
+          setActive(id);
+          setValue(FEATURE_ID, "randomMode", "off");
+        }}
+      />
     </div>
   );
 }

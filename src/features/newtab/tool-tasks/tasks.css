@@ -1,7 +1,31 @@
 .tasks__add {
   display: flex;
+  flex-direction: column;
   gap: var(--space-2);
   margin-bottom: var(--space-3);
+}
+.tasks__add-row {
+  display: flex;
+  gap: var(--space-2);
+}
+.tasks__add-row .ui-input {
+  flex: 1;
+  min-width: 0;
+}
+.tasks__add-expand--on {
+  color: var(--accent);
+}
+.tasks__add-extra {
+  display: flex;
+  gap: var(--space-2);
+}
+.tasks__add-date {
+  width: 150px;
+  flex-shrink: 0;
+}
+.tasks__add-type {
+  width: 110px;
+  flex-shrink: 0;
 }
 .tasks__list {
   display: flex;
@@ -10,8 +34,8 @@
 }
 .task-row {
   display: flex;
-  align-items: center;
-  gap: var(--space-2);
+  flex-direction: column;
+  gap: 2px;
   padding: var(--space-2);
   border-radius: var(--radius-sm);
   transition: background-color var(--dur-hover) ease-out;
@@ -21,6 +45,17 @@
 }
 .task-row--dragover {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+.task-row__main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.task-row__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-left: calc(15px + 20px + var(--space-2) * 2);
 }
 .task-row__grip {
   color: var(--text-muted);
@@ -51,8 +86,24 @@
   background: var(--accent);
   border-color: var(--accent);
 }
+/* view mode: static title (no input chrome), takes remaining space */
+.task-row__title {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.task-row__title--done {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+/* edit mode: the same slot becomes a real input */
 .task-row__text {
   flex: 1;
+  min-width: 0;
   font-size: 14px;
   background: transparent;
   border: none;
@@ -63,12 +114,44 @@
   text-decoration: line-through;
   color: var(--text-muted);
 }
+.task-row__badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.task-row__badge--overdue {
+  color: #e0523f;
+}
+.task-row__type-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+}
+.task-row__edit,
 .task-row__del {
+  flex-shrink: 0;
   opacity: 0;
   transition: opacity var(--dur-hover) ease-out;
 }
+.task-row:hover .task-row__edit,
 .task-row:hover .task-row__del {
   opacity: 1;
+}
+
+.task-row__deadline {
+  flex-shrink: 0;
+  width: 128px;
+}
+.ui-datepicker-trigger.task-row__deadline--overdue {
+  border-color: #e0523f;
+  color: #e0523f;
+}
+.task-row__type {
+  flex-shrink: 0;
+  width: 88px;
+  font-size: 11.5px;
 }
 .tasks__empty {
   color: var(--text-muted);

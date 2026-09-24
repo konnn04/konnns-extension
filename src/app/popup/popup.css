@@ -1,0 +1,409 @@
+/*
+ * Toolbar popup. A popup sizes itself to its content, so this surface opts out
+ * of the full-viewport rules global.css sets for the NewTab.
+ *
+ * Chrome caps a popup at 800x600 and simply CLIPS anything past that — with
+ * `overflow: visible` the overflow is then unreachable, which is what happened
+ * once the per-tool options form opened. So body carries the cap itself and
+ * scrolls, and the width is set wide enough for a Select plus its label.
+ */
+/*
+ * The extra specificity here is deliberate, not decoration.
+ *
+ * global.css sets `html, body, #root { width: 100%; height: 100%; overflow:
+ * hidden }`, which is exactly wrong for a popup: Chrome derives the popup's
+ * size FROM the document, so a document pinned to 100% of a not-yet-sized
+ * viewport collapses to Chrome's ~25px minimum box. Overriding it at equal
+ * specificity leaves the winner up to CSS injection order, and that order
+ * differs between the dev server (runtime <style> tags, module-eval order) and
+ * the production build (bundler-ordered <link> tags). These selectors outrank
+ * global.css in both, so the popup can never collapse again.
+ */
+html:root,
+html:root > body,
+html:root > body > #root {
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+html:root > body {
+  width: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 160px;
+  padding: var(--space-4);
+  background: var(--theme-gradient, var(--bg));
+}
+
+/* ---------- header ---------- */
+.popup__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.popup__brand {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.popup__version {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ---------- primary action ---------- */
+.popup__home {
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding-block: var(--space-3);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ---------- sections ---------- */
+.popup__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.popup__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.popup__label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.popup__link {
+  border: none;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  padding: 0;
+}
+
+.popup__link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- app grid ---------- */
+.popup__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.popup__tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 100%;
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: center;
+  overflow: hidden;
+}
+
+.popup__tile:hover,
+.popup__tile:focus-visible {
+  border-color: var(--border);
+  background: var(--glass-bg-strong);
+}
+
+.popup__tile-icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.popup__tile-name {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  /* two lines max, so one long name can't make its tile taller than the row */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The description only exists on hover/focus — see the note in PopupApp.tsx. */
+.popup__tile-desc {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--surface-elevated);
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.35;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+}
+
+.popup__tile:hover .popup__tile-desc,
+.popup__tile:focus-visible .popup__tile-desc {
+  opacity: 1;
+}
+
+.popup__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.popup__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    background var(--dur-hover) var(--ease-out),
+    border-color var(--dur-hover) var(--ease-out);
+}
+
+.popup__row:hover:not(:disabled) {
+  border-color: var(--border);
+  background: var(--glass-bg-strong);
+}
+
+.popup__row:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.popup__row-icon {
+  flex: none;
+  color: var(--accent);
+}
+
+.popup__row-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.popup__row-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.popup__row-desc {
+  overflow: hidden;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popup__row-chevron {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.popup__spin {
+  animation: popup-spin 900ms linear infinite;
+}
+
+@keyframes popup-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- empty / error states ---------- */
+.popup__empty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.popup__empty--warn {
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.popup__error {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #ef4444 16%, transparent);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- tool result ---------- */
+.popup__result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.popup__header--result {
+  align-items: center;
+}
+
+.popup__back {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--glass-bg);
+  color: inherit;
+  cursor: pointer;
+}
+
+.popup__back:hover {
+  background: var(--glass-bg-strong);
+}
+
+.popup__result-title {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.popup__stats {
+  display: flex;
+  gap: var(--space-2);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.popup__preview {
+  max-height: 220px;
+  padding: var(--space-3);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  user-select: text;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.popup__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.popup__actions > :first-child {
+  grid-column: 1 / -1;
+  justify-content: center;
+}
+
+.popup__actions .ui-btn {
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+/* ---------- per-tool options ---------- */
+.popup__row-group {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.popup__row-group .popup__row {
+  flex: 1;
+  min-width: 0;
+}
+
+.popup__opts-btn {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
+}
+
+.popup__opts-btn:hover,
+.popup__opts-btn--on {
+  background: var(--glass-bg-strong);
+  color: var(--text);
+}
+
+.popup__opts-btn--on {
+  border-color: var(--accent);
+}
+
+.popup__options {
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+
+/* the shared form targets the settings modal; tighten it for a 340px popup */
+.popup__options .ui-field {
+  gap: var(--space-1);
+  padding-block: var(--space-2);
+}
+
+.popup__options .ui-field__label {
+  font-size: 12px;
+}
+
+.popup__options .ui-field__desc {
+  font-size: 10px;
+  line-height: 1.4;
+}

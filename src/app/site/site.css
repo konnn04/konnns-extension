@@ -1,0 +1,398 @@
+/*
+ * Custom Site shell. Layout only — every colour, radius and spacing value is a
+ * design token, so the site follows the theme picked on the NewTab.
+ */
+.site {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: 100%;
+  height: 100%;
+  background: var(--theme-gradient, var(--bg));
+}
+
+.site--zen {
+  grid-template-rows: 1fr;
+}
+
+/* ---------- top bar ---------- */
+.site__topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+}
+
+.site__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.site__brand svg {
+  color: var(--accent);
+}
+
+.site__crumb {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ---------- body: rail + main ---------- */
+.site__body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 0;
+}
+
+.site__body--zen {
+  grid-template-columns: 1fr;
+}
+
+.site__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-2);
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+}
+
+.site__rail-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background var(--dur-hover) var(--ease-out),
+    color var(--dur-hover) var(--ease-out);
+}
+
+button.site__rail-item,
+.site__rail-item--btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  width: 100%;
+  color: var(--text-muted);
+}
+
+.site__rail-item:hover,
+button.site__rail-item:hover {
+  background: var(--glass-bg);
+  color: var(--text);
+}
+
+.site__rail-item--active {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--text);
+}
+
+.site__rail-item--active svg {
+  color: var(--accent);
+}
+
+.site__rail-footer {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border);
+}
+
+.site__main {
+  min-width: 0;
+  padding: var(--space-6);
+  overflow: auto;
+}
+
+/* apps that paint their own full-height chrome (the audio editor) */
+.site__main--bleed {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.site__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+
+.site__notfound {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.site__notfound h1 {
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 20px;
+}
+
+.site__notfound code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+/* ---------- home ---------- */
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.home__title {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+}
+
+.home__sub {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.home__empty {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.home__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.home__group-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.home__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--space-4);
+}
+
+.home__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  transition:
+    transform var(--dur-hover) var(--ease-out),
+    border-color var(--dur-hover) var(--ease-out),
+    background var(--dur-hover) var(--ease-out);
+}
+
+.home__card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: var(--glass-bg-strong);
+}
+
+.home__card-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+.home__card-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.home__card-desc {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ---------- narrow windows: rail collapses to icons ---------- */
+@media (max-width: 860px) {
+  .site__body {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .site__rail-label {
+    display: none;
+  }
+
+  .site__rail-item {
+    justify-content: center;
+  }
+
+  .site__main {
+    padding: var(--space-4);
+  }
+}
+
+/* ---------- quick settings in the top bar ---------- */
+.site__topbar-spacer {
+  flex: 1;
+}
+
+.site__settings {
+  position: relative;
+}
+
+.site__settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.site__settings-btn:hover,
+.site__settings-btn[aria-expanded="true"] {
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.site__settings-pop {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: min(260px, calc(100vw - 32px));
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-elevated);
+}
+
+.site__settings-note {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* ---------- collapsible rail ---------- */
+.site__rail-toggle {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  border-right: 1px solid var(--border);
+  padding-right: var(--space-4);
+}
+
+/*
+ * Collapsing hides the labels and lets the rail shrink to its icons. The
+ * labels stay in the DOM as the accessible name of each link — hiding them
+ * with display:none would leave screen readers with a column of blank icons.
+ */
+.site__body--rail-collapsed .site__rail-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.site__body--rail-collapsed .site__rail-item {
+  justify-content: center;
+  gap: 0;
+}
+
+/* ---------- tool search ---------- */
+.home__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 420px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.home__search:focus-within {
+  border-color: var(--accent);
+}
+
+.home__search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+/* the browser's own clear affordance would sit next to ours */
+.home__search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.home__search button {
+  display: flex;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.home__search button:hover {
+  color: var(--text);
+}
+
+/*
+ * The rail column is a fixed grid track, so hiding the labels alone changed
+ * nothing — the 220px stayed. Collapsing has to narrow the track itself.
+ */
+.site__body--rail-collapsed {
+  grid-template-columns: 60px 1fr;
+}

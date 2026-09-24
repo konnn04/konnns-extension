@@ -19,21 +19,25 @@ export interface Option<T extends string = string> {
   value: T;
   label: string;
   icon?: ReactNode;
-  /** render the label in this font-family (used by the font picker preview) */
   font?: string;
 }
 
-/** Fixed-position dropdown anchored under a trigger element. */
-function Dropdown({
+export function Dropdown({
   anchor,
   onClose,
   children,
   width,
+  matchTriggerWidth = true,
+  className = "ui-select-menu",
+  role = "listbox",
 }: {
   anchor: HTMLElement | null;
   onClose: () => void;
   children: ReactNode;
   width?: number;
+  matchTriggerWidth?: boolean;
+  className?: string;
+  role?: string;
 }) {
   const menuRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState<React.CSSProperties>({ visibility: "hidden" });
@@ -42,15 +46,20 @@ function Dropdown({
     if (!anchor) return;
     const update = () => {
       const r = anchor.getBoundingClientRect();
+      const menuW = width ?? (matchTriggerWidth ? r.width : (menuRef.current?.offsetWidth ?? r.width));
       const menuH = menuRef.current?.offsetHeight ?? 0;
       const spaceBelow = window.innerHeight - r.bottom;
       const openUp = spaceBelow < menuH + 12 && r.top > spaceBelow;
+      // clamp so a menu anchored near the right/left edge (e.g. a toolbar
+      // button flush against the window edge) never renders partly off-screen
+      const margin = 8;
+      const left = Math.min(r.left, window.innerWidth - menuW - margin);
       setStyle({
         position: "fixed",
-        left: r.left,
+        left: Math.max(margin, left),
         top: openUp ? undefined : r.bottom + 4,
         bottom: openUp ? window.innerHeight - r.top + 4 : undefined,
-        width: width ?? r.width,
+        width: width ?? (matchTriggerWidth ? r.width : undefined),
         visibility: "visible",
       });
     };
@@ -61,7 +70,7 @@ function Dropdown({
       window.removeEventListener("resize", update);
       window.removeEventListener("scroll", update, true);
     };
-  }, [anchor, width]);
+  }, [anchor, width, matchTriggerWidth]);
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -74,7 +83,7 @@ function Dropdown({
   }, [anchor, onClose]);
 
   return createPortal(
-    <div ref={menuRef} className="ui-select-menu" style={style} role="listbox">
+    <div ref={menuRef} className={className} style={style} role={role}>
       {children}
     </div>,
     document.body,
@@ -162,10 +171,6 @@ export function Select<T extends string = string>({
   );
 }
 
-/**
- * Combobox / "Select2" — searchable dropdown supporting single or multiple
- * selection (checkboxes + chips). Kept generic for future feature toggles.
- */
 export function Combobox<T extends string = string>({
   value,
   onChange,

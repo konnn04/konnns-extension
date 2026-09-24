@@ -1,0 +1,229 @@
+/* Whiteboard — fullBleed site app. */
+
+/* ---------- empty hero screen (Image 1 pattern) ---------- */
+.wb__empty-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: var(--space-6);
+  gap: var(--space-3);
+}
+
+.wb__empty-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--primary, #0ea5e9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+  box-shadow: 0 0 30px rgba(14, 165, 233, 0.15);
+}
+
+.wb__empty-title {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.wb__empty-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.6;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.wb__empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* ---------- board grid / picker screen ---------- */
+.wb__grid-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-5);
+  overflow-y: auto;
+}
+
+.wb__grid-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wb__grid-head h1 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+}
+
+.wb__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.wb__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  overflow: hidden;
+}
+
+.wb__card-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.wb__card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.wb__card-empty-thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  color: var(--text-muted);
+}
+
+.wb__card-empty-icon {
+  opacity: 0.4;
+}
+
+.wb__card-empty {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.wb__card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 var(--space-3);
+}
+
+.wb__card-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wb__card-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.wb__card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+}
+
+/* ---------- board view ---------- */
+.wb {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.wb__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  z-index: 5; /* stay above Excalidraw's own floating panels */
+  position: relative;
+}
+
+.wb__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.wb__title:hover {
+  background: var(--glass-bg-strong);
+}
+
+.wb__title-input {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 6px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.wb__spacer {
+  flex: 1;
+}
+
+.wb__canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Excalidraw fills its container; the container just needs to actually have height */
+.wb__canvas .excalidraw {
+  height: 100%;
+}
+
+/* ---------- export menu ---------- */
+.wb__export-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+}
+
+.wb__export-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Download, Palette, RotateCcw, Settings2, Upload } from "lucide-react";
+import { Download, HeartHandshake, Palette, RotateCcw, Settings2, Upload } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getFeatures } from "@/core/feature-registry";
 import { SettingsForm } from "@/core/settings-engine/SettingsForm";
@@ -18,9 +18,11 @@ import { SoundSettings } from "@/core/sound/SoundSettings";
 import { coreAppearanceSchema, coreGeneralSchema } from "./coreSettings";
 import { ThemePicker } from "./ThemePicker";
 import { FontPicker } from "./FontPicker";
+import { ContributePanel } from "./ContributePanel";
 import "./settings-modal.css";
 
 const APPEARANCE_ID = "appearance";
+const CONTRIBUTE_ID = "contribute";
 
 /** Appearance tab — theme + wallpaper/glass controls (split out of General). */
 function AppearancePanel() {
@@ -210,9 +212,21 @@ export function SettingsModal() {
                 </div>
               );
             })}
+
+            {/* About & Contribute at the bottom */}
+            <div className="settings-nav__group">{t("settings.groupAbout", "Thông tin")}</div>
+            <button
+              className={`settings-nav__item ${category === CONTRIBUTE_ID ? "settings-nav__item--active" : ""}`}
+              onClick={() => setCategory(CONTRIBUTE_ID)}
+            >
+              <HeartHandshake size={16} />
+              {t("settings.contribute")}
+            </button>
           </nav>
           <div className="settings-content">
-            {category === CORE_FEATURE_ID ? (
+            {category === CONTRIBUTE_ID ? (
+              <ContributePanel />
+            ) : category === CORE_FEATURE_ID ? (
               <GeneralPanel />
             ) : category === APPEARANCE_ID ? (
               <AppearancePanel />

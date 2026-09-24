@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Music, Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { ExternalLink, Music, Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { registerFeature } from "@/core/feature-registry";
 import { useFeatureValues } from "@/core/settings-engine/settingsStore";
@@ -67,15 +67,28 @@ function PanelSpotify() {
 
   const doControl = async (action: PlaybackAction) => {
     if (tokenRef.current) {
-      await control(tokenRef.current, action);
-      setTimeout(refresh, 400);
+      const ok = await control(tokenRef.current, action, np?.uri);
+      if (!ok && action === "play" && np?.spotifyUrl) {
+        // If playback failed (e.g. no active device), offer opening Spotify
+        window.open(np.spotifyUrl, "_blank", "noopener,noreferrer");
+      }
+      setTimeout(refresh, 500);
+    }
+  };
+
+  const openSpotify = () => {
+    if (np?.spotifyUrl) {
+      window.open(np.spotifyUrl, "_blank", "noopener,noreferrer");
+    } else {
+      window.open("https://open.spotify.com", "_blank", "noopener,noreferrer");
     }
   };
 
   const [sizeRef, size] = useElementSize<HTMLDivElement>();
-  const narrow = size.width > 0 && size.width < 220;
+  const isNarrow = size.width > 0 && size.width < 220;
+  const isWide = size.width >= 270;
 
-  // View is status-only — connect/disconnect lives in Settings (docs item 4)
+  // View is status-only — connect/disconnect lives in Settings
   if (!clientId || connected === false) {
     return (
       <div className="sp__connect">
@@ -96,16 +109,21 @@ function PanelSpotify() {
   }
 
   const pct = np.durationMs > 0 ? (progress / np.durationMs) * 100 : 0;
+  const layoutClass = isNarrow ? "sp--narrow" : isWide ? "sp--horizontal" : "sp--vertical";
 
   return (
-    <div className={`sp ${narrow ? "sp--narrow" : ""}`} ref={sizeRef}>
+    <div className={`sp ${layoutClass}`} ref={sizeRef}>
       <div className="sp__player">
         <div
           className="sp__art"
           style={np.albumArt ? { backgroundImage: `url(${np.albumArt})` } : undefined}
+          onClick={openSpotify}
+          title={t("spotify.openInSpotify")}
+          role="button"
+          tabIndex={0}
         >
-          {narrow && (
-            <div className="sp__art-overlay">
+          {isNarrow && (
+            <div className="sp__art-overlay" onClick={(e) => e.stopPropagation()}>
               <IconButton label="Previous" onClick={() => void doControl("previous")}>
                 <SkipBack size={16} />
               </IconButton>
@@ -121,25 +139,49 @@ function PanelSpotify() {
             </div>
           )}
         </div>
+
         <div className="sp__meta">
-          <div className="sp__title">{np.title}</div>
+          <div className="sp__header-row">
+            {np.isRecentlyPlayed && (
+              <span className="sp__badge">{t("spotify.recentlyPlayed")}</span>
+            )}
+            <button
+              type="button"
+              className="sp__link-btn"
+              onClick={openSpotify}
+              title={t("spotify.openInSpotify")}
+              aria-label={t("spotify.openInSpotify")}
+            >
+              <ExternalLink size={13} />
+            </button>
+          </div>
+
+          <div
+            className="sp__title"
+            onClick={openSpotify}
+            title={`${np.title} (${t("spotify.openInSpotify")})`}
+          >
+            {np.title}
+          </div>
           <div className="sp__artist">{np.artist}</div>
+
           <div className="sp__progress">
             <div className="sp__progress-fill" style={{ width: `${pct}%` }} />
           </div>
-          {!narrow && (
+
+          {!isNarrow && (
             <div className="sp__controls">
               <IconButton label="Previous" onClick={() => void doControl("previous")}>
-                <SkipBack size={18} />
+                <SkipBack size={isWide ? 16 : 18} />
               </IconButton>
               <IconButton
                 label={np.isPlaying ? "Pause" : "Play"}
                 onClick={() => void doControl(np.isPlaying ? "pause" : "play")}
               >
-                {np.isPlaying ? <Pause size={22} /> : <Play size={22} />}
+                {np.isPlaying ? <Pause size={isWide ? 20 : 22} /> : <Play size={isWide ? 20 : 22} />}
               </IconButton>
               <IconButton label="Next" onClick={() => void doControl("next")}>
-                <SkipForward size={18} />
+                <SkipForward size={isWide ? 16 : 18} />
               </IconButton>
             </div>
           )}

@@ -44,9 +44,11 @@ refactor(search): extract engine selector into shared component
 2. Run `pnpm install` to install dependencies.
 3. Make your changes.
 4. Run `pnpm compile` to verify TypeScript types.
-5. Run `pnpm build` to verify the extension builds successfully.
-6. Commit your changes using a conventional commit message.
-7. Push to your fork and open a pull request.
+5. Run `pnpm lint`.
+6. Run `pnpm build` -- some failures only surface at bundle time, so this is not
+   optional before opening a PR.
+7. Commit your changes using a conventional commit message.
+8. Push to your fork and open a pull request.
 
 ### Pre-commit Checks
 
@@ -56,22 +58,46 @@ This project uses [Husky](https://typicode.github.io/husky/) and [lint-staged](h
 
 ```
 src/
-  entrypoints/       # Extension entry points (newtab, background)
-  core/              # Shared core modules (feature registry, settings, theme, etc.)
-  features/          # Each feature in its own folder, self-registering
-  shared/            # Shared UI components and icons
-  app/               # App shell (layout, modals, onboarding)
+  entrypoints/       # One per browser surface (newtab, popup, site, embed, background)
+  app/               # The shell of each surface (layout, modals, router)
+  features/          # One folder per surface, then per feature -- self-registering
+  core/              # Surface-independent services (registries, storage, theme, i18n)
+  shared/            # UI kit, icons, pure utils used everywhere
   styles/            # Design tokens and global styles
 docs/                # Architecture and feature documentation
 ```
 
-## Adding a New Feature
+Dependencies run **one way only**: `entrypoints -> app -> features -> core / shared`.
+`core` and `shared` never import back up. See [docs/architecture.md](docs/architecture.md).
 
-1. Create `src/features/<feature-name>/` with `index.tsx` (component + registerFeature), `settings.schema.ts`, and CSS.
-2. Add an import line to `src/features/index.ts`.
-3. Do not modify core code -- settings, sidebar, and onboarding auto-discover new features from the registry.
-4. Use components from `src/shared/ui` and design tokens from `src/styles/tokens.css`. Do not hardcode colors or spacing.
-5. Use `AsyncState` pattern for async data and provide skeleton loaders sized to the final layout.
+## Adding a New Feature or Tool
+
+1. Create the folder -- `src/features/newtab/<name>/` for a New Tab feature, or
+   `src/features/site/<name>/` for a Custom Site app -- with an `index.tsx` that
+   calls `registerFeature()` / `registerSiteApp()`.
+2. Add one `import "./<name>"` line to that surface barrel.
+3. Do not modify core code -- settings, sidebar, home grid and onboarding all read
+   the registry, so nothing hardcodes a list.
+4. Use components from `src/shared/ui` and tokens from `src/styles/tokens.css`. Do
+   not hardcode colors or spacing.
+5. Every user-visible string goes through `t()`, and `en.json` / `vi.json` must stay
+   key-for-key identical.
+
+### One tool = one folder
+
+Inside `features/site`, `features/embed` and `features/popup`, a tool must be a
+folder you can delete without breaking anything else. ESLint enforces it: an
+`@/features/**` import **inside** those folders is a build error, because within
+your own tool you would use a relative path -- so such an import is by definition
+a reach into somebody else's tool.
+
+Need to share something? Copy it, or promote it to `@/core` / `@/shared`.
+
+### Algorithms live in `engine/`
+
+There is no unit-test runner. Anything algorithmic belongs in a tool's `engine/`
+folder as pure functions -- no React, no DOM -- so it can be bundled with esbuild
+and run under Node. See [AGENTS.md](AGENTS.md) §5.
 
 ## Code Style
 

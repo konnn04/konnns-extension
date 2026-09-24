@@ -1,0 +1,125 @@
+/* Audio Mixer popup widget — matches popup.css's row/section look. */
+
+.amx {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.amx__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.amx__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+}
+
+.amx__row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+}
+
+.amx__row-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.amx__row-main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border: none;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.amx__row-main:hover {
+  background: var(--glass-bg-strong);
+}
+
+.amx__favicon {
+  flex: none;
+  border-radius: 3px;
+}
+
+.amx__favicon-fallback {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.amx__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.amx__mute--on {
+  color: var(--accent);
+}
+
+/* ---------- per-tab volume (active tab only) ---------- */
+.amx__volume {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2) var(--space-2) var(--space-3);
+}
+
+.amx__volume-slider {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--accent);
+}
+
+.amx__volume-value {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  min-width: 4ch;
+  text-align: right;
+}
+
+.amx__volume-error {
+  font-size: 10px;
+  color: var(--danger, #e5484d);
+}
+
+.amx__grant {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+}
+
+.amx__grant:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
