@@ -12,3 +12,4 @@ import "./auto-clear-cache";
 import "./image-editor";
 import "./video-editor";
 import "./qr-generator";
+import "./link-preview";

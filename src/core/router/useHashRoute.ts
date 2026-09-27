@@ -20,7 +20,9 @@ export interface Route {
 
 function parse(hash: string): Route {
   const raw = hash.replace(/^#/, "") || "/";
-  const [pathPart, queryPart = ""] = raw.split("?");
+  const qIdx = raw.indexOf("?");
+  const pathPart = qIdx === -1 ? raw : raw.slice(0, qIdx);
+  const queryPart = qIdx === -1 ? "" : raw.slice(qIdx + 1);
   const path = pathPart.startsWith("/") ? pathPart : `/${pathPart}`;
   const query: Record<string, string> = {};
   for (const [k, v] of new URLSearchParams(queryPart)) query[k] = v;

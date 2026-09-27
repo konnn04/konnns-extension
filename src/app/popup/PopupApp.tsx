@@ -1,7 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { browser } from "wxt/browser";
 import { useTranslation } from "react-i18next";
-import { Ban, Globe, House, LayoutGrid, Loader2, Play, SlidersHorizontal } from "lucide-react";
+import {
+  Ban,
+  ExternalLink,
+  Globe,
+  House,
+  LayoutGrid,
+  Loader2,
+  Play,
+  Share2,
+  SlidersHorizontal,
+} from "lucide-react";
 import {
   CORE_FEATURE_ID,
   coreSettingsSchemaRef,
@@ -93,6 +103,8 @@ function PopupBody() {
 
   const canEmbed = tab !== null && isInjectableUrl(tab.url);
 
+  const isWeb = tab?.url && (tab.url.startsWith("http://") || tab.url.startsWith("https://"));
+
   const openSite = useCallback((route: string, appId?: string) => {
     // the count is what orders the shortcut row next time; recorded before
     // navigating away because the popup is destroyed the moment it opens a tab
@@ -176,7 +188,13 @@ function PopupBody() {
                 <button
                   type="button"
                   className="popup__tile"
-                  onClick={() => openSite(app.path, app.id)}
+                  onClick={() => {
+                    const route =
+                      app.id === "link-preview" && isWeb
+                        ? `${app.path}?url=${encodeURIComponent(tab.url!)}`
+                        : app.path;
+                    openSite(route, app.id);
+                  }}
                   title={t(app.descKey)}
                 >
                   <span className="popup__tile-icon">
@@ -206,10 +224,28 @@ function PopupBody() {
           ) : undefined
         }
       >
-        {EMBED_CATALOG.length === 0 ? (
+        {!isWeb && EMBED_CATALOG.length === 0 ? (
           <p className="popup__empty">{t("popup.noTools")}</p>
         ) : (
           <ul className="popup__list">
+            {isWeb && (
+              <li>
+                <button
+                  type="button"
+                  className="popup__row"
+                  onClick={() =>
+                    openSite(`/link-preview?url=${encodeURIComponent(tab.url!)}`, "link-preview")
+                  }
+                >
+                  <Share2 size={16} className="popup__row-icon" />
+                  <span className="popup__row-text">
+                    <span className="popup__row-name">{t("popup.linkPreview")}</span>
+                    <span className="popup__row-desc">{t("popup.linkPreviewDesc")}</span>
+                  </span>
+                  <ExternalLink size={13} className="popup__row-chevron" />
+                </button>
+              </li>
+            )}
             {EMBED_CATALOG.map((tool) => {
               const busy = run.status === "running" && run.toolId === tool.id;
               const optionsOpen = openOptions === tool.id;
