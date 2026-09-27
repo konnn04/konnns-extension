@@ -30,6 +30,7 @@
     "compile": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "i18n:check": "node scripts/check-i18n-parity.mjs",
     "prepare": "husky",
     "postinstall": "wxt prepare"
   },

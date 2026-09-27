@@ -1,0 +1,40 @@
+{
+  "title": "Auto Clear Cache",
+  "clearNow": "Clear now",
+  "running": "Clearing…",
+  "enable": "Enable auto-clear",
+  "enableDesc": "Runs on a schedule via chrome.alarms — not setInterval, so it still fires even if the service worker was suspended.",
+  "frequency": "Frequency",
+  "freqHourly": "Hourly",
+  "freqDaily": "Daily",
+  "freqWeekly": "Weekly",
+  "freqOnClose": "On browser close",
+  "dataTypes": "Data types",
+  "type": {
+    "cache": "Cache",
+    "cookies": "Cookies",
+    "history": "Browsing history",
+    "formData": "Saved form data",
+    "downloadHistory": "Download history"
+  },
+  "typeDesc": {
+    "cache": "Harmless — just means pages reload a bit slower the first time.",
+    "cookies": "Signs you out of most sites.",
+    "history": "Clears the list of pages you've visited.",
+    "formData": "Clears saved autofill suggestions.",
+    "downloadHistory": "Only the LIST of downloads — not the files on your machine."
+  },
+  "blockedByPolicy": "Blocked by system policy",
+  "cookieWarning": "Clearing cookies signs you out of most sites, including ones you didn't mean to.",
+  "excludedDomains": "Excluded domains",
+  "excludedPlaceholder": "e.g. mybank.com — Enter to add",
+  "excludedNote": "Exclusion only works for cookies and cache on a specific domain — it does NOT work for browsing history, form data, or download history (a limitation of the browser itself).",
+  "log": "Run log",
+  "noLog": "No runs yet.",
+  "logTime": "Time",
+  "logTrigger": "Trigger",
+  "logTypes": "Cleared",
+  "logResult": "Result",
+  "triggerManual": "Manual",
+  "triggerScheduled": "Scheduled"
+}

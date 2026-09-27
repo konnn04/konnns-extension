@@ -92,15 +92,16 @@ Comment: giải thích *vì sao*, không kể lại code. Không để code bị
 
 ## 6. i18n
 
-Mọi chuỗi hiển thị đi qua `t("namespace.key")`. Hai file locale phải **khớp khoá tuyệt đối**:
+Mọi chuỗi hiển thị đi qua `t("namespace.key")`.
 
+- **Dùng chung / vỏ hệ thống**: nằm ở `src/core/i18n/locales/{vi,en}.json`.
+- **Mỗi feature/tool riêng**: tự quản lý file `locales/{vi,en}.json` ngay trong thư mục của nó và đăng ký qua `registerI18nResources({ vi: { namespace: vi }, en: { namespace: en } })` trong `index.tsx` (tuân thủ quy tắc 1 tool = 1 thư mục).
+- Kiểm tra tính đồng bộ khoá (parity) bằng lệnh:
 ```bash
-node -e '
-const f=(o,p="")=>Object.entries(o).flatMap(([k,v])=>v&&typeof v==="object"?f(v,p+k+"."):[p+k]);
-const a=f(require("./src/core/i18n/locales/en.json")).sort();
-const b=f(require("./src/core/i18n/locales/vi.json")).sort();
-console.log("parity", JSON.stringify(a)===JSON.stringify(b));'
+pnpm i18n:check   # node scripts/check-i18n-parity.mjs
 ```
+Lệnh này tự động kiểm tra cả `core` lẫn tất cả thư mục `features/**/locales` để đảm bảo khớp 100% giữa `vi` và `en`.
+
 
 ## 7. CSP: không CDN, không eval
 

@@ -1,0 +1,23 @@
+{
+  "title": "Whiteboard",
+  "newBoard": "New board",
+  "noBoards": "No boards yet.",
+  "emptyHeroTitle": "Start a new whiteboard",
+  "emptyHeroDesc": "Draw diagrams, brainstorm ideas, and sketch freely on an infinite canvas. Everything is saved locally on your device — nothing is uploaded.",
+  "untitled": "Untitled",
+  "emptyBoard": "Empty board",
+  "duplicate": "Duplicate",
+  "backToList": "Back to boards",
+  "renameBoard": "Rename board",
+  "copySuffix": "(copy)",
+  "export": "Export",
+  "transparentBg": "Transparent background",
+  "resolution": "Resolution",
+  "darkMode": "Dark mode",
+  "copyToClipboard": "Copy to clipboard",
+  "copied": "Copied to clipboard!",
+  "downloadPng": "Download PNG",
+  "downloadSvg": "Download SVG",
+  "openInNewTab": "Open in new tab (fullscreen)",
+  "exitZenMode": "Exit fullscreen"
+}

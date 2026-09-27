@@ -1,0 +1,6 @@
+{
+  "loading": "Đang tải…",
+  "missing": "Không tìm thấy nội dung. Có thể phiên làm việc đã kết thúc — hãy trích lại từ popup.",
+  "chars": "{{count}} ký tự",
+  "editorLabel": "Nội dung Markdown"
+}

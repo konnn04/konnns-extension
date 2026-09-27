@@ -1,0 +1,40 @@
+{
+  "title": "Tự động dọn dẹp",
+  "clearNow": "Dọn ngay",
+  "running": "Đang dọn…",
+  "enable": "Bật tự động dọn",
+  "enableDesc": "Chạy theo lịch bằng chrome.alarms — không dùng setInterval nên vẫn chạy đúng dù service worker bị tạm dừng.",
+  "frequency": "Tần suất",
+  "freqHourly": "Mỗi giờ",
+  "freqDaily": "Mỗi ngày",
+  "freqWeekly": "Mỗi tuần",
+  "freqOnClose": "Khi đóng trình duyệt",
+  "dataTypes": "Loại dữ liệu",
+  "type": {
+    "cache": "Bộ nhớ đệm (cache)",
+    "cookies": "Cookie",
+    "history": "Lịch sử duyệt web",
+    "formData": "Dữ liệu biểu mẫu đã lưu",
+    "downloadHistory": "Lịch sử tải xuống"
+  },
+  "typeDesc": {
+    "cache": "Vô hại — chỉ khiến trang tải lại chậm hơn lần đầu.",
+    "cookies": "Sẽ đăng xuất bạn khỏi hầu hết trang web.",
+    "history": "Xoá danh sách các trang đã ghé.",
+    "formData": "Xoá gợi ý tự động điền đã lưu.",
+    "downloadHistory": "Chỉ xoá DANH SÁCH đã tải, không xoá file trên máy."
+  },
+  "blockedByPolicy": "Bị chính sách hệ thống chặn",
+  "cookieWarning": "Xoá cookie sẽ đăng xuất bạn khỏi hầu hết trang web, kể cả trang bạn không muốn.",
+  "excludedDomains": "Domain không theo dõi",
+  "excludedPlaceholder": "vd: mybank.com — Enter để thêm",
+  "excludedNote": "Loại trừ chỉ áp dụng được cho cookie và cache theo domain cụ thể — KHÔNG áp dụng được cho lịch sử duyệt web, dữ liệu biểu mẫu hay lịch sử tải xuống (giới hạn của chính trình duyệt).",
+  "log": "Nhật ký các lần đã chạy",
+  "noLog": "Chưa có lần nào chạy.",
+  "logTime": "Thời gian",
+  "logTrigger": "Kích hoạt",
+  "logTypes": "Đã xoá",
+  "logResult": "Kết quả",
+  "triggerManual": "Bằng tay",
+  "triggerScheduled": "Theo lịch"
+}

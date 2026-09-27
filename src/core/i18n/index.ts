@@ -20,4 +20,21 @@ export function setLanguage(lang: string) {
   void i18n.changeLanguage(lang);
 }
 
+/**
+ * Register feature-scoped translation resources dynamically.
+ * Deep-merges into the existing resource bundles for 'vi' and 'en'.
+ */
+export function registerI18nResources(bundles: {
+  vi?: Record<string, unknown>;
+  en?: Record<string, unknown>;
+}): void {
+  if (bundles.vi) {
+    i18n.addResourceBundle("vi", "translation", bundles.vi, true, true);
+  }
+  if (bundles.en) {
+    i18n.addResourceBundle("en", "translation", bundles.en, true, true);
+  }
+}
+
 export default i18n;
+

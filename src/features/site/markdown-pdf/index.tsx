@@ -2,6 +2,15 @@ import { lazy } from "react";
 import { FileEdit } from "lucide-react";
 import { registerSiteApp } from "@/core/site-registry";
 
+import { registerI18nResources } from "@/core/i18n";
+import vi from "./locales/vi.json";
+import en from "./locales/en.json";
+
+registerI18nResources({
+  vi: { markdownPdf: vi },
+  en: { markdownPdf: en },
+});
+
 registerSiteApp({
   id: "markdown-pdf",
   path: "/markdown-pdf",
