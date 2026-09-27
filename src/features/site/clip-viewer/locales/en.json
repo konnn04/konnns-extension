@@ -1,0 +1,6 @@
+{
+  "loading": "Loading…",
+  "missing": "Nothing found here. The session may have ended — extract it again from the popup.",
+  "chars": "{{count}} characters",
+  "editorLabel": "Markdown content"
+}

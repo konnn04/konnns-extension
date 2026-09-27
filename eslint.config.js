@@ -73,7 +73,7 @@ export default tseslint.config(
 
   // Node-side files (configs, CI scripts)
   {
-    files: ["*.{js,ts,mjs,cjs}", ".github/**/*.{js,mjs,cjs}"],
+    files: ["*.{js,ts,mjs,cjs}", "scripts/**/*.{js,ts,mjs,cjs}", ".github/**/*.{js,mjs,cjs}"],
     languageOptions: {
       globals: { ...globals.node },
     },

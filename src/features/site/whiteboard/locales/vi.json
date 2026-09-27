@@ -1,0 +1,23 @@
+{
+  "title": "Bảng trắng",
+  "newBoard": "Bảng mới",
+  "noBoards": "Chưa có bảng nào.",
+  "emptyHeroTitle": "Bắt đầu bảng vẽ mới",
+  "emptyHeroDesc": "Vẽ sơ đồ, ghi chú ý tưởng, phác thảo tư duy tự do trên không gian vô tận. Mọi dữ liệu lưu an toàn trên máy bạn — không tải lên máy chủ.",
+  "untitled": "Chưa đặt tên",
+  "emptyBoard": "Bảng trống",
+  "duplicate": "Nhân bản",
+  "backToList": "Về danh sách bảng",
+  "renameBoard": "Đổi tên bảng",
+  "copySuffix": "(bản sao)",
+  "export": "Xuất",
+  "transparentBg": "Nền trong suốt",
+  "resolution": "Độ phân giải",
+  "darkMode": "Chế độ tối",
+  "copyToClipboard": "Sao chép vào bộ nhớ tạm",
+  "copied": "Đã sao chép vào bộ nhớ tạm!",
+  "downloadPng": "Tải PNG",
+  "downloadSvg": "Tải SVG",
+  "openInNewTab": "Mở tab mới (toàn màn hình)",
+  "exitZenMode": "Thu nhỏ về site"
+}
