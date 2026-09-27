@@ -115,7 +115,7 @@ export function ContributePanel() {
     <div className="contribute-panel">
       <div className="contribute-hero">
         <div className="contribute-hero__icon-wrap">
-          <img src="icons\128.png" alt="My NewTab Icon" className="contribute-hero__icon" />
+          <img src="/icons/128.png" alt="My NewTab Icon" className="contribute-hero__icon" />
         </div>
         <div className="contribute-hero__info">
           <div className="contribute-hero__title-row">

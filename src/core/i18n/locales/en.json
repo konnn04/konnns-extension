@@ -905,7 +905,9 @@
     "openInSite": "Open in site",
     "words": "{{count}} words",
     "tokensApprox": "~{{count}} tokens",
-    "options": "Options"
+    "options": "Options",
+    "linkPreview": "Link Preview",
+    "linkPreviewDesc": "Preview social cards for current page"
   },
   "site": {
     "title": "Tools & Apps",
@@ -970,6 +972,10 @@
       "qr-generator": {
         "name": "QR Code Generator",
         "desc": "Create styled QR codes with patterns, gradients, custom logos, frames, and high-res vector/PNG export."
+      },
+      "link-preview": {
+        "name": "Link Preview",
+        "desc": "Test and audit link previews across Google, Twitter/X, Facebook, Discord, WhatsApp, LinkedIn and Telegram."
       }
     },
     "quickSettings": "Quick settings",
@@ -1790,5 +1796,176 @@
     "savePromptConfirm": "Save project",
     "savePromptDismiss": "Don't save",
     "unsavedConfirm": "Project is not saved to browser storage. Are you sure you want to continue?"
+  },
+  "linkPreview": {
+    "urlPlaceholder": "Enter any URL to test (e.g. https://...)",
+    "fetch": "Fetch",
+    "scorecard": "Audit Score",
+    "editMeta": "Edit Tags",
+    "exportTags": "HTML Tags",
+    "showDetails": "Details",
+    "hideDetails": "Collapse",
+    "emptyTitle": "Enter a URL to preview",
+    "emptyDesc": "Test and audit how your webpage looks when shared across Google, Twitter/X, Facebook, Discord, WhatsApp, LinkedIn, and Telegram.",
+    "reset": "Reset",
+    "close": "Close",
+    "copyCode": "Copy HTML",
+    "copied": "Copied!",
+    "errEmptyUrl": "Please enter a valid URL.",
+    "errInvalidUrl": "The provided URL format is invalid.",
+    "errFetchFailed": "Unable to load page metadata directly. You can enter or edit tags manually.",
+    "platforms": {
+      "all": "All Platforms",
+      "google": "Google",
+      "twitter": "Twitter / X",
+      "facebook": "Facebook",
+      "discord": "Discord",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "telegram": "Telegram"
+    },
+    "scorecardTitle": "Link Preview Quality Audit",
+    "scorecardSubtitle": "Detailed SEO and Social Card scoring breakdown",
+    "categories": {
+      "seo": "Search & SEO",
+      "opengraph": "Open Graph",
+      "twitter": "Twitter / X",
+      "assets": "Assets & Visuals"
+    },
+    "stats": {
+      "passed": "Passed",
+      "warnings": "Warnings",
+      "failures": "Failed"
+    },
+    "filter": {
+      "all": "All Checks",
+      "issues": "Issues Only",
+      "passed": "Passed Only"
+    },
+    "auditDetails": {
+      "detected": "Detected",
+      "recommendation": "Recommendation"
+    },
+    "score": {
+      "title": {
+        "name": "Title Tag",
+        "desc": "Crucial for search engines and social cards.",
+        "missing": "Add a <title> tag to your HTML header.",
+        "tooShort": "Title is shorter than 25 characters. Expand it to be more descriptive.",
+        "tooLong": "Title exceeds 65 characters and may be truncated.",
+        "optimal": "Optimal title length for search engines and social platforms."
+      },
+      "desc": {
+        "name": "Meta Description",
+        "desc": "Summary snippet shown in search results and social previews.",
+        "missing": "Add a <meta name=\"description\"> tag.",
+        "tooShort": "Description is under 50 characters. Consider adding more context.",
+        "tooLong": "Description exceeds 165 characters and will be truncated.",
+        "optimal": "Great summary length (70–160 characters)."
+      },
+      "canonical": {
+        "name": "Canonical URL",
+        "desc": "Tells search engines the preferred URL to prevent duplicate content.",
+        "missing": "Add <link rel=\"canonical\" href=\"...\">.",
+        "ok": "Canonical URL is properly defined."
+      },
+      "favicon": {
+        "name": "Favicon / Icon",
+        "desc": "Appears in browser tabs and modern Google search results.",
+        "missing": "Add <link rel=\"icon\" href=\"/favicon.ico\">.",
+        "ok": "Favicon link is present."
+      },
+      "ogTitle": {
+        "name": "og:title Tag",
+        "desc": "The headline shown when shared on social networks.",
+        "missing": "Add <meta property=\"og:title\" content=\"...\">.",
+        "ok": "og:title is present."
+      },
+      "ogDesc": {
+        "name": "og:description Tag",
+        "desc": "The description snippet on social networks.",
+        "missing": "Add <meta property=\"og:description\" content=\"...\">.",
+        "ok": "og:description is present."
+      },
+      "ogImage": {
+        "name": "og:image Tag",
+        "desc": "The main preview thumbnail for social shares.",
+        "missing": "Add <meta property=\"og:image\" content=\"...\"> with a high quality image.",
+        "httpWarning": "Image uses HTTP instead of HTTPS. Some networks may refuse to load it.",
+        "ok": "Secure og:image is configured."
+      },
+      "ogUrl": {
+        "name": "og:url Tag",
+        "desc": "Canonical share URL used by social platforms.",
+        "missing": "Add <meta property=\"og:url\" content=\"...\">.",
+        "ok": "og:url is configured."
+      },
+      "ogSiteName": {
+        "name": "og:site_name Tag",
+        "desc": "Identifies the overall brand/site name.",
+        "missing": "Add <meta property=\"og:site_name\" content=\"...\">.",
+        "ok": "og:site_name is present."
+      },
+      "twitterCard": {
+        "name": "twitter:card Type",
+        "desc": "Specifies summary or summary_large_image card display.",
+        "missing": "Add <meta name=\"twitter:card\" content=\"summary_large_image\">.",
+        "ok": "twitter:card is configured."
+      },
+      "twitterTitle": {
+        "name": "twitter:title Tag",
+        "desc": "Title for Twitter/X cards (falls back to og:title).",
+        "missing": "Add <meta name=\"twitter:title\" content=\"...\">.",
+        "ok": "twitter:title is set."
+      },
+      "twitterDesc": {
+        "name": "twitter:description Tag",
+        "desc": "Description for Twitter/X cards.",
+        "missing": "Add <meta name=\"twitter:description\" content=\"...\">.",
+        "ok": "twitter:description is set."
+      },
+      "twitterImage": {
+        "name": "twitter:image Tag",
+        "desc": "Image for Twitter/X cards.",
+        "missing": "Add <meta name=\"twitter:image\" content=\"...\">.",
+        "ok": "twitter:image is set."
+      },
+      "themeColor": {
+        "name": "theme-color Tag",
+        "desc": "Used by Discord embeds and mobile browser tabs.",
+        "missing": "Add <meta name=\"theme-color\" content=\"#hex\">.",
+        "ok": "theme-color is defined."
+      },
+      "ogType": {
+        "name": "og:type Tag",
+        "desc": "Categorizes content (website, article, product, etc.).",
+        "missing": "Add <meta property=\"og:type\" content=\"website\">.",
+        "ok": "og:type is defined."
+      },
+      "imageRatio": {
+        "name": "Image Resolution & Ratio",
+        "desc": "Ideal 1.91:1 ratio (1200×630px) ensures crisp previews without cropping.",
+        "unknown": "Image is present; verify dimensions are 1200×630px.",
+        "optimal": "Perfect 1.91:1 ratio and high resolution (1200×630px or higher).",
+        "goodRatioLowRes": "Good aspect ratio, but resolution is below recommended 1200×630px.",
+        "suboptimalRatio": "Aspect ratio differs from 1.91:1 and may be cropped on some platforms.",
+        "present": "Image is loaded.",
+        "missing": "No preview image provided."
+      }
+    },
+    "editor": {
+      "title": "Edit Meta Tags",
+      "pageTitle": "Page Title",
+      "pageDesc": "Meta Description",
+      "siteName": "Site Name",
+      "themeColor": "Theme Color",
+      "imageUrl": "Image URL",
+      "twitterCard": "Twitter Card Format",
+      "canonical": "Canonical URL"
+    },
+    "exportModal": {
+      "title": "Generated HTML Meta Tags",
+      "desc": "Copy and paste these tags into your HTML <head> to enable rich social sharing."
+    }
   }
 }

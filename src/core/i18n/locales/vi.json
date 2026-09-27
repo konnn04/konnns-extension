@@ -905,7 +905,9 @@
     "openInSite": "Mở trong site",
     "words": "{{count}} từ",
     "tokensApprox": "~{{count}} token",
-    "options": "Tùy chọn"
+    "options": "Tùy chọn",
+    "linkPreview": "Xem trước liên kết",
+    "linkPreviewDesc": "Xem trước thẻ chia sẻ cho trang này"
   },
   "site": {
     "title": "Các công cụ",
@@ -970,6 +972,10 @@
       "qr-generator": {
         "name": "Tạo mã QR",
         "desc": "Tạo mã QR tuỳ biến hoa văn, gradient, chèn logo, khung kêu gọi và xuất vector SVG/PNG."
+      },
+      "link-preview": {
+        "name": "Xem trước liên kết",
+        "desc": "Kiểm tra và chấm điểm xem trước liên kết trên Google, Twitter/X, Facebook, Discord, WhatsApp, LinkedIn và Telegram."
       }
     },
     "quickSettings": "Cài đặt nhanh",
@@ -1790,5 +1796,176 @@
     "savePromptConfirm": "Lưu dự án",
     "savePromptDismiss": "Không lưu",
     "unsavedConfirm": "Dự án chưa được lưu vào trình duyệt. Bạn có chắc muốn tiếp tục không?"
+  },
+  "linkPreview": {
+    "urlPlaceholder": "Nhập URL bất kỳ để kiểm thử (ví dụ: https://...)",
+    "fetch": "Tải thẻ",
+    "scorecard": "Chấm điểm",
+    "editMeta": "Sửa thẻ Meta",
+    "exportTags": "Mã HTML",
+    "showDetails": "Chi tiết",
+    "hideDetails": "Thu gọn",
+    "emptyTitle": "Nhập URL để xem trước",
+    "emptyDesc": "Kiểm tra và chấm điểm cách trang web hiển thị khi chia sẻ trên Google, Twitter/X, Facebook, Discord, WhatsApp, LinkedIn và Telegram.",
+    "reset": "Đặt lại",
+    "close": "Đóng",
+    "copyCode": "Sao chép HTML",
+    "copied": "Đã sao chép!",
+    "errEmptyUrl": "Vui lòng nhập một URL hợp lệ.",
+    "errInvalidUrl": "Định dạng URL không hợp lệ.",
+    "errFetchFailed": "Không thể tải trực tiếp metadata của trang. Bạn có thể tự chỉnh sửa thẻ thủ công.",
+    "platforms": {
+      "all": "Tất cả nền tảng",
+      "google": "Google",
+      "twitter": "Twitter / X",
+      "facebook": "Facebook",
+      "discord": "Discord",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "telegram": "Telegram"
+    },
+    "scorecardTitle": "Đánh giá chất lượng Link Preview",
+    "scorecardSubtitle": "Bảng điểm chi tiết SEO và thẻ mạng xã hội",
+    "categories": {
+      "seo": "Tìm kiếm & SEO",
+      "opengraph": "Open Graph",
+      "twitter": "Twitter / X",
+      "assets": "Tài nguyên & Hình ảnh"
+    },
+    "stats": {
+      "passed": "Đạt",
+      "warnings": "Cảnh báo",
+      "failures": "Chưa đạt"
+    },
+    "filter": {
+      "all": "Tất cả tiêu chí",
+      "issues": "Chỉ mục có vấn đề",
+      "passed": "Chỉ mục đạt"
+    },
+    "auditDetails": {
+      "detected": "Phát hiện",
+      "recommendation": "Đề xuất cải thiện"
+    },
+    "score": {
+      "title": {
+        "name": "Thẻ tiêu đề (Title)",
+        "desc": "Rất quan trọng cho công cụ tìm kiếm và mạng xã hội.",
+        "missing": "Thêm thẻ <title> vào phần head của trang.",
+        "tooShort": "Tiêu đề ngắn hơn 25 ký tự. Hãy viết mô tả rõ ràng hơn.",
+        "tooLong": "Tiêu đề dài hơn 65 ký tự và có thể bị cắt bớt.",
+        "optimal": "Độ dài tiêu đề tối ưu cho tìm kiếm và mạng xã hội."
+      },
+      "desc": {
+        "name": "Thẻ mô tả (Meta Description)",
+        "desc": "Đoạn trích tóm tắt hiển thị trong kết quả tìm kiếm và mạng xã hội.",
+        "missing": "Thêm thẻ <meta name=\"description\">.",
+        "tooShort": "Mô tả dưới 50 ký tự. Nên bổ sung thêm ngữ cảnh.",
+        "tooLong": "Mô tả vượt quá 165 ký tự và sẽ bị cắt bớt.",
+        "optimal": "Độ dài tóm tắt lý tưởng (70–160 ký tự)."
+      },
+      "canonical": {
+        "name": "Đường dẫn Canonical",
+        "desc": "Báo cho máy tìm kiếm URL gốc tránh trùng lặp nội dung.",
+        "missing": "Nên thêm <link rel=\"canonical\" href=\"...\">.",
+        "ok": "Đường dẫn Canonical được khai báo chuẩn."
+      },
+      "favicon": {
+        "name": "Favicon / Biểu tượng",
+        "desc": "Xuất hiện trên tab trình duyệt và kết quả tìm kiếm Google.",
+        "missing": "Thêm <link rel=\"icon\" href=\"/favicon.ico\">.",
+        "ok": "Đã có favicon hợp lệ."
+      },
+      "ogTitle": {
+        "name": "Thẻ og:title",
+        "desc": "Tiêu đề hiển thị khi chia sẻ trên mạng xã hội.",
+        "missing": "Thêm thẻ <meta property=\"og:title\" content=\"...\">.",
+        "ok": "Đã có og:title."
+      },
+      "ogDesc": {
+        "name": "Thẻ og:description",
+        "desc": "Mô tả tóm tắt trên mạng xã hội.",
+        "missing": "Thêm thẻ <meta property=\"og:description\" content=\"...\">.",
+        "ok": "Đã có og:description."
+      },
+      "ogImage": {
+        "name": "Thẻ og:image",
+        "desc": "Hình ảnh xem trước chính khi chia sẻ.",
+        "missing": "Thêm thẻ <meta property=\"og:image\" content=\"...\"> với ảnh chất lượng cao.",
+        "httpWarning": "Ảnh dùng giao thức HTTP thay vì HTTPS. Một số nền tảng có thể từ chối tải.",
+        "ok": "Đã thiết lập ảnh og:image qua HTTPS."
+      },
+      "ogUrl": {
+        "name": "Thẻ og:url",
+        "desc": "Đường dẫn chia sẻ chuẩn cho mạng xã hội.",
+        "missing": "Thêm <meta property=\"og:url\" content=\"...\">.",
+        "ok": "Đã có og:url."
+      },
+      "ogSiteName": {
+        "name": "Thẻ og:site_name",
+        "desc": "Xác định tên thương hiệu hoặc trang web.",
+        "missing": "Thêm <meta property=\"og:site_name\" content=\"...\">.",
+        "ok": "Đã có og:site_name."
+      },
+      "twitterCard": {
+        "name": "Loại twitter:card",
+        "desc": "Xác định kiểu thẻ hiển thị trên Twitter / X.",
+        "missing": "Thêm <meta name=\"twitter:card\" content=\"summary_large_image\">.",
+        "ok": "Đã có twitter:card."
+      },
+      "twitterTitle": {
+        "name": "Thẻ twitter:title",
+        "desc": "Tiêu đề cho Twitter/X (dùng lại og:title nếu thiếu).",
+        "missing": "Thêm <meta name=\"twitter:title\" content=\"...\">.",
+        "ok": "Đã có twitter:title."
+      },
+      "twitterDesc": {
+        "name": "Thẻ twitter:description",
+        "desc": "Mô tả cho thẻ Twitter/X.",
+        "missing": "Thêm <meta name=\"twitter:description\" content=\"...\">.",
+        "ok": "Đã có twitter:description."
+      },
+      "twitterImage": {
+        "name": "Thẻ twitter:image",
+        "desc": "Ảnh xem trước trên Twitter/X.",
+        "missing": "Thêm <meta name=\"twitter:image\" content=\"...\">.",
+        "ok": "Đã có twitter:image."
+      },
+      "themeColor": {
+        "name": "Thẻ theme-color",
+        "desc": "Dùng để tô màu viền Discord embed và tab trình duyệt di động.",
+        "missing": "Thêm <meta name=\"theme-color\" content=\"#hex\">.",
+        "ok": "Đã có theme-color."
+      },
+      "ogType": {
+        "name": "Thẻ og:type",
+        "desc": "Phân loại nội dung (website, article, product, v.v.).",
+        "missing": "Thêm <meta property=\"og:type\" content=\"website\">.",
+        "ok": "Đã có og:type."
+      },
+      "imageRatio": {
+        "name": "Tỷ lệ & Độ phân giải ảnh",
+        "desc": "Tỷ lệ chuẩn 1.91:1 (1200×630px) giúp hiển thị sắc nét không bị méo.",
+        "unknown": "Đã có ảnh; nên đảm bảo kích thước 1200×630px.",
+        "optimal": "Tỷ lệ 1.91:1 hoàn hảo và độ phân giải cao (1200×630px trở lên).",
+        "goodRatioLowRes": "Tỷ lệ tốt, nhưng độ phân giải thấp hơn mức khuyến nghị 1200×630px.",
+        "suboptimalRatio": "Tỷ lệ khác 1.91:1, ảnh có thể bị cắt xén trên một số nền tảng.",
+        "present": "Ảnh đã được tải.",
+        "missing": "Chưa có ảnh xem trước."
+      }
+    },
+    "editor": {
+      "title": "Chỉnh sửa thẻ Meta",
+      "pageTitle": "Tiêu đề trang",
+      "pageDesc": "Mô tả trang",
+      "siteName": "Tên trang / Thương hiệu",
+      "themeColor": "Màu chủ đạo (Theme)",
+      "imageUrl": "Đường dẫn ảnh (og:image)",
+      "twitterCard": "Định dạng thẻ Twitter",
+      "canonical": "Đường dẫn Canonical"
+    },
+    "exportModal": {
+      "title": "Mã thẻ HTML Meta tạo sẵn",
+      "desc": "Sao chép và dán các thẻ sau vào thẻ <head> của trang web để hiển thị đẹp mắt khi chia sẻ."
+    }
   }
 }
